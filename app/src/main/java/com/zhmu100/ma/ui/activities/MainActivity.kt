@@ -1,4 +1,4 @@
-package com.zhmu100.ma
+package com.zhmu100.ma.ui.activities
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -7,10 +7,8 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import com.zhmu100.ma.ui.components.Greeting
 import com.zhmu100.ma.ui.theme.MATheme
 
 
@@ -28,21 +26,5 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
-    }
-}
-
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    MATheme {
-        Greeting("Android")
     }
 }

@@ -9,7 +9,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.zhmu100.ma.ui.theme.MATheme
 
 @Composable
-fun StringButton(text: String, modifier: Modifier = Modifier, onClick: () -> Unit = {} ) {
+fun StringButton(text: String, modifier: Modifier = Modifier, onClick: () -> Unit = {}) {
     TextButton(
         onClick = onClick,
         modifier = modifier

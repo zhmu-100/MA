@@ -70,7 +70,7 @@ fun AgeSelector(
         ) {
             items(ages.size) { index ->
                 val isSelected = selectedIndex == index
-                val fontSize = if (isSelected) 32.sp else 24.sp
+                val fontSize = if (isSelected) 40.sp else 32.sp
                 val fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal
                 val fontColor = if (isSelected) White else Black
                 // Numbers
@@ -81,8 +81,8 @@ fun AgeSelector(
                     textAlign = TextAlign.Center,
                     color = fontColor,
                     modifier = Modifier
-                        .width(40.dp)
-                        .padding(vertical = 8.dp)
+                        .width(60.dp)
+                        .padding(vertical = 16.dp)
                 )
                 // Vertical lines
                 if (index < ages.lastIndex) {

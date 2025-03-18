@@ -5,7 +5,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.size
-import androidx.compose.material3.ButtonColors
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
@@ -31,55 +31,49 @@ fun GenderButtons(
 ) {
     var isMaleSelected by remember { mutableStateOf(true) }
 
-    val unselectedColors = ButtonColors(
-        White,
-        MaterialTheme.colorScheme.primary,
-        White,
-        MaterialTheme.colorScheme.primary
-    )
-    val selectedColors = ButtonColors(
-        MaterialTheme.colorScheme.inversePrimary,
-        White,
-        MaterialTheme.colorScheme.inversePrimary,
-        White
-    )
-
     Column(
         modifier = modifier,
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
         // Male button
-        OutlinedButton(
-            onClick = {
-                onMaleSelect()
-                isMaleSelected = true
-            },
-            contentPadding = PaddingValues(16.dp),
-            colors = if (isMaleSelected) selectedColors else unselectedColors
-        ) {
-            Icon(
-                painter = painterResource(R.drawable.male),
-                contentDescription = null,
-                modifier = Modifier.size(100.dp)
-            )
-        }
+        CircleButton(isMaleSelected, onClick = {
+            onMaleSelect()
+            isMaleSelected = true
+        }, iconRes = R.drawable.male)
         Spacer(Modifier.size(16.dp))
         // Female button
-        OutlinedButton(
-            onClick = {
-                onFemaleSelect()
-                isMaleSelected = false
-            },
-            contentPadding = PaddingValues(16.dp),
-            colors = if (isMaleSelected) unselectedColors else selectedColors
-        ) {
-            Icon(
-                painter = painterResource(R.drawable.female),
-                contentDescription = null,
-                modifier = Modifier.size(100.dp)
-            )
-        }
+        CircleButton(!isMaleSelected, onClick = {
+            onFemaleSelect()
+            isMaleSelected = false
+        }, iconRes = R.drawable.female)
+    }
+}
+
+@Composable
+fun CircleButton(
+    isSelected: Boolean,
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit = {},
+    iconRes: Int
+) {
+    OutlinedButton(
+        onClick = onClick,
+        contentPadding = PaddingValues(16.dp),
+        colors = if (isSelected) ButtonDefaults.buttonColors(
+            MaterialTheme.colorScheme.primary,
+            White
+        ) else ButtonDefaults.buttonColors(
+            White,
+            MaterialTheme.colorScheme.primary
+        ),
+        modifier = modifier
+    ) {
+        Icon(
+            painter = painterResource(iconRes),
+            contentDescription = null,
+            modifier = Modifier.size(100.dp)
+        )
     }
 }
 

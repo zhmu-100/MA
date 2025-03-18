@@ -5,7 +5,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonColors
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -22,7 +22,7 @@ import com.zhmu100.ma.ui.theme.MATheme
 fun BackButton(modifier: Modifier = Modifier, text: String = "Назад", onClick: () -> Unit = {}) {
     Button(
         onClick = onClick,
-        colors = ButtonColors(LightGray, Black, LightGray, Black),
+        colors = ButtonDefaults.buttonColors(LightGray, Black),
         contentPadding = PaddingValues(8.dp),
         modifier = modifier
     ) {

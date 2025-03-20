@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
@@ -28,76 +27,91 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.zhmu100.ma.R
-import com.zhmu100.ma.ui.theme.Black
+import com.zhmu100.ma.ui.theme.LightGray
 import com.zhmu100.ma.ui.theme.MATheme
 import com.zhmu100.ma.ui.theme.White
 
 @Composable
 fun AgeSelector(
-    modifier: Modifier = Modifier, onAgeSelected: (Int) -> Unit = {}
+    modifier: Modifier = Modifier, onAgeSelected: (Int) -> Unit = {},
+    ageRange: List<Int> = (0..99).toList()
 ) {
     val listState = rememberLazyListState(18)
-    val ages = (0..99).toList()
-    val selectedIndex by remember {
+    val selectedIndex by remember { // nearest to the center of screen
         derivedStateOf {
-            listState.firstVisibleItemIndex + (listState.layoutInfo.visibleItemsInfo.size / 2)
+            val visibleItems = listState.layoutInfo.visibleItemsInfo
+            val viewportCenter = listState.layoutInfo.viewportSize.width / 2
+            val closestItem = visibleItems.minByOrNull {
+                val itemCenter = it.offset + it.size / 2
+                kotlin.math.abs(itemCenter - viewportCenter)
+            }
+            closestItem?.index ?: 0
         }
     }
-    // Change number
+    // Callback when selected index changes
     LaunchedEffect(selectedIndex) {
-        onAgeSelected(ages[selectedIndex])
+        onAgeSelected(ageRange[selectedIndex])
     }
-    // Slider
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier
     ) {
+        // Selected age display
         Text(
-            text = "${ages[selectedIndex]}",
+            text = "${ageRange[selectedIndex]}",
             fontSize = 64.sp
         )
-        Icon(
-            painter = painterResource(R.drawable.triangle_up),
-            contentDescription = null,
-            tint = MaterialTheme.colorScheme.primary,
-            modifier = Modifier.size(64.dp)
-        )
+        ArrowUp()
+        // Slider
         LazyRow(
             state = listState,
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Center,
             modifier = Modifier.background(MaterialTheme.colorScheme.inversePrimary)
         ) {
-            items(ages.size) { index ->
+            items(ageRange.size) { index ->
                 val isSelected = selectedIndex == index
                 val fontSize = if (isSelected) 40.sp else 32.sp
                 val fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal
-                val fontColor = if (isSelected) White else Black
+                val fontColor = if (isSelected) White else LightGray
                 // Numbers
                 Text(
-                    text = "${ages[index]}",
+                    text = "${ageRange[index]}",
                     fontSize = fontSize,
                     fontWeight = fontWeight,
                     textAlign = TextAlign.Center,
                     color = fontColor,
                     modifier = Modifier
                         .width(60.dp)
-                        .padding(vertical = 16.dp)
                 )
-                // Vertical lines
-                if (index < ages.lastIndex) {
+                if (index < ageRange.lastIndex) {
                     Spacer(modifier = Modifier.width(8.dp))
-                    Box(
-                        modifier = Modifier
-                            .width(1.dp)
-                            .height(if (index == selectedIndex || index == selectedIndex - 1) 40.dp else 20.dp)
-                            .background(if (index == selectedIndex || index == selectedIndex - 1) White else Black)
-                    )
+                    VerticalLine(index == selectedIndex || index == selectedIndex - 1)
                     Spacer(modifier = Modifier.width(8.dp))
                 }
             }
         }
     }
+}
+
+@Composable
+private fun ArrowUp() {
+    Icon(
+        painter = painterResource(R.drawable.triangle_up),
+        contentDescription = null,
+        tint = MaterialTheme.colorScheme.primary,
+        modifier = Modifier.size(64.dp)
+    )
+}
+
+@Composable
+private fun VerticalLine(isSelected: Boolean) {
+    Box(
+        modifier = Modifier
+            .width(1.dp)
+            .height(if (isSelected) 80.dp else 20.dp)
+            .background(if (isSelected) White else LightGray)
+    )
 }
 
 @Preview(showBackground = true)

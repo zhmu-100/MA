@@ -9,6 +9,11 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
@@ -42,7 +47,8 @@ fun BackButton(modifier: Modifier = Modifier, text: String = "Назад", onCli
 @Preview(showBackground = true)
 @Composable
 fun BackButtonPreview() {
+    var text by remember { mutableStateOf("Test") }
     MATheme {
-        BackButton()
+        BackButton(text = text, onClick = { text = "Test1" })
     }
 }

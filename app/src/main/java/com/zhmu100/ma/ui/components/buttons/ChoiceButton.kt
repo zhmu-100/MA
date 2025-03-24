@@ -16,6 +16,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -70,9 +71,10 @@ fun ChoiceButton(
 @Preview(showBackground = true)
 @Composable
 fun ChoiceButtonPreview() {
+    var text by remember { mutableStateOf("Test") }
     MATheme {
         ChoiceButton(
-            listOf("Похудеть", "Набрать вес", "Другое")
+            listOf(text, "Набрать вес", "Другое"), onOptionChoose = { text = "Test1" }
         )
     }
 }

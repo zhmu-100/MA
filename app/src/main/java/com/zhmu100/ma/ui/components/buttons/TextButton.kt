@@ -3,6 +3,10 @@ package com.zhmu100.ma.ui.components.buttons
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -24,9 +28,10 @@ fun StringButton(text: String, modifier: Modifier = Modifier, onClick: () -> Uni
 @Preview(showBackground = true)
 @Composable
 fun StringButtonPreview() {
+    var text by remember { mutableStateOf("Test") }
     MATheme {
         StringButton(
-            "Зарегистрируйся"
+            text, onClick = { text = "Test1" }
         )
     }
 }

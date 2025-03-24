@@ -1,8 +1,10 @@
 package com.zhmu100.ma.ui.components.buttons
 
+import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Switch
 import androidx.compose.material3.SwitchDefaults
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -39,6 +41,10 @@ fun ToggleButton(
 @Composable
 fun ToggleButtonPreview() {
     MATheme {
-        ToggleButton()
+        var text by remember { mutableStateOf("Test") }
+        Column {
+            Text(text)
+            ToggleButton(onCheckedChange = { text = it.toString() })
+        }
     }
 }

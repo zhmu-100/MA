@@ -19,7 +19,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -148,6 +150,10 @@ private fun HorizontalLine(height: Dp, color: Color) {
 @Composable
 fun HeightSelectorPreview() {
     MATheme {
-        HeightSelector()
+        var text by remember { mutableStateOf("Test") }
+        Column {
+            Text(text)
+            HeightSelector(onHeightSelected = { text = it.toString() })
+        }
     }
 }

@@ -12,6 +12,10 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -79,10 +83,14 @@ fun DoubleButton(
 @Preview(showBackground = true)
 @Composable
 fun MyScreen() {
+    var text1 by remember { mutableStateOf("Test") }
+    var text2 by remember { mutableStateOf("Test") }
     MATheme {
         DoubleButton(
-            leftText = "KG",
-            rightText = "LB"
+            leftText = text1,
+            rightText = text2,
+            onLeftClick = { text1 = "Test1" },
+            onRightClick = { text2 = "Test2" }
         )
     }
 }

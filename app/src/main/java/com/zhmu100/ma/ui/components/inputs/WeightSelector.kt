@@ -19,7 +19,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -144,6 +146,10 @@ private fun VerticalLine(height: Dp, color: Color) {
 @Composable
 fun WeightSelectorPreview() {
     MATheme {
-        WeightSelector()
+        var text by remember { mutableStateOf("Test") }
+        Column {
+            Text(text)
+            WeightSelector(onWeightSelected = { text = it.toString() })
+        }
     }
 }

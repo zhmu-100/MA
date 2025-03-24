@@ -54,9 +54,11 @@ fun InputLine(
 @Composable
 fun InputLinePreview() {
     MATheme {
+        var text by remember { mutableStateOf("Test") }
         InputLine(
-            label = "Почта",
-            password = false
+            label = text,
+            password = false,
+            onTextChanged = { text = "Test1" }
         )
     }
 }

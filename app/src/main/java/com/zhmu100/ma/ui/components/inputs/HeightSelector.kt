@@ -148,7 +148,7 @@ private fun HorizontalLine(height: Dp, color: Color) {
 
 @Preview(showBackground = true)
 @Composable
-fun HeightSelectorPreview() {
+private fun HeightSelectorPreview() {
     MATheme {
         var text by remember { mutableStateOf("Test") }
         Column {

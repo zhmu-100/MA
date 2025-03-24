@@ -52,7 +52,7 @@ fun BackButton(
 
 @Preview(showBackground = true)
 @Composable
-fun BackButtonPreview() {
+private fun BackButtonPreview() {
     var text by remember { mutableStateOf("Test") }
     MATheme {
         BackButton(text = text, onClick = { text = "•••" }, isIconActive = false)

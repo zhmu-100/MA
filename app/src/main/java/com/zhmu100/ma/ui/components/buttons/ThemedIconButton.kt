@@ -63,7 +63,7 @@ fun ThemedIconButton(
 
 @Preview(showBackground = true)
 @Composable
-fun IconButtonPreview() {
+private fun IconButtonPreview() {
     var text by remember { mutableStateOf("Test") }
     Column {
         Text(text)

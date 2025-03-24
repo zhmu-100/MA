@@ -118,7 +118,7 @@ private fun VerticalLine(isSelected: Boolean) {
 
 @Preview(showBackground = true)
 @Composable
-fun AgeSelectorPreview() {
+private fun AgeSelectorPreview() {
     MATheme {
         var text by remember { mutableStateOf("Test") }
         Column {

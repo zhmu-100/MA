@@ -64,7 +64,7 @@ fun CategoryButton(
 
 @Preview(showBackground = true)
 @Composable
-fun CategoryButtonPreview() {
+private fun CategoryButtonPreview() {
     var text by remember { mutableStateOf("Test") }
     var active by remember { mutableStateOf(false) }
     MATheme {

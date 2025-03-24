@@ -144,7 +144,7 @@ private fun VerticalLine(height: Dp, color: Color) {
 
 @Preview(showBackground = true)
 @Composable
-fun WeightSelectorPreview() {
+private fun WeightSelectorPreview() {
     MATheme {
         var text by remember { mutableStateOf("Test") }
         Column {

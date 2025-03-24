@@ -31,7 +31,7 @@ fun RoundButton(text: String, modifier: Modifier = Modifier, onClick: () -> Unit
 
 @Preview(showBackground = true)
 @Composable
-fun RoundButtonPreview() {
+private fun RoundButtonPreview() {
     var text by remember { mutableStateOf("Test") }
 
     MATheme {

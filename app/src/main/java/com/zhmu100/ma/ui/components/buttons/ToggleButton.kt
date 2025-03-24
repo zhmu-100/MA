@@ -39,7 +39,7 @@ fun ToggleButton(
 
 @Preview(showBackground = true)
 @Composable
-fun ToggleButtonPreview() {
+private fun ToggleButtonPreview() {
     MATheme {
         var text by remember { mutableStateOf("Test") }
         Column {

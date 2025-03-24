@@ -3,6 +3,7 @@ package com.zhmu100.ma.ui.components.buttons
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
@@ -36,7 +37,7 @@ fun BigIconButton(
         modifier = modifier
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
-            Icon(painterResource(drawableResId), null)
+            Icon(painterResource(drawableResId), null, modifier.size(30.dp))
             Text(
                 text = text,
                 fontWeight = FontWeight.Normal,
@@ -46,6 +47,7 @@ fun BigIconButton(
             Icon(
                 imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
                 null,
+                modifier.size(30.dp)
             )
         }
 
@@ -54,7 +56,7 @@ fun BigIconButton(
 
 @Preview(showBackground = true)
 @Composable
-fun BigIconButtonPreview() {
+private fun BigIconButtonPreview() {
     var text by remember { mutableStateOf("Test") }
     MATheme {
         BigIconButton(text, R.drawable.male, onClick = { text = "Test1" })

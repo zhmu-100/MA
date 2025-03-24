@@ -48,7 +48,7 @@ fun SquareIconButton(
 
 @Preview(showBackground = true)
 @Composable
-fun SquareIconButtonPreview() {
+private fun SquareIconButtonPreview() {
     var text by remember { mutableStateOf("Test") }
     Column {
         Text(text)

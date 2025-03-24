@@ -52,7 +52,7 @@ fun InputLine(
 
 @Preview(showBackground = true)
 @Composable
-fun InputLinePreview() {
+private fun InputLinePreview() {
     MATheme {
         var text by remember { mutableStateOf("Test") }
         InputLine(

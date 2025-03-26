@@ -100,7 +100,7 @@ fun AgeSelector(
 private fun ArrowUp() {
     Icon(
         painter = painterResource(R.drawable.triangle_up),
-        contentDescription = null,
+        contentDescription = "Arrow Up",
         tint = MaterialTheme.colorScheme.primary,
         modifier = Modifier.size(64.dp)
     )

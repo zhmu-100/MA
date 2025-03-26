@@ -39,7 +39,7 @@ fun BackButton(
             if (isIconActive) {
                 Icon(
                     imageVector = Icons.AutoMirrored.Default.KeyboardArrowLeft,
-                    contentDescription = null
+                    contentDescription = "Arrow Up"
                 )
             }
             Text(

@@ -110,7 +110,7 @@ fun HeightSelector(
 private fun ArrowLeft() {
     Icon(
         painter = painterResource(R.drawable.triangle_left),
-        contentDescription = null,
+        contentDescription = "Arrow Left",
         tint = MaterialTheme.colorScheme.primary,
         modifier = Modifier.size(64.dp)
     )

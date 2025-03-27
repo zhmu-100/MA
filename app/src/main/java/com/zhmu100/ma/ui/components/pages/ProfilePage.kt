@@ -17,7 +17,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -33,7 +32,7 @@ import com.zhmu100.ma.ui.theme.LightGray
 import com.zhmu100.ma.ui.theme.MATheme
 
 @Composable
-fun Profile(modifier: Modifier = Modifier) {
+fun ProfilePage(modifier: Modifier = Modifier) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier
@@ -42,7 +41,7 @@ fun Profile(modifier: Modifier = Modifier) {
             horizontalArrangement = Arrangement.Absolute.SpaceBetween,
             modifier = Modifier.fillMaxWidth()
         ) {
-            BackButton(text = "Назад")
+                BackButton(text = "Назад")
             BackButton(text = "•••", isIconActive = false)
         }
         ProfileImage(
@@ -64,7 +63,7 @@ fun Profile(modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun ProfileImage(url: String) {
+private fun ProfileImage(url: String) {
     Box {
         AsyncImage(
             model = url,
@@ -86,8 +85,8 @@ fun ProfileImage(url: String) {
 
 @Preview(showBackground = true)
 @Composable
-private fun ProfilePreview() {
+private fun ProfilePagePreview() {
     MATheme {
-        Profile()
+        ProfilePage()
     }
 }

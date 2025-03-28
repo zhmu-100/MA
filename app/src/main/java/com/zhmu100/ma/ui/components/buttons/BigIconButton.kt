@@ -17,6 +17,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -30,6 +31,28 @@ fun BigIconButton(
     drawableResId: Int,
     modifier: Modifier = Modifier,
     onClick: () -> Unit = {}
+) = BaseBigIconButton(text, modifier, onClick)
+{
+    Icon(painterResource(drawableResId), null, modifier.size(30.dp))
+}
+
+@Composable
+fun BigIconButton(
+    text: String,
+    imageVector: ImageVector,
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit = {}
+) = BaseBigIconButton(text, modifier, onClick)
+{
+    Icon(imageVector = imageVector, null, modifier.size(30.dp))
+}
+
+@Composable
+private fun BaseBigIconButton(
+    text: String,
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit = {},
+    content: @Composable () -> Unit
 ) {
     Button(
         onClick = onClick,
@@ -37,7 +60,7 @@ fun BigIconButton(
         modifier = modifier
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
-            Icon(painterResource(drawableResId), null, modifier.size(30.dp))
+            content()
             Text(
                 text = text,
                 fontWeight = FontWeight.Normal,

@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
@@ -41,7 +42,7 @@ fun ProfilePage(modifier: Modifier = Modifier) {
             horizontalArrangement = Arrangement.Absolute.SpaceBetween,
             modifier = Modifier.fillMaxWidth()
         ) {
-                BackButton(text = "Назад")
+            BackButton(text = "Назад")
             BackButton(text = "•••", isIconActive = false)
         }
         ProfileImage(
@@ -49,10 +50,26 @@ fun ProfilePage(modifier: Modifier = Modifier) {
         )
         Text("Login")
         Text("online", fontSize = 12.sp, color = MaterialTheme.colorScheme.primary)
-        BigIconButton(text = "Мои параметры", drawableResId = R.drawable.ruler)
-        BigIconButton(text = "Напоминания", drawableResId = R.drawable.alarm)
-        BigIconButton(text = "Мои устройства", drawableResId = R.drawable.devices)
-        BigIconButton(text = "Статистика", drawableResId = R.drawable.bars)
+        BigIconButton(
+            text = "Мои параметры",
+            drawableResId = R.drawable.ruler,
+            modifier = Modifier.padding(bottom = 8.dp)
+        )
+        BigIconButton(
+            text = "Напоминания",
+            drawableResId = R.drawable.alarm,
+            modifier = Modifier.padding(bottom = 8.dp)
+        )
+        BigIconButton(
+            text = "Мои устройства",
+            drawableResId = R.drawable.devices,
+            modifier = Modifier.padding(bottom = 8.dp)
+        )
+        BigIconButton(
+            text = "Статистика",
+            drawableResId = R.drawable.bars,
+            modifier = Modifier.padding(bottom = 8.dp)
+        )
         Text(
             "Мои записи",
             fontWeight = FontWeight.Bold,

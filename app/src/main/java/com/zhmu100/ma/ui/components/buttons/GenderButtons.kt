@@ -52,7 +52,7 @@ fun GenderButtons(
 }
 
 @Composable
-fun CircleButton(
+private fun CircleButton(
     isSelected: Boolean,
     modifier: Modifier = Modifier,
     onClick: () -> Unit = {},

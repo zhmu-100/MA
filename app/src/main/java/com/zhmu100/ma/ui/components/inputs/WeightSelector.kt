@@ -106,7 +106,7 @@ fun WeightSelector(
 private fun ArrowUp() {
     Icon(
         painter = painterResource(R.drawable.triangle_up),
-        contentDescription = null,
+        contentDescription = "Arrow Up",
         tint = MaterialTheme.colorScheme.primary,
         modifier = Modifier.size(64.dp)
     )
@@ -144,7 +144,7 @@ private fun VerticalLine(height: Dp, color: Color) {
 
 @Preview(showBackground = true)
 @Composable
-fun WeightSelectorPreview() {
+private fun WeightSelectorPreview() {
     MATheme {
         var text by remember { mutableStateOf("Test") }
         Column {

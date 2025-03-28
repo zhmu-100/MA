@@ -70,7 +70,7 @@ fun NavBar(
 
 @Preview(showBackground = true)
 @Composable
-fun NavBarPreview() {
+private fun NavBarPreview() {
     MATheme {
         var text by remember { mutableStateOf("Test") }
         Column {

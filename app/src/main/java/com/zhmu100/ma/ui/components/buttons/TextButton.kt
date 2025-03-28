@@ -27,7 +27,7 @@ fun StringButton(text: String, modifier: Modifier = Modifier, onClick: () -> Uni
 
 @Preview(showBackground = true)
 @Composable
-fun StringButtonPreview() {
+private fun StringButtonPreview() {
     var text by remember { mutableStateOf("Test") }
     MATheme {
         StringButton(

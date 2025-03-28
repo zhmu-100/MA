@@ -10,7 +10,7 @@ import com.zhmu100.ma.ui.theme.MATheme
 
 @Preview(showBackground = true)
 @Composable
-fun GreetingPreview() {
+private fun GreetingPreview() {
     MATheme {
         Greeting(
             "Android",

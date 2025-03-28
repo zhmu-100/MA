@@ -4,10 +4,11 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.height
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
+import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -19,43 +20,42 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.zhmu100.ma.ui.theme.Black
-import com.zhmu100.ma.ui.theme.LightGray
 import com.zhmu100.ma.ui.theme.MATheme
+import com.zhmu100.ma.ui.theme.White
 
 @Composable
-fun BackButton(
+fun SaveButton(
     modifier: Modifier = Modifier,
-    text: String = "Назад",
+    text: String = "Сохранить",
     onClick: () -> Unit = {},
     isIconActive: Boolean = true
 ) {
     Button(
         onClick = onClick,
-        colors = ButtonDefaults.buttonColors(LightGray, Black),
+        colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.primary, White),
         contentPadding = PaddingValues(vertical = 0.dp, horizontal = 8.dp),
         modifier = modifier.height(24.dp)
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
-            if (isIconActive) {
-                Icon(
-                    imageVector = Icons.AutoMirrored.Default.KeyboardArrowLeft,
-                    contentDescription = "Arrow Left"
-                )
-            }
             Text(
                 text = text,
                 fontWeight = FontWeight.Bold
             )
+            if (isIconActive) {
+                Icon(
+                    imageVector = Icons.AutoMirrored.Default.KeyboardArrowRight,
+                    contentDescription = "Arrow Right"
+                )
+            }
         }
     }
 }
 
 @Preview(showBackground = true)
 @Composable
-private fun BackButtonPreview() {
+private fun SaveButtonPreview() {
     var text by remember { mutableStateOf("Test") }
     MATheme {
-        BackButton(text = text, onClick = { text = "•••" }, isIconActive = false)
+        SaveButton(text = text, onClick = { text = "•••" }, isIconActive = true)
     }
 }

@@ -25,19 +25,11 @@ fun ThemedIconButton(
     imageVector: ImageVector,
     modifier: Modifier = Modifier,
     onClick: () -> Unit = {}
+) = BaseThemedIconButton(
+    modifier = modifier,
+    onClick = onClick
 ) {
-    IconButton(
-        onClick = onClick, colors = IconButtonDefaults.iconButtonColors(
-            containerColor = MaterialTheme.colorScheme.primary,
-            contentColor = MaterialTheme.colorScheme.background
-        ),
-        modifier = modifier
-    ) {
-        Icon(
-            imageVector = imageVector,
-            null
-        )
-    }
+    Icon(imageVector = imageVector, null)
 }
 
 @Composable
@@ -45,6 +37,18 @@ fun ThemedIconButton(
     drawableResId: Int,
     modifier: Modifier = Modifier,
     onClick: () -> Unit = {}
+) = BaseThemedIconButton(
+    modifier = modifier,
+    onClick = onClick
+) {
+    Icon(painter = painterResource(drawableResId), null)
+}
+
+@Composable
+private fun BaseThemedIconButton(
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit = {},
+    content: @Composable () -> Unit
 ) {
     IconButton(
         onClick = onClick, colors = IconButtonDefaults.iconButtonColors(
@@ -53,17 +57,14 @@ fun ThemedIconButton(
         ),
         modifier = modifier
     ) {
-        Icon(
-            painter = painterResource(drawableResId),
-            null
-        )
+        content()
     }
 }
 
 
 @Preview(showBackground = true)
 @Composable
-fun IconButtonPreview() {
+private fun IconButtonPreview() {
     var text by remember { mutableStateOf("Test") }
     Column {
         Text(text)

@@ -100,7 +100,7 @@ fun AgeSelector(
 private fun ArrowUp() {
     Icon(
         painter = painterResource(R.drawable.triangle_up),
-        contentDescription = null,
+        contentDescription = "Arrow Up",
         tint = MaterialTheme.colorScheme.primary,
         modifier = Modifier.size(64.dp)
     )
@@ -118,7 +118,7 @@ private fun VerticalLine(isSelected: Boolean) {
 
 @Preview(showBackground = true)
 @Composable
-fun AgeSelectorPreview() {
+private fun AgeSelectorPreview() {
     MATheme {
         var text by remember { mutableStateOf("Test") }
         Column {

@@ -110,7 +110,7 @@ fun HeightSelector(
 private fun ArrowLeft() {
     Icon(
         painter = painterResource(R.drawable.triangle_left),
-        contentDescription = null,
+        contentDescription = "Arrow Left",
         tint = MaterialTheme.colorScheme.primary,
         modifier = Modifier.size(64.dp)
     )
@@ -148,7 +148,7 @@ private fun HorizontalLine(height: Dp, color: Color) {
 
 @Preview(showBackground = true)
 @Composable
-fun HeightSelectorPreview() {
+private fun HeightSelectorPreview() {
     MATheme {
         var text by remember { mutableStateOf("Test") }
         Column {

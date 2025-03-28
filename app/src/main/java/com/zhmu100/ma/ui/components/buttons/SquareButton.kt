@@ -41,7 +41,7 @@ fun SquareButton(
 
 @Preview(showBackground = true)
 @Composable
-fun SquareButtonPreview() {
+private fun SquareButtonPreview() {
     var text by remember { mutableStateOf("Test") }
     MATheme {
         SquareButton(

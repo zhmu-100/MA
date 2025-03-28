@@ -60,7 +60,7 @@ fun ChoiceButtonFill(
 
 @Preview(showBackground = true)
 @Composable
-fun ChoiceButtonFillPreview() {
+private fun ChoiceButtonFillPreview() {
     MATheme {
         var text by remember { mutableStateOf("Test") }
         ChoiceButtonFill(

@@ -9,4 +9,5 @@ val Orange = Color(0xFFBD5D34)
 val White = Color(0xFFFFFFFF)
 val Black = Color(0xFF000000)
 val LightGray = Color(0xFFCCCCCC)
+val LightGreenTransparent = Color(0x334FA997)
 

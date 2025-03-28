@@ -52,7 +52,7 @@ fun GenderButtons(
 }
 
 @Composable
-fun CircleButton(
+private fun CircleButton(
     isSelected: Boolean,
     modifier: Modifier = Modifier,
     onClick: () -> Unit = {},
@@ -80,7 +80,7 @@ fun CircleButton(
 
 @Preview(showBackground = true)
 @Composable
-fun GenderButtonsPreview() {
+private fun GenderButtonsPreview() {
     var text by remember { mutableStateOf("Test") }
     Column {
         Text(text)

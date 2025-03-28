@@ -70,7 +70,7 @@ fun ChoiceButton(
 
 @Preview(showBackground = true)
 @Composable
-fun ChoiceButtonPreview() {
+private fun ChoiceButtonPreview() {
     var text by remember { mutableStateOf("Test") }
     MATheme {
         ChoiceButton(

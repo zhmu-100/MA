@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -12,6 +13,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Create
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -23,59 +25,76 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import coil3.compose.AsyncImage
 import com.zhmu100.ma.R
+import com.zhmu100.ma.ui.components.NavBar
 import com.zhmu100.ma.ui.components.buttons.BackButton
 import com.zhmu100.ma.ui.components.buttons.BigIconButton
 import com.zhmu100.ma.ui.components.buttons.RoundButton
 import com.zhmu100.ma.ui.components.buttons.ThemedIconButton
 import com.zhmu100.ma.ui.theme.LightGray
 import com.zhmu100.ma.ui.theme.MATheme
+import kotlinx.serialization.Serializable
 
 @Composable
-fun ProfilePage(modifier: Modifier = Modifier) {
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = modifier
-    ) {
-        Row(
-            horizontalArrangement = Arrangement.Absolute.SpaceBetween,
-            modifier = Modifier.fillMaxWidth()
+fun ProfilePage(modifier: Modifier = Modifier, navController: NavController? = null) {
+    Scaffold(
+        bottomBar = { NavBar(4, {}, modifier = Modifier.padding(vertical = 8.dp)) },
+        modifier = Modifier.fillMaxSize()
+    ) { innerPadding ->
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = modifier
+                .padding(innerPadding)
+                .padding(16.dp)
         ) {
-            BackButton(text = "Назад")
-            BackButton(text = "•••", isIconActive = false)
+            Row(
+                horizontalArrangement = Arrangement.Absolute.SpaceBetween,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                BackButton(text = "Назад")
+                BackButton(
+                    text = "•••",
+                    isIconActive = false,
+                    onClick = { navController?.navigate(SettingsScreen) })
+            }
+            ProfileImage(
+                url = "https://avatars.mds.yandex.net/i?id=973900345cef4fb385b6142051e2cd9b81e0ff0a-9856853-images-thumbs&n=13"
+            )
+            Text("Login")
+            Text("online", fontSize = 12.sp, color = MaterialTheme.colorScheme.primary)
+            BigIconButton(
+                text = "Мои параметры",
+                drawableResId = R.drawable.ruler,
+                modifier = Modifier.padding(bottom = 8.dp)
+            )
+            BigIconButton(
+                text = "Напоминания",
+                drawableResId = R.drawable.alarm,
+                modifier = Modifier.padding(bottom = 8.dp),
+                onClick = { navController?.navigate(RemindersScreen) }
+            )
+            BigIconButton(
+                text = "Мои устройства",
+                drawableResId = R.drawable.devices,
+                modifier = Modifier.padding(bottom = 8.dp),
+                onClick = { navController?.navigate(DevicesScreen) }
+
+            )
+            BigIconButton(
+                text = "Статистика",
+                drawableResId = R.drawable.bars,
+                modifier = Modifier.padding(bottom = 8.dp),
+//                onClick = { navController?.navigate(StatisticsScreen) }
+            )
+            Text(
+                "Мои записи",
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colorScheme.inversePrimary
+            )
+            RoundButton("Создать запись", onClick = { navController?.navigate(PostScreen) })
         }
-        ProfileImage(
-            url = "https://avatars.mds.yandex.net/i?id=973900345cef4fb385b6142051e2cd9b81e0ff0a-9856853-images-thumbs&n=13"
-        )
-        Text("Login")
-        Text("online", fontSize = 12.sp, color = MaterialTheme.colorScheme.primary)
-        BigIconButton(
-            text = "Мои параметры",
-            drawableResId = R.drawable.ruler,
-            modifier = Modifier.padding(bottom = 8.dp)
-        )
-        BigIconButton(
-            text = "Напоминания",
-            drawableResId = R.drawable.alarm,
-            modifier = Modifier.padding(bottom = 8.dp)
-        )
-        BigIconButton(
-            text = "Мои устройства",
-            drawableResId = R.drawable.devices,
-            modifier = Modifier.padding(bottom = 8.dp)
-        )
-        BigIconButton(
-            text = "Статистика",
-            drawableResId = R.drawable.bars,
-            modifier = Modifier.padding(bottom = 8.dp)
-        )
-        Text(
-            "Мои записи",
-            fontWeight = FontWeight.Bold,
-            color = MaterialTheme.colorScheme.inversePrimary
-        )
-        RoundButton("Создать запись")
     }
 }
 
@@ -99,6 +118,9 @@ private fun ProfileImage(url: String) {
         )
     }
 }
+
+@Serializable
+object ProfileScreen
 
 @Preview(showBackground = true)
 @Composable

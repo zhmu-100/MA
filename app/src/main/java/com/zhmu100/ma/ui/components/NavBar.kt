@@ -23,6 +23,7 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.zhmu100.ma.R
 import com.zhmu100.ma.ui.theme.MATheme
 
@@ -30,7 +31,8 @@ import com.zhmu100.ma.ui.theme.MATheme
 fun NavBar(
     startingActiveInd: Int,
     onClick: (Int) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    navController: NavController? = null
 ) {
     Surface(
         color = MaterialTheme.colorScheme.background,
@@ -43,6 +45,7 @@ fun NavBar(
             R.drawable.note,
             R.drawable.person,
         )
+//        val navPath = TODO (PostsScreen, TrainingsScreen, FoodScreen, NotesScreen, ProfileScreen)
         var activeInd by remember { mutableIntStateOf(startingActiveInd) }
 
         Row(
@@ -59,6 +62,7 @@ fun NavBar(
                         .clickable {
                             activeInd = ind
                             onClick(ind)
+                            // TODO navController?.navigate(navPath[ind])
                         }
                 )
             }

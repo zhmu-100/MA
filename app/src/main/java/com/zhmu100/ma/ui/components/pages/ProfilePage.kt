@@ -59,7 +59,8 @@ fun ProfilePage(modifier: Modifier = Modifier, navController: NavController? = n
             BigIconButton(
                 text = "Мои параметры",
                 drawableResId = R.drawable.ruler,
-                modifier = Modifier.padding(bottom = 8.dp)
+                modifier = Modifier.padding(bottom = 8.dp),
+                onClick = {navController?.navigate(ProfileParametersScreen)}
             )
             BigIconButton(
                 text = "Напоминания",

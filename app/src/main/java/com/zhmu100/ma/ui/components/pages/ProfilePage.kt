@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -13,7 +12,6 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Create
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -28,7 +26,6 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil3.compose.AsyncImage
 import com.zhmu100.ma.R
-import com.zhmu100.ma.ui.components.NavBar
 import com.zhmu100.ma.ui.components.buttons.BackButton
 import com.zhmu100.ma.ui.components.buttons.BigIconButton
 import com.zhmu100.ma.ui.components.buttons.RoundButton
@@ -39,15 +36,10 @@ import kotlinx.serialization.Serializable
 
 @Composable
 fun ProfilePage(modifier: Modifier = Modifier, navController: NavController? = null) {
-    Scaffold(
-        bottomBar = { NavBar(4, {}, modifier = Modifier.padding(vertical = 8.dp)) },
-        modifier = Modifier.fillMaxSize()
-    ) { innerPadding ->
+    BasePage(true, modifier = modifier) { baseModifier ->
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = modifier
-                .padding(innerPadding)
-                .padding(16.dp)
+            modifier = baseModifier
         ) {
             Row(
                 horizontalArrangement = Arrangement.Absolute.SpaceBetween,
@@ -67,7 +59,8 @@ fun ProfilePage(modifier: Modifier = Modifier, navController: NavController? = n
             BigIconButton(
                 text = "Мои параметры",
                 drawableResId = R.drawable.ruler,
-                modifier = Modifier.padding(bottom = 8.dp)
+                modifier = Modifier.padding(bottom = 8.dp),
+                onClick = {navController?.navigate(ProfileParametersScreen)}
             )
             BigIconButton(
                 text = "Напоминания",

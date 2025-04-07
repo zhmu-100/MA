@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -17,7 +16,6 @@ import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -43,14 +41,10 @@ import kotlinx.serialization.Serializable
 
 @Composable
 fun ReminderPage(modifier: Modifier = Modifier, navController: NavController? = null) {
-    Scaffold(
-        modifier = Modifier.fillMaxSize()
-    ) { innerPadding ->
+    BasePage(false, modifier = modifier) { baseModifier ->
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = modifier
-                .padding(innerPadding)
-                .padding(16.dp)
+            modifier = baseModifier
         ) {
             var selectedHour by remember { mutableIntStateOf(8) }
             var selectedMinute by remember { mutableIntStateOf(30) }

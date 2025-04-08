@@ -2,6 +2,7 @@ package com.zhmu100.ma.ui.components.charts
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Size
@@ -27,7 +28,7 @@ import com.zhmu100.ma.ui.theme.fatsColor
 import com.zhmu100.ma.ui.theme.proteinsColor
 
 
-private val BAR_WIDTH = 30.dp
+private val BAR_WIDTH = 25.dp
 private val CHART_HEIGHT = 400.dp
 private val LEGEND_HEIGHT = 30.dp
 private val Y_STEP_SIZE = 5
@@ -40,7 +41,7 @@ fun StackableNutrients(nutrients: List<NutrientsData>, modifier: Modifier = Modi
 }
 
 @Composable
-fun VerticalStackedBarChart(groupBarData: List<GroupBar>, modifier: Modifier = Modifier) {
+private fun VerticalStackedBarChart(groupBarData: List<GroupBar>, modifier: Modifier = Modifier) {
     val legendLabels = COLOR_PALETTE.mapIndexed { index, color ->
         LegendLabel(color, LABELS[index])
     }
@@ -60,8 +61,8 @@ fun VerticalStackedBarChart(groupBarData: List<GroupBar>, modifier: Modifier = M
         }
         .build()
     val legendsConfig = LegendsConfig(
-        colorBoxSize = 8.dp,
-        spaceBWLabelAndColorBox = 4.dp,
+        colorBoxSize = 7.dp,
+        spaceBWLabelAndColorBox = 2.dp,
         legendLabelList = legendLabels,
         gridColumnCount = COLOR_PALETTE.size
     )
@@ -95,14 +96,14 @@ fun VerticalStackedBarChart(groupBarData: List<GroupBar>, modifier: Modifier = M
         }
     )
     Column(
-        modifier.height(CHART_HEIGHT + LEGEND_HEIGHT)
+        modifier.height(CHART_HEIGHT + LEGEND_HEIGHT).width(350.dp)
     ) {
         Legends(
             legendsConfig = legendsConfig,
             modifier = Modifier.height(LEGEND_HEIGHT)
         )
         StackedBarChart(
-            modifier = Modifier.height(CHART_HEIGHT),
+            modifier = Modifier,
             groupBarChartData = groupBarChartData
         )
     }

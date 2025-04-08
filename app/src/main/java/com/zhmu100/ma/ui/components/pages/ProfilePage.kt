@@ -79,7 +79,7 @@ fun ProfilePage(modifier: Modifier = Modifier, navController: NavController? = n
                 text = "Статистика",
                 drawableResId = R.drawable.bars,
                 modifier = Modifier.padding(bottom = 8.dp),
-//                onClick = { navController?.navigate(StatisticsScreen) }
+                onClick = { navController?.navigate(StatisticsScreen) }
             )
             Text(
                 "Мои записи",

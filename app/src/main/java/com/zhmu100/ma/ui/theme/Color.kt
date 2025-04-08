@@ -11,3 +11,9 @@ val Black = Color(0xFF000000)
 val LightGray = Color(0xFFCCCCCC)
 val LightGreenTransparent = Color(0x334FA997)
 
+// graphs
+val caloriesColor = Color(0xFF22C38E)
+val carbsColor = Color(0xFFF2C94C)
+val fatsColor = Color(0xFFF38B00)
+val proteinsColor = Color(0xFF0BA5FF)
+

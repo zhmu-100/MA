@@ -46,7 +46,7 @@ fun VerticalStackedBarChart(groupBarData: List<GroupBar>, modifier: Modifier = M
     }
     val xAxisData = AxisData.Builder()
         .steps(groupBarData.count() - 1)
-        .startDrawPadding(30.dp)
+        .startDrawPadding(BAR_WIDTH)
         .build()
     val yAxisData = AxisData.Builder()
         .steps(Y_STEP_SIZE)
@@ -70,6 +70,7 @@ fun VerticalStackedBarChart(groupBarData: List<GroupBar>, modifier: Modifier = M
         barStyle = BarStyle(
             barWidth = BAR_WIDTH,
             selectionHighlightData = SelectionHighlightData(
+                highlightTextOffset = 5.dp,
                 groupBarPopUpLabel = { x, value ->
                     "${xToName(x)}: ${value.toInt()}"
                 }

@@ -23,6 +23,8 @@ import com.zhmu100.ma.ui.components.pages.DevicesScreen
 import com.zhmu100.ma.ui.components.pages.PostPage
 import com.zhmu100.ma.ui.components.pages.PostScreen
 import com.zhmu100.ma.ui.components.pages.ProfilePage
+import com.zhmu100.ma.ui.components.pages.ProfileParametersPage
+import com.zhmu100.ma.ui.components.pages.ProfileParametersScreen
 import com.zhmu100.ma.ui.components.pages.ProfileScreen
 import com.zhmu100.ma.ui.components.pages.ReminderPage
 import com.zhmu100.ma.ui.components.pages.ReminderScreen
@@ -30,6 +32,8 @@ import com.zhmu100.ma.ui.components.pages.RemindersPage
 import com.zhmu100.ma.ui.components.pages.RemindersScreen
 import com.zhmu100.ma.ui.components.pages.SettingsPage
 import com.zhmu100.ma.ui.components.pages.SettingsScreen
+import com.zhmu100.ma.ui.components.pages.StatisticPage
+import com.zhmu100.ma.ui.components.pages.StatisticsScreen
 import com.zhmu100.ma.ui.theme.MATheme
 
 
@@ -48,7 +52,9 @@ class MainActivity : ComponentActivity() {
                     composable<RemindersScreen> { RemindersPage(navController = navContoller) }
                     composable<ReminderScreen> { ReminderPage(navController = navContoller) }
                     composable<SettingsScreen> { SettingsPage(navController = navContoller) }
-//                    composable<StatisticsScreen> {  }
+                    composable<StatisticsScreen> { StatisticPage(navController = navContoller) }
+                    composable<ProfileParametersScreen> { ProfileParametersPage(navController = navContoller) }
+
                 }
             }
         }

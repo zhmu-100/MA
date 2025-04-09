@@ -23,6 +23,14 @@ import androidx.compose.ui.unit.dp
 import com.zhmu100.ma.ui.theme.MATheme
 import com.zhmu100.ma.ui.theme.White
 
+/**
+ * Компонент кнопки сохранения с опциональной иконкой стрелки.
+ *
+ * @param modifier Модификатор для настройки внешнего вида и расположения кнопки
+ * @param text Текст кнопки (по умолчанию "Сохранить")
+ * @param onClick Обработчик нажатия на кнопку
+ * @param isIconActive Флаг отображения иконки стрелки (по умолчанию true)
+ */
 @Composable
 fun SaveButton(
     modifier: Modifier = Modifier,

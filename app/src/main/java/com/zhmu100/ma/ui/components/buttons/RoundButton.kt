@@ -14,7 +14,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.zhmu100.ma.ui.theme.MATheme
 
-
+/**
+ * Компонент круглой кнопки с текстом.
+ *
+ * @param text Текст, отображаемый на кнопке
+ * @param modifier Модификатор для настройки внешнего вида и расположения кнопки
+ * @param onClick Обработчик нажатия на кнопку
+ */
 @Composable
 fun RoundButton(text: String, modifier: Modifier = Modifier, onClick: () -> Unit = {}) {
     Button(

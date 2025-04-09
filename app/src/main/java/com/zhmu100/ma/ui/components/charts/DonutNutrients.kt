@@ -28,6 +28,18 @@ import com.zhmu100.ma.ui.theme.proteinsColor
 private val COLOR_PALETTE = listOf(caloriesColor, carbsColor, fatsColor, proteinsColor)
 private val LABELS = listOf("Белки", "Углеводы", "Жиры", "Калории")
 
+/**
+ * Компонент кольцевой диаграммы (donut chart) для отображения питательных веществ.
+ *
+ * @param nutrients Данные о питательных веществах для отображения
+ * @param modifier Модификатор для настройки внешнего вида и расположения компонента
+ *
+ * Внутренняя реализация:
+ * - Использует библиотеку для построения кольцевых диаграмм
+ * - Отображает 4 категории: белки, жиры, углеводы и калории
+ * - Включает легенду с цветовыми обозначениями
+ * - Поддерживает анимации и пользовательские настройки отображения
+ */
 @Composable
 fun DonutNutrients(nutrients: NutrientsData, modifier: Modifier = Modifier) {
     SimpleDonutChart(nutrients, modifier)
@@ -73,6 +85,12 @@ private fun SimpleDonutChart(nutrients: NutrientsData, modifier: Modifier = Modi
     }
 }
 
+/**
+ * Приватная функция преобразования данных о питательных веществах в формат для диаграммы.
+ *
+ * @param nutrients Данные о питательных веществах
+ * @return PieChartData подготовленные данные для отображения на диаграмме
+ */
 private fun nutrientsToPieData(nutrients: NutrientsData): PieChartData {
     return PieChartData(
         plotType = PlotType.Donut,

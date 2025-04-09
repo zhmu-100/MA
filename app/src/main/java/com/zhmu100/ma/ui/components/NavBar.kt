@@ -27,6 +27,14 @@ import androidx.navigation.NavController
 import com.zhmu100.ma.R
 import com.zhmu100.ma.ui.theme.MATheme
 
+/**
+ * Компонент нижней навигационной панели приложения.
+ *
+ * @param startingActiveInd Индекс начальной активной иконки
+ * @param onClick Обработчик клика по иконке (возвращает индекс нажатой иконки)
+ * @param modifier Модификатор для настройки внешнего вида
+ * @param navController Контроллер навигации (опционально)
+ */
 @Composable
 fun NavBar(
     startingActiveInd: Int,
@@ -67,8 +75,6 @@ fun NavBar(
                 )
             }
         }
-
-
     }
 }
 

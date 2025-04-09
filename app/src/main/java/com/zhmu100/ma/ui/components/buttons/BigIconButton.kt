@@ -25,6 +25,14 @@ import androidx.compose.ui.unit.dp
 import com.zhmu100.ma.R
 import com.zhmu100.ma.ui.theme.MATheme
 
+/**
+ * Компонент кнопки с крупной иконкой и текстом.
+ *
+ * @param text Текст, отображаемый на кнопке.
+ * @param drawableResId Ресурс иконки (Drawable), отображаемой на кнопке.
+ * @param modifier Модификатор для настройки внешнего вида и расположения кнопки.
+ * @param onClick Обработчик нажатия на кнопку.
+ */
 @Composable
 fun BigIconButton(
     text: String,
@@ -36,6 +44,14 @@ fun BigIconButton(
     Icon(painterResource(drawableResId), null, modifier.size(30.dp))
 }
 
+/**
+ * Компонент кнопки с крупной иконкой и текстом.
+ *
+ * @param text Текст, отображаемый на кнопке.
+ * @param imageVector Векторное изображение (ImageVector), отображаемое на кнопке.
+ * @param modifier Модификатор для настройки внешнего вида и расположения кнопки.
+ * @param onClick Обработчик нажатия на кнопку.
+ */
 @Composable
 fun BigIconButton(
     text: String,

@@ -35,6 +35,18 @@ private val Y_STEP_SIZE = 5
 private val COLOR_PALETTE = listOf(caloriesColor, carbsColor, fatsColor, proteinsColor)
 private val LABELS = listOf("Белки", "Углеводы", "Жиры", "Калории")
 
+/**
+ * Компонент стекированной вертикальной диаграммы для отображения питательных веществ.
+ *
+ * @param nutrients Список данных о питательных веществах для отображения
+ * @param modifier Модификатор для настройки внешнего вида и расположения компонента
+ *
+ * Внутренняя реализация:
+ * - Преобразует данные о питательных веществах в формат для стекированной диаграммы
+ * - Отображает 4 категории: белки, жиры, углеводы и калории
+ * - Включает легенду с цветовыми обозначениями
+ * - Поддерживает подсказки при наведении на элементы диаграммы
+ */
 @Composable
 fun StackableNutrients(nutrients: List<NutrientsData>, modifier: Modifier = Modifier) {
     VerticalStackedBarChart(nutrientsToGroupBar(nutrients), modifier)
@@ -109,6 +121,17 @@ private fun VerticalStackedBarChart(groupBarData: List<GroupBar>, modifier: Modi
     }
 }
 
+/**
+ * Приватная функция преобразования данных о питательных веществах в формат для стекированной диаграммы.
+ *
+ * @param nutrients Список данных о питательных веществах
+ * @return List<GroupBar> подготовленные данные для отображения на диаграмме
+ *
+ * Особенности преобразования:
+ * - Создает группу столбцов для каждого набора данных
+ * - Каждый столбец содержит 4 значения (белки, жиры, углеводы, калории)
+ * - Использует фиксированные индексы для категорий (0-3)
+ */
 private fun nutrientsToGroupBar(nutrients: List<NutrientsData>): List<GroupBar> {
     return nutrients.map { nutrition ->
         GroupBar(
@@ -123,6 +146,13 @@ private fun nutrientsToGroupBar(nutrients: List<NutrientsData>): List<GroupBar> 
     }
 }
 
+/**
+ * Приватная функция преобразования индекса категории в читаемое название.
+ *
+ * @param x Индекс категории в виде строки
+ * @return String читаемое название категории
+ * @throws IllegalArgumentException при передаче недопустимого индекса
+ */
 private fun xToName(x: String): String {
     return when (x) {
         "0" -> "Белки"

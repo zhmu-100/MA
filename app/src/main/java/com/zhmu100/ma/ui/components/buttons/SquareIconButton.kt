@@ -25,6 +25,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.zhmu100.ma.ui.theme.MATheme
 
+/**
+ * Компонент квадратной кнопки с иконкой и закругленными углами.
+ *
+ * @param imageVector Векторное изображение для иконки кнопки
+ * @param modifier Модификатор для настройки внешнего вида и расположения кнопки
+ * @param background Цвет фона кнопки (по умолчанию tertiary цвет из темы)
+ * @param onClick Обработчик нажатия на кнопку
+ */
 @Composable
 fun SquareIconButton(
     imageVector: ImageVector,
@@ -44,6 +52,14 @@ fun SquareIconButton(
     )
 }
 
+/**
+ * Компонент квадратной кнопки с иконкой (из ресурсов) и закругленными углами.
+ *
+ * @param iconResourceId ID ресурса изображения для иконки кнопки
+ * @param modifier Модификатор для настройки внешнего вида и расположения кнопки
+ * @param background Цвет фона кнопки (по умолчанию tertiary цвет из темы)
+ * @param onClick Обработчик нажатия на кнопку
+ */
 @Composable
 fun SquareIconButton(
     iconResourceId: Int,

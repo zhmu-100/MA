@@ -24,6 +24,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.zhmu100.ma.ui.theme.MATheme
 
+/**
+ * Компонент выбора числа из списка с вертикальным скроллируемым списком.
+ *
+ * @param range Список доступных чисел для выбора
+ * @param selectedItem Текущее выбранное число
+ * @param onItemSelected Обработчик выбора числа (возвращает выбранное значение)
+ * @param modifier Модификатор для настройки внешнего вида и расположения компонента
+ */
 @Composable
 fun NumberSelector(
     range: List<Int>,

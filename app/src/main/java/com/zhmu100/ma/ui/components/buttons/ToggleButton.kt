@@ -14,6 +14,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.zhmu100.ma.ui.theme.MATheme
 
+/**
+ * Компонент переключателя (toggle) с тематическим оформлением.
+ *
+ * @param modifier Модификатор для настройки внешнего вида и расположения переключателя
+ * @param initState Начальное состояние переключателя (по умолчанию false)
+ * @param onCheckedChange Обработчик изменения состояния (возвращает новое состояние)
+ */
 @Composable
 fun ToggleButton(
     modifier: Modifier = Modifier,

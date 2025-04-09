@@ -20,6 +20,12 @@ import androidx.compose.ui.unit.dp
 import com.zhmu100.ma.ui.theme.Black
 import com.zhmu100.ma.ui.theme.MATheme
 
+/**
+ * Компонент визуализации недели в виде точек с днями недели.
+ *
+ * @param currentDayIndex Индекс текущего дня недели (0-6, где 0=Пн)
+ * @param modifier Модификатор для настройки внешнего вида
+ */
 @Composable
 fun WeekDots(
     currentDayIndex: Int,
@@ -58,7 +64,6 @@ fun WeekDots(
                             shape = CircleShape
                         )
                 )
-
                 Text(text = day)
             }
         }

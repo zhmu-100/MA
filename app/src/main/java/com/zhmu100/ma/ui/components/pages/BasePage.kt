@@ -11,6 +11,14 @@ import androidx.navigation.NavController
 import com.zhmu100.ma.ui.components.NavBar
 import com.zhmu100.ma.ui.theme.MATheme
 
+/**
+ * Базовый компонент страницы с опциональной навигационной панелью.
+ *
+ * @param hasNavBar Флаг отображения навигационной панели
+ * @param modifier Модификатор для настройки внешнего вида контента
+ * @param navController Контроллер навигации (опционально)
+ * @param content Композируемая функция контента страницы
+ */
 @Composable
 fun BasePage(
     hasNavBar: Boolean,

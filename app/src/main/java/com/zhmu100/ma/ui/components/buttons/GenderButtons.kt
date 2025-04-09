@@ -24,6 +24,13 @@ import com.zhmu100.ma.R
 import com.zhmu100.ma.ui.theme.MATheme
 import com.zhmu100.ma.ui.theme.White
 
+/**
+ * Компонент для выбора пола с двумя круглыми кнопками (мужской/женский).
+ *
+ * @param modifier Модификатор для настройки внешнего вида и расположения компонента
+ * @param onMaleSelect Обработчик выбора мужского пола
+ * @param onFemaleSelect Обработчик выбора женского пола
+ */
 @Composable
 fun GenderButtons(
     modifier: Modifier = Modifier,

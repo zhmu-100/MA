@@ -22,6 +22,13 @@ import androidx.compose.ui.unit.dp
 import com.zhmu100.ma.ui.theme.MATheme
 import com.zhmu100.ma.ui.theme.White
 
+/**
+ * Компонент выбора варианта из списка с полным заполнением выбранного элемента цветом.
+ *
+ * @param options Список текстовых вариантов для выбора
+ * @param modifier Модификатор для настройки внешнего вида и расположения компонента
+ * @param onOptionChoose Обработчик выбора варианта, возвращает индекс выбранного элемента
+ */
 @Composable
 fun ChoiceButtonFill(
     options: List<String>,

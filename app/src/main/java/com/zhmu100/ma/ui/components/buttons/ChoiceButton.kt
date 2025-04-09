@@ -28,6 +28,13 @@ import com.zhmu100.ma.ui.theme.Black
 import com.zhmu100.ma.ui.theme.MATheme
 import com.zhmu100.ma.ui.theme.White
 
+/**
+ * Компонент выбора варианта из списка с визуальным выделением выбранного элемента.
+ *
+ * @param options Список текстовых вариантов для выбора.
+ * @param modifier Модификатор для настройки внешнего вида и расположения компонента.
+ * @param onOptionChoose Обработчик выбора варианта, возвращает индекс выбранного элемента.
+ */
 @Composable
 fun ChoiceButton(
     options: List<String>,

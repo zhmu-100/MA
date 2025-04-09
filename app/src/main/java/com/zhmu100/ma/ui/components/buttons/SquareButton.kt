@@ -16,7 +16,14 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import com.zhmu100.ma.ui.theme.MATheme
 
-
+/**
+ * Компонент квадратной кнопки с закругленными углами и настраиваемым цветом.
+ *
+ * @param text Текст, отображаемый на кнопке
+ * @param modifier Модификатор для настройки внешнего вида и расположения кнопки
+ * @param color Цвет фона кнопки (по умолчанию tertiary цвет из темы)
+ * @param onClick Обработчик нажатия на кнопку
+ */
 @Composable
 fun SquareButton(
     text: String,

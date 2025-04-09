@@ -36,7 +36,16 @@ import com.zhmu100.ma.ui.components.pages.StatisticPage
 import com.zhmu100.ma.ui.components.pages.StatisticsScreen
 import com.zhmu100.ma.ui.theme.MATheme
 
-
+/**
+ * Главная Activity приложения, содержащая навигационный граф.
+ *
+ * Особенности реализации:
+ * - Включает edge-to-edge отображение (enableEdgeToEdge)
+ * - Использует кастомную тему MATheme
+ * - Создает и передает NavController во все экраны
+ * - Определяет начальный экран
+ * Все экраны получают navController для навигации между ними
+ */
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -62,7 +71,7 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun MainScreen() {
+private fun MainScreen() {
     Scaffold(
         bottomBar = { NavBar(4, {}, modifier = Modifier.padding(vertical = 8.dp)) },
         modifier = Modifier.fillMaxSize()

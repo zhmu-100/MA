@@ -19,7 +19,13 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.zhmu100.ma.ui.theme.MATheme
 
-
+/**
+ * Компонент тематической кнопки с иконкой (из векторного изображения).
+ *
+ * @param imageVector Векторное изображение для иконки кнопки
+ * @param modifier Модификатор для настройки внешнего вида и расположения кнопки
+ * @param onClick Обработчик нажатия на кнопку
+ */
 @Composable
 fun ThemedIconButton(
     imageVector: ImageVector,
@@ -32,6 +38,13 @@ fun ThemedIconButton(
     Icon(imageVector = imageVector, null)
 }
 
+/**
+ * Компонент тематической кнопки с иконкой (из ресурсов).
+ *
+ * @param drawableResId ID ресурса изображения для иконки кнопки
+ * @param modifier Модификатор для настройки внешнего вида и расположения кнопки
+ * @param onClick Обработчик нажатия на кнопку
+ */
 @Composable
 fun ThemedIconButton(
     drawableResId: Int,

@@ -38,6 +38,13 @@ import com.zhmu100.ma.ui.theme.LightGray
 import com.zhmu100.ma.ui.theme.MATheme
 import com.zhmu100.ma.ui.theme.White
 
+/**
+ * Компонент выбора роста с вертикальным скроллируемым списком.
+ *
+ * @param modifier Модификатор для настройки внешнего вида и расположения компонента
+ * @param onHeightSelected Обработчик выбора роста (возвращает выбранное значение в см)
+ * @param heightRange Диапазон доступных значений роста (по умолчанию 100-250 см с шагом 5 см)
+ */
 @Composable
 fun HeightSelector(
     modifier: Modifier = Modifier,
@@ -106,6 +113,9 @@ fun HeightSelector(
     }
 }
 
+/**
+ * Приватный компонент стрелки-индикатора выбранного значения.
+ */
 @Composable
 private fun ArrowLeft() {
     Icon(
@@ -116,6 +126,11 @@ private fun ArrowLeft() {
     )
 }
 
+/**
+ * Приватный компонент горизонтальных линий-индикаторов для значений роста.
+ *
+ * @param isSelected Флаг, указывающий является ли текущее значение выбранным
+ */
 @Composable
 private fun HeightLines(isSelected: Boolean) {
     Column(
@@ -136,6 +151,12 @@ private fun HeightLines(isSelected: Boolean) {
     }
 }
 
+/**
+ * Приватный компонент отдельной горизонтальной линии.
+ *
+ * @param height Длина линии
+ * @param color Цвет линии
+ */
 @Composable
 private fun HorizontalLine(height: Dp, color: Color) {
     Box(

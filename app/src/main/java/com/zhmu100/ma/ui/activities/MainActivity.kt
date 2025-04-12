@@ -37,6 +37,8 @@ import com.zhmu100.ma.ui.components.pages.PostScreen
 import com.zhmu100.ma.ui.components.pages.ProfilePage
 import com.zhmu100.ma.ui.components.pages.ProfileRegPage
 import com.zhmu100.ma.ui.components.pages.ProfileRegScreen
+import com.zhmu100.ma.ui.components.pages.ProfileParametersPage
+import com.zhmu100.ma.ui.components.pages.ProfileParametersScreen
 import com.zhmu100.ma.ui.components.pages.ProfileScreen
 import com.zhmu100.ma.ui.components.pages.ReminderPage
 import com.zhmu100.ma.ui.components.pages.ReminderScreen
@@ -46,9 +48,21 @@ import com.zhmu100.ma.ui.components.pages.SettingsPage
 import com.zhmu100.ma.ui.components.pages.SettingsScreen
 import com.zhmu100.ma.ui.components.pages.WeightRegPage
 import com.zhmu100.ma.ui.components.pages.WeightRegScreen
+import com.zhmu100.ma.ui.components.pages.StatisticPage
+import com.zhmu100.ma.ui.components.pages.StatisticsScreen
+
 import com.zhmu100.ma.ui.theme.MATheme
 
-
+/**
+ * Главная Activity приложения, содержащая навигационный граф.
+ *
+ * Особенности реализации:
+ * - Включает edge-to-edge отображение (enableEdgeToEdge)
+ * - Использует кастомную тему MATheme
+ * - Создает и передает NavController во все экраны
+ * - Определяет начальный экран
+ * Все экраны получают navController для навигации между ними
+ */
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -64,7 +78,6 @@ class MainActivity : ComponentActivity() {
                     composable<RemindersScreen> { RemindersPage(navController = navContoller) }
                     composable<ReminderScreen> { ReminderPage(navController = navContoller) }
                     composable<SettingsScreen> { SettingsPage(navController = navContoller) }
-//                    composable<StatisticsScreen> {  }
                     composable<IntroScreen> { IntroPage(navController = navContoller) }
                     composable<GenderRegScreen> { GenderRegPage(navController = navContoller) }
                     composable<AgeRegScreen> { AgeRegPage(navController = navContoller) }
@@ -73,7 +86,8 @@ class MainActivity : ComponentActivity() {
                     composable<GoalsRegScreen> { GoalsRegPage(navController = navContoller) }
                     composable<ActivityLevelRegScreen> { ActivityLevelRegPage(navController = navContoller) }
                     composable<ProfileRegScreen> { ProfileRegPage(navController = navContoller) }
-
+                    composable<StatisticsScreen> { StatisticPage(navController = navContoller) }
+                    composable<ProfileParametersScreen> { ProfileParametersPage(navController = navContoller) }
 
                 }
             }
@@ -82,7 +96,7 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun MainScreen() {
+private fun MainScreen() {
     Scaffold(
         bottomBar = { NavBar(4, {}, modifier = Modifier.padding(vertical = 8.dp)) },
         modifier = Modifier.fillMaxSize()

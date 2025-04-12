@@ -21,6 +21,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.zhmu100.ma.ui.theme.MATheme
 
+/**
+ * Компонент текстового поля ввода с базовыми функциями.
+ *
+ * @param modifier Модификатор для настройки внешнего вида и расположения компонента
+ * @param label Текстовая метка над полем ввода (опционально)
+ * @param password Флаг, указывающий нужно ли скрывать вводимый текст (для паролей)
+ * @param onTextChanged Обработчик изменения текста (возвращает текущее значение)
+ */
 @Composable
 fun InputLine(
     modifier: Modifier = Modifier,

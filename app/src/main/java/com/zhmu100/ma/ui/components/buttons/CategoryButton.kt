@@ -18,6 +18,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
@@ -29,7 +30,15 @@ import com.zhmu100.ma.R
 import com.zhmu100.ma.ui.theme.Black
 import com.zhmu100.ma.ui.theme.MATheme
 
-
+/**
+ * Компонент кнопки категории с возможностью отображения иконки и состояния активности.
+ *
+ * @param text Текст, отображаемый на кнопке.
+ * @param isActive Флаг, указывающий активное состояние кнопки (меняет цветовую схему).
+ * @param iconResource Ресурс иконки (Drawable), отображаемой на кнопке.
+ * @param modifier Модификатор для настройки внешнего вида и расположения кнопки.
+ * @param onClick Обработчик нажатия на кнопку.
+ */
 @Composable
 fun CategoryButton(
     text: String,
@@ -42,6 +51,15 @@ fun CategoryButton(
     Icon(painter = painterResource(iconResource), null)
 }
 
+/**
+ * Компонент кнопки категории с возможностью отображения векторной иконки и состояния активности.
+ *
+ * @param text Текст, отображаемый на кнопке.
+ * @param isActive Флаг, указывающий активное состояние кнопки (меняет цветовую схему).
+ * @param imageVector Векторное изображение (ImageVector), отображаемое на кнопке.
+ * @param modifier Модификатор для настройки внешнего вида и расположения кнопки.
+ * @param onClick Обработчик нажатия на кнопку.
+ */
 @Composable
 fun CategoryButton(
     text: String,
@@ -54,6 +72,14 @@ fun CategoryButton(
     Icon(imageVector = imageVector, null)
 }
 
+/**
+ * Компонент кнопки категории без иконки с поддержкой состояния активности.
+ *
+ * @param text Текст, отображаемый на кнопке.
+ * @param isActive Флаг, указывающий активное состояние кнопки (меняет цветовую схему).
+ * @param modifier Модификатор для настройки внешнего вида и расположения кнопки.
+ * @param onClick Обработчик нажатия на кнопку.
+ */
 @Composable
 fun CategoryButton(
     text: String,
@@ -85,7 +111,7 @@ private fun BaseCategoryButton(
             )
             .height(24.dp)
     ) {
-        Row {
+        Row(verticalAlignment = Alignment.CenterVertically) {
             content()
             Text(
                 text = text,

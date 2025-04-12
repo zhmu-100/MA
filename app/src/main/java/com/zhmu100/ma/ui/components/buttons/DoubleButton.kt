@@ -26,6 +26,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.zhmu100.ma.ui.theme.MATheme
 
+/**
+ * Компонент двойной кнопки с разделителем между двумя действиями.
+ *
+ * @param leftText Текст для левой кнопки
+ * @param rightText Текст для правой кнопки
+ * @param onLeftClick Обработчик нажатия левой кнопки
+ * @param onRightClick Обработчик нажатия правой кнопки
+ */
 @Composable
 fun DoubleButton(
     leftText: String,

@@ -33,6 +33,13 @@ import com.zhmu100.ma.ui.theme.LightGray
 import com.zhmu100.ma.ui.theme.MATheme
 import com.zhmu100.ma.ui.theme.White
 
+/**
+ * Компонент выбора возраста с горизонтальным скроллируемым списком.
+ *
+ * @param modifier Модификатор для настройки внешнего вида и расположения компонента
+ * @param onAgeSelected Обработчик выбора возраста (возвращает выбранный возраст)
+ * @param ageRange Диапазон доступных возрастов (по умолчанию 0-99)
+ */
 @Composable
 fun AgeSelector(
     modifier: Modifier = Modifier, onAgeSelected: (Int) -> Unit = {},
@@ -96,6 +103,9 @@ fun AgeSelector(
     }
 }
 
+/**
+ * Приватный компонент стрелки-индикатора выбранного значения.
+ */
 @Composable
 private fun ArrowUp() {
     Icon(
@@ -106,6 +116,11 @@ private fun ArrowUp() {
     )
 }
 
+/**
+ * Приватный компонент вертикальной разделительной линии между значениями.
+ *
+ * @param isSelected Флаг, указывающий находится ли линия рядом с выбранным значением
+ */
 @Composable
 private fun VerticalLine(isSelected: Boolean) {
     Box(

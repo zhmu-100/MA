@@ -38,6 +38,13 @@ import com.zhmu100.ma.ui.theme.LightGray
 import com.zhmu100.ma.ui.theme.MATheme
 import com.zhmu100.ma.ui.theme.White
 
+/**
+ * Компонент выбора веса с горизонтальным скроллируемым списком.
+ *
+ * @param modifier Модификатор для настройки внешнего вида и расположения компонента
+ * @param onWeightSelected Обработчик выбора веса (возвращает выбранное значение в кг)
+ * @param weightRange Диапазон доступных значений веса (по умолчанию 0-99 кг)
+ */
 @Composable
 fun WeightSelector(
     modifier: Modifier = Modifier,
@@ -102,6 +109,9 @@ fun WeightSelector(
     }
 }
 
+/**
+ * Приватный компонент стрелки-индикатора выбранного значения.
+ */
 @Composable
 private fun ArrowUp() {
     Icon(
@@ -112,6 +122,9 @@ private fun ArrowUp() {
     )
 }
 
+/**
+ * Приватный компонент вертикальных линий-индикаторов для значений веса.
+ */
 @Composable
 private fun WeightLines(isSelected: Boolean) {
     Row(
@@ -132,6 +145,9 @@ private fun WeightLines(isSelected: Boolean) {
     }
 }
 
+/**
+ * Приватный компонент отдельной вертикальной линии.
+ */
 @Composable
 private fun VerticalLine(height: Dp, color: Color) {
     Box(

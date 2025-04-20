@@ -9,31 +9,31 @@ import io.ktor.client.request.*
 import io.ktor.http.*
 
 class AuthApiImpl(private val client: HttpClient) : AuthApi {
-    private val AUTH_SERVICE_URL= "http://auth-service:8081/auth";
+    private val GATEWAY_BASE= "http://localhost:8080/api/auth";
 
     override suspend fun login(request: LoginRequest): AuthResponse {
-        return client.post("${AUTH_SERVICE_URL}/login") {
+        return client.post("${GATEWAY_BASE}/login") {
             contentType(ContentType.Application.Json)
             setBody(request)
         }.body()
     }
 
     override suspend fun register(request: RegisterRequest): AuthResponse {
-        return client.post("${AUTH_SERVICE_URL}/register") {
+        return client.post("${GATEWAY_BASE}/register") {
             contentType(ContentType.Application.Json)
             setBody(request)
         }.body()
     }
 
     override suspend fun logout() {
-        client.post("${AUTH_SERVICE_URL}/logout")
+        client.post("${GATEWAY_BASE}/logout")
     }
 
     override suspend fun refresh(): AuthResponse {
-        return client.post("${AUTH_SERVICE_URL}/refresh").body()
+        return client.post("${GATEWAY_BASE}/refresh").body()
     }
 
     override suspend fun validate(): Boolean {
-        return client.get("${AUTH_SERVICE_URL}/validate").status == HttpStatusCode.OK
+        return client.get("${GATEWAY_BASE}/validate").status == HttpStatusCode.OK
     }
 }

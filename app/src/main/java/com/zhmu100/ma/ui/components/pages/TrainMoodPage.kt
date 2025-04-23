@@ -6,10 +6,12 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.requiredHeightIn
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
@@ -29,6 +31,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.zhmu100.ma.R
+import com.zhmu100.ma.ui.components.buttons.SquareIconButton
 import com.zhmu100.ma.ui.components.inputs.MultiLineTextField
 import com.zhmu100.ma.ui.theme.Black
 import com.zhmu100.ma.ui.theme.MATheme
@@ -55,8 +58,14 @@ fun TrainMoodPage(modifier: Modifier = Modifier, navController: NavController? =
                 text = commentValue,
                 placeholder = "Добавьте заметку о тренировке",
                 onTextChanged = { commentValue = it },
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 8.dp)
+                    .requiredHeightIn(max = 400.dp)
             )
+            SquareIconButton(
+                Icons.Default.Delete,
+                onClick = { navController?.navigate(TrainCategoryScreen) })
         }
     }
 }

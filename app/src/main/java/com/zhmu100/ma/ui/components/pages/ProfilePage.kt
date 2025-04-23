@@ -36,7 +36,12 @@ import kotlinx.serialization.Serializable
 
 @Composable
 fun ProfilePage(modifier: Modifier = Modifier, navController: NavController? = null) {
-    BasePage(true, modifier = modifier) { baseModifier ->
+    BasePage(
+        true,
+        navIndex = 4,
+        modifier = modifier,
+        navController = navController
+    ) { baseModifier ->
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = baseModifier
@@ -60,7 +65,7 @@ fun ProfilePage(modifier: Modifier = Modifier, navController: NavController? = n
                 text = "Мои параметры",
                 drawableResId = R.drawable.ruler,
                 modifier = Modifier.padding(bottom = 8.dp),
-                onClick = {navController?.navigate(ProfileParametersScreen)}
+                onClick = { navController?.navigate(ProfileParametersScreen) }
             )
             BigIconButton(
                 text = "Напоминания",

@@ -80,7 +80,7 @@ fun SquareIconButton(
 }
 
 @Composable
-private fun BaseSquareIconButton(
+fun BaseSquareIconButton(
     modifier: Modifier,
     background: Color,
     onClick: () -> Unit,

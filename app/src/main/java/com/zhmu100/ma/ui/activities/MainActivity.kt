@@ -85,29 +85,29 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             MATheme {
-                val navContoller = rememberNavController()
-                NavHost(navController = navContoller, startDestination = ProfileScreen) {
-                    composable<ProfileScreen> { ProfilePage(navController = navContoller) }
-                    composable<DevicesScreen> { DevicesPage(navController = navContoller) }
-                    composable<DeviceScreen> { DevicePage(navController = navContoller) }
-                    composable<PostScreen> { IntroPage(navController = navContoller) }
-                    composable<RemindersScreen> { RemindersPage(navController = navContoller) }
-                    composable<ReminderScreen> { ReminderPage(navController = navContoller) }
-                    composable<SettingsScreen> { SettingsPage(navController = navContoller) }
-                    composable<IntroScreen> { IntroPage(navController = navContoller) }
-                    composable<GenderRegScreen> { GenderRegPage(navController = navContoller) }
-                    composable<AgeRegScreen> { AgeRegPage(navController = navContoller) }
-                    composable<WeightRegScreen> { WeightRegPage(navController = navContoller) }
-                    composable<HeightRegScreen> { HeightRegPage(navController = navContoller) }
-                    composable<GoalsRegScreen> { GoalsRegPage(navController = navContoller) }
-                    composable<ActivityLevelRegScreen> { ActivityLevelRegPage(navController = navContoller) }
-                    composable<ProfileRegScreen> { ProfileRegPage(navController = navContoller) }
-                    composable<StatisticsScreen> { StatisticPage(navController = navContoller) }
-                    composable<ProfileParametersScreen> { ProfileParametersPage(navController = navContoller) }
-                    composable<LoginScreen> { LoginPage(navController = navContoller) }
-                    composable<RegisterScreen> { RegisterPage(navController = navContoller) }
-                    composable<ResetPasswordScreen> { ResetPasswordPage(navController = navContoller) }
-                    composable<NewPasswordScreen> { NewPasswordPage(navController = navContoller) }
+                val navController = rememberNavController()
+                NavHost(navController = rnavContoller, startDestination = ProfileScreen) {
+                    composable<ProfileScreen> { ProfilePage(navController = rnavContoller) }
+                    composable<DevicesScreen> { DevicesPage(navController = rnavContoller) }
+                    composable<DeviceScreen> { DevicePage(navController = rnavContoller) }
+                    composable<PostScreen> { IntroPage(navController = rnavContoller) }
+                    composable<RemindersScreen> { RemindersPage(navController = rnavContoller) }
+                    composable<ReminderScreen> { ReminderPage(navController = rnavContoller) }
+                    composable<SettingsScreen> { SettingsPage(navController = rnavContoller) }
+                    composable<IntroScreen> { IntroPage(navController = rnavContoller) }
+                    composable<GenderRegScreen> { GenderRegPage(navController = rnavContoller) }
+                    composable<AgeRegScreen> { AgeRegPage(navController = rnavContoller) }
+                    composable<WeightRegScreen> { WeightRegPage(navController = rnavContoller) }
+                    composable<HeightRegScreen> { HeightRegPage(navController = rnavContoller) }
+                    composable<GoalsRegScreen> { GoalsRegPage(navController = rnavContoller) }
+                    composable<ActivityLevelRegScreen> { ActivityLevelRegPage(navController = rnavContoller) }
+                    composable<ProfileRegScreen> { ProfileRegPage(navController = rnavContoller) }
+                    composable<StatisticsScreen> { StatisticPage(navController = rnavContoller) }
+                    composable<ProfileParametersScreen> { ProfileParametersPage(navController = rnavContoller) }
+                    composable<LoginScreen> { LoginPage(navController = rnavContoller) }
+                    composable<RegisterScreen> { RegisterPage(navController = rnavContoller) }
+                    composable<ResetPasswordScreen> { ResetPasswordPage(navController = rnavContoller) }
+                    composable<NewPasswordScreen> { NewPasswordPage(navController = rnavContoller) }
                     composable<TrainCategoryScreen> { TrainCategoryPage(navController = navController) }
                     composable<TrainMapScreen> { TrainMapPage(navController = navController) }
                     composable<TrainGymScreen> { TrainGymPage(navController = navController) }

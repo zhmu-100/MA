@@ -32,6 +32,10 @@ import com.zhmu100.ma.ui.components.pages.HeightRegPage
 import com.zhmu100.ma.ui.components.pages.HeightRegScreen
 import com.zhmu100.ma.ui.components.pages.IntroPage
 import com.zhmu100.ma.ui.components.pages.IntroScreen
+import com.zhmu100.ma.ui.components.pages.LoginPage
+import com.zhmu100.ma.ui.components.pages.LoginScreen
+import com.zhmu100.ma.ui.components.pages.NewPasswordPage
+import com.zhmu100.ma.ui.components.pages.NewPasswordScreen
 import com.zhmu100.ma.ui.components.pages.PostPage
 import com.zhmu100.ma.ui.components.pages.PostScreen
 import com.zhmu100.ma.ui.components.pages.ProfilePage
@@ -40,6 +44,10 @@ import com.zhmu100.ma.ui.components.pages.ProfileRegScreen
 import com.zhmu100.ma.ui.components.pages.ProfileParametersPage
 import com.zhmu100.ma.ui.components.pages.ProfileParametersScreen
 import com.zhmu100.ma.ui.components.pages.ProfileScreen
+import com.zhmu100.ma.ui.components.pages.RegisterPage
+import com.zhmu100.ma.ui.components.pages.RegisterScreen
+import com.zhmu100.ma.ui.components.pages.ResetPasswordPage
+import com.zhmu100.ma.ui.components.pages.ResetPasswordScreen
 import com.zhmu100.ma.ui.components.pages.ReminderPage
 import com.zhmu100.ma.ui.components.pages.ReminderScreen
 import com.zhmu100.ma.ui.components.pages.RemindersPage
@@ -82,7 +90,7 @@ class MainActivity : ComponentActivity() {
                     composable<ProfileScreen> { ProfilePage(navController = navController) }
                     composable<DevicesScreen> { DevicesPage(navController = navController) }
                     composable<DeviceScreen> { DevicePage(navController = navController) }
-                    composable<PostScreen> { PostPage(navController = navController) }
+                    composable<PostScreen> { IntroPage(navController = navController) }
                     composable<RemindersScreen> { RemindersPage(navController = navController) }
                     composable<ReminderScreen> { ReminderPage(navController = navController) }
                     composable<SettingsScreen> { SettingsPage(navController = navController) }
@@ -96,6 +104,10 @@ class MainActivity : ComponentActivity() {
                     composable<ProfileRegScreen> { ProfileRegPage(navController = navController) }
                     composable<StatisticsScreen> { StatisticPage(navController = navController) }
                     composable<ProfileParametersScreen> { ProfileParametersPage(navController = navController) }
+                    composable<LoginScreen> { LoginPage(navController = navController) }
+                    composable<RegisterScreen> { RegisterPage(navController = navController) }
+                    composable<ResetPasswordScreen> { ResetPasswordPage(navController = navController) }
+                    composable<NewPasswordScreen> { NewPasswordPage(navController = navController) }
                     composable<TrainCategoryScreen> { TrainCategoryPage(navController = navController) }
                     composable<TrainMapScreen> { TrainMapPage(navController = navController) }
                     composable<TrainGymScreen> { TrainGymPage(navController = navController) }

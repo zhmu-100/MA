@@ -29,6 +29,7 @@ import com.zhmu100.ma.R
 import com.zhmu100.ma.ui.components.buttons.BackButton
 import com.zhmu100.ma.ui.components.buttons.BigIconButton
 import com.zhmu100.ma.ui.components.buttons.RoundButton
+import com.zhmu100.ma.ui.components.buttons.StringButton
 import com.zhmu100.ma.ui.components.buttons.ThemedIconButton
 import com.zhmu100.ma.ui.theme.LightGray
 import com.zhmu100.ma.ui.theme.MATheme
@@ -59,7 +60,11 @@ fun ProfilePage(modifier: Modifier = Modifier, navController: NavController? = n
             ProfileImage(
                 url = "https://avatars.mds.yandex.net/i?id=973900345cef4fb385b6142051e2cd9b81e0ff0a-9856853-images-thumbs&n=13"
             )
-            Text("Login")
+            // Заменяем обычный текст на кликабельный StringButton
+            StringButton(
+                text = "Login",
+                onClick = { navController?.navigate(LoginScreen) }
+            )
             Text("online", fontSize = 12.sp, color = MaterialTheme.colorScheme.primary)
             BigIconButton(
                 text = "Мои параметры",

@@ -229,7 +229,7 @@ private fun StatsByRoute(
     val seconds = duration.seconds % 60
     val durationString = String.format("%02d:%02d:%02d", hours, minutes, seconds)
 
-    val pace = if (distance > 0) (duration.toSeconds() / 60.0) / (distance / 1000) else 0.0
+    val pace = if (distance > 0) (duration.seconds / 60.0) / (distance / 1000) else 0.0
     val paceMinutes = pace.toInt()
     val paceSeconds = ((pace - paceMinutes) * 60).roundToInt()
     val paceString = String.format("%02d:%02d", paceMinutes, paceSeconds)

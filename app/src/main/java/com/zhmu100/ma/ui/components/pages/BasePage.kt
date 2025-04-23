@@ -17,6 +17,7 @@ import com.zhmu100.ma.ui.theme.MATheme
  * @param hasNavBar Флаг отображения навигационной панели
  * @param modifier Модификатор для настройки внешнего вида контента
  * @param navController Контроллер навигации (опционально)
+ * @param navIndex Выбранная иконка в NavBar
  * @param content Композируемая функция контента страницы
  */
 @Composable
@@ -24,10 +25,20 @@ fun BasePage(
     hasNavBar: Boolean,
     modifier: Modifier = Modifier,
     navController: NavController? = null,
+    navIndex: Int = 4,
     content: @Composable (Modifier) -> Unit
 ) {
+    val navPath =
+        listOf(ProfileScreen, TrainCategoryScreen, ProfileScreen, ProfileScreen, ProfileScreen)
+
     val bottomBar: @Composable (() -> Unit) = if (hasNavBar) {
-        { NavBar(4, {}, modifier = Modifier.padding(vertical = 8.dp), navController) }
+        {
+            NavBar(
+                navIndex,
+                { navController?.navigate(navPath[it]) },
+                modifier = Modifier.padding(vertical = 8.dp)
+            )
+        }
     } else {
         {}
     }

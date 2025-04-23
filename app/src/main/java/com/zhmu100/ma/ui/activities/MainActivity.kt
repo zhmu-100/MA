@@ -58,6 +58,14 @@ import com.zhmu100.ma.ui.components.pages.WeightRegPage
 import com.zhmu100.ma.ui.components.pages.WeightRegScreen
 import com.zhmu100.ma.ui.components.pages.StatisticPage
 import com.zhmu100.ma.ui.components.pages.StatisticsScreen
+import com.zhmu100.ma.ui.components.pages.TrainCategoryPage
+import com.zhmu100.ma.ui.components.pages.TrainCategoryScreen
+import com.zhmu100.ma.ui.components.pages.TrainGymPage
+import com.zhmu100.ma.ui.components.pages.TrainGymScreen
+import com.zhmu100.ma.ui.components.pages.TrainMapPage
+import com.zhmu100.ma.ui.components.pages.TrainMapScreen
+import com.zhmu100.ma.ui.components.pages.TrainMoodPage
+import com.zhmu100.ma.ui.components.pages.TrainMoodScreen
 
 import com.zhmu100.ma.ui.theme.MATheme
 
@@ -100,6 +108,10 @@ class MainActivity : ComponentActivity() {
                     composable<RegisterScreen> { RegisterPage(navController = navContoller) }
                     composable<ResetPasswordScreen> { ResetPasswordPage(navController = navContoller) }
                     composable<NewPasswordScreen> { NewPasswordPage(navController = navContoller) }
+                    composable<TrainCategoryScreen> { TrainCategoryPage(navController = navController) }
+                    composable<TrainMapScreen> { TrainMapPage(navController = navController) }
+                    composable<TrainGymScreen> { TrainGymPage(navController = navController) }
+                    composable<TrainMoodScreen> { TrainMoodPage(navController = navController) }
                 }
             }
         }

@@ -86,28 +86,28 @@ class MainActivity : ComponentActivity() {
         setContent {
             MATheme {
                 val navController = rememberNavController()
-                NavHost(navController = rnavContoller, startDestination = ProfileScreen) {
-                    composable<ProfileScreen> { ProfilePage(navController = rnavContoller) }
-                    composable<DevicesScreen> { DevicesPage(navController = rnavContoller) }
-                    composable<DeviceScreen> { DevicePage(navController = rnavContoller) }
-                    composable<PostScreen> { IntroPage(navController = rnavContoller) }
-                    composable<RemindersScreen> { RemindersPage(navController = rnavContoller) }
-                    composable<ReminderScreen> { ReminderPage(navController = rnavContoller) }
-                    composable<SettingsScreen> { SettingsPage(navController = rnavContoller) }
-                    composable<IntroScreen> { IntroPage(navController = rnavContoller) }
-                    composable<GenderRegScreen> { GenderRegPage(navController = rnavContoller) }
-                    composable<AgeRegScreen> { AgeRegPage(navController = rnavContoller) }
-                    composable<WeightRegScreen> { WeightRegPage(navController = rnavContoller) }
-                    composable<HeightRegScreen> { HeightRegPage(navController = rnavContoller) }
-                    composable<GoalsRegScreen> { GoalsRegPage(navController = rnavContoller) }
-                    composable<ActivityLevelRegScreen> { ActivityLevelRegPage(navController = rnavContoller) }
-                    composable<ProfileRegScreen> { ProfileRegPage(navController = rnavContoller) }
-                    composable<StatisticsScreen> { StatisticPage(navController = rnavContoller) }
-                    composable<ProfileParametersScreen> { ProfileParametersPage(navController = rnavContoller) }
-                    composable<LoginScreen> { LoginPage(navController = rnavContoller) }
-                    composable<RegisterScreen> { RegisterPage(navController = rnavContoller) }
-                    composable<ResetPasswordScreen> { ResetPasswordPage(navController = rnavContoller) }
-                    composable<NewPasswordScreen> { NewPasswordPage(navController = rnavContoller) }
+                NavHost(navController = navController, startDestination = ProfileScreen) {
+                    composable<ProfileScreen> { ProfilePage(navController = navController) }
+                    composable<DevicesScreen> { DevicesPage(navController = navController) }
+                    composable<DeviceScreen> { DevicePage(navController = navController) }
+                    composable<PostScreen> { IntroPage(navController = navController) }
+                    composable<RemindersScreen> { RemindersPage(navController = navController) }
+                    composable<ReminderScreen> { ReminderPage(navController = navController) }
+                    composable<SettingsScreen> { SettingsPage(navController = navController) }
+                    composable<IntroScreen> { IntroPage(navController = navController) }
+                    composable<GenderRegScreen> { GenderRegPage(navController = navController) }
+                    composable<AgeRegScreen> { AgeRegPage(navController = navController) }
+                    composable<WeightRegScreen> { WeightRegPage(navController = navController) }
+                    composable<HeightRegScreen> { HeightRegPage(navController = navController) }
+                    composable<GoalsRegScreen> { GoalsRegPage(navController = navController) }
+                    composable<ActivityLevelRegScreen> { ActivityLevelRegPage(navController = navController) }
+                    composable<ProfileRegScreen> { ProfileRegPage(navController = navController) }
+                    composable<StatisticsScreen> { StatisticPage(navController = navController) }
+                    composable<ProfileParametersScreen> { ProfileParametersPage(navController = navController) }
+                    composable<LoginScreen> { LoginPage(navController = navController) }
+                    composable<RegisterScreen> { RegisterPage(navController = navController) }
+                    composable<ResetPasswordScreen> { ResetPasswordPage(navController = navController) }
+                    composable<NewPasswordScreen> { NewPasswordPage(navController = navController) }
                     composable<TrainCategoryScreen> { TrainCategoryPage(navController = navController) }
                     composable<TrainMapScreen> { TrainMapPage(navController = navController) }
                     composable<TrainGymScreen> { TrainGymPage(navController = navController) }

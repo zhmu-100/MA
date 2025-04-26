@@ -2,7 +2,7 @@ package com.zhmu100.ma.domain.viewModel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.zhmu100.ma.domain.api.auth.ProfileApi
+import com.zhmu100.ma.domain.api.profile.ProfileApi
 import com.zhmu100.ma.domain.model.profile.UserProfile
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow

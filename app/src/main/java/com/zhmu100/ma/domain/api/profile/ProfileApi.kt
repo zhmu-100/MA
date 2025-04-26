@@ -1,4 +1,4 @@
-package com.zhmu100.ma.domain.api.auth
+package com.zhmu100.ma.domain.api.profile
 
 import com.zhmu100.ma.domain.model.profile.ListFollowersResponse
 import com.zhmu100.ma.domain.model.profile.ListFollowingResponse

@@ -39,7 +39,7 @@ object SettingsStorage {
     }
 
     // Для удобства - enum-подобные методы
-    enum class AppLanguage { RUSSIAN, ENGLISH }
+    enum class AppLanguage(val displayName: String) { RUSSIAN("Русский"), ENGLISH("English") }
     enum class AppTheme { LIGHT, DARK }
 
     fun getAppLanguage(): AppLanguage {

@@ -37,9 +37,10 @@ fun InputLine(
     label: String = "",
     password: Boolean = false,
     onTextChanged: (String) -> Unit = {},
-    placeholder: String = ""
+    placeholder: String = "",
+    initValue: String = ""
 ) {
-    var textState by remember { mutableStateOf("") }
+    var textState by remember { mutableStateOf(initValue) }
     val shape = CircleShape
 
     Column(modifier = modifier) {

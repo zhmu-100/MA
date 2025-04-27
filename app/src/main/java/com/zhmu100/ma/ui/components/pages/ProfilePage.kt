@@ -47,37 +47,29 @@ fun ProfilePage(
     navController: NavController? = null,
     viewModel: ProfileViewModel = koinViewModel()
 ) {
+    val profileState by viewModel.profileState.collectAsState()
+    val profilePhotoUrl by viewModel.profilePhotoUrl.collectAsState()
+
+    val openGallery = rememberImagePicker { bytes, fileName, mimeType ->
+        viewModel.updateProfilePhoto(bytes, fileName, mimeType)
+    }
+
+    val profile: UserProfile? = (profileState as? ViewState.Success)?.data
+
     BasePage(
         true,
         navIndex = 4,
         modifier = modifier,
         navController = navController
     ) { baseModifier ->
-        val profileState by viewModel.profileState.collectAsState()
-        val profilePhotoUrl by viewModel.profilePhotoUrl.collectAsState()
-
-        val openGallery = rememberImagePicker { bytes, fileName, mimeType ->
-            viewModel.updateProfilePhoto(bytes, fileName, mimeType)
-        }
-
-        val profile: UserProfile = when (val state = profileState) {
-            is ViewState.Success -> {
-                state.data
-            }
-
-            else -> {
-                UserProfile("", "", "")
-            }
-        }
-
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = baseModifier
         ) {
             Header(navController)
             ProfileImage(url = profilePhotoUrl ?: "", onEditClick = openGallery)
-            Text(profile.name, fontSize = 14.sp, color = MaterialTheme.colorScheme.primary)
-            Text("online", fontSize = 12.sp, color = MaterialTheme.colorScheme.primary)
+            Text(profile?.name ?: "", fontSize = 20.sp)
+            Text("online", fontSize = 14.sp, color = MaterialTheme.colorScheme.primary)
             MiddleButtons(navController)
             Text(
                 "Мои записи",
@@ -132,7 +124,7 @@ private fun Header(navController: NavController?) {
 
 @Composable
 private fun ProfileImage(url: String, onEditClick: () -> Unit) {
-    Box {
+    Box(modifier = Modifier.padding(bottom = 8.dp)) {
         AsyncImage(
             model = url,
             contentDescription = "Profile picture",

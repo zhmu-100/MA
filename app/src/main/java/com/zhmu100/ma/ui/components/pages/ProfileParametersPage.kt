@@ -99,7 +99,8 @@ fun ProfileParametersPage(
                 leftText = "Мужской",
                 rightText = "Женский",
                 onLeftClick = { gender = "M" },
-                onRightClick = { gender = "F" }
+                onRightClick = { gender = "F" },
+                modifier = Modifier.padding(bottom = 8.dp)
             )
             RoundButton(
                 text = "Сохранить",

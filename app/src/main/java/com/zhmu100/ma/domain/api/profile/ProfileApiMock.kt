@@ -15,7 +15,7 @@ class ProfileApiMock : ProfileApi {
     private val followRelations = mutableSetOf<Pair<String, String>>()
 
     // Текущий авторизованный пользователь
-    private var currentUserId: String? = null
+    private var currentUserId: String? = "user1"
 
     init {
         // Инициализация тестовыми данными

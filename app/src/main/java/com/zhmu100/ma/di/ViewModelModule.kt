@@ -5,6 +5,9 @@ import com.zhmu100.ma.domain.viewModel.SettingsViewModel
 import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
 
+/**
+ * Модуль DI для ViewModel
+ */
 val viewModelModule = module {
     viewModel { ProfileViewModel(get(), get()) }
     viewModel { SettingsViewModel(get()) }

@@ -4,18 +4,20 @@ import android.content.Context
 import android.content.SharedPreferences
 import androidx.core.content.edit
 
+/**
+ * Хранилище для локальных пользовательских настроек приложения
+ */
 object SettingsStorage {
     private const val PREF_NAME = "app_settings"
     private const val KEY_LANGUAGE = "app_language"
     private const val KEY_THEME = "app_theme"
 
     // Значения по умолчанию
-    private const val DEFAULT_LANGUAGE = "ru" // русский
-    private const val DEFAULT_THEME = "light" // светлая тема
+    private const val DEFAULT_LANGUAGE = "ru"
+    private const val DEFAULT_THEME = "light"
 
     private lateinit var prefs: SharedPreferences
 
-    // Необходимо инициализировать в MainActivity
     fun init(context: Context) {
         prefs = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
     }

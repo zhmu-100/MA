@@ -7,6 +7,8 @@ import com.zhmu100.ma.domain.api.files.FilesApiMock
 import com.zhmu100.ma.domain.api.profile.ProfileApi
 import com.zhmu100.ma.domain.api.profile.ProfileApiImpl
 import com.zhmu100.ma.domain.api.profile.ProfileApiMock
+import com.zhmu100.ma.domain.api.statistic.StatisticsApi
+import com.zhmu100.ma.domain.api.statistic.StatisticsApiImpl
 import org.koin.dsl.module
 
 val networkModule = module {
@@ -16,4 +18,5 @@ val networkModule = module {
 
     single<ProfileApi> { ProfileApiMock() }
     single<FilesApi> { FilesApiMock() }
+    single<StatisticsApi> { StatisticsApiImpl(get(), "http://localhost:8080/api/statistics") }
 }

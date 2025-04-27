@@ -15,6 +15,9 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.zhmu100.ma.di.networkModule
+import com.zhmu100.ma.di.storageModule
+import com.zhmu100.ma.di.viewModelModule
 import com.zhmu100.ma.ui.components.NavBar
 import com.zhmu100.ma.ui.components.pages.ActivityLevelRegPage
 import com.zhmu100.ma.ui.components.pages.ActivityLevelRegScreen
@@ -36,26 +39,23 @@ import com.zhmu100.ma.ui.components.pages.LoginPage
 import com.zhmu100.ma.ui.components.pages.LoginScreen
 import com.zhmu100.ma.ui.components.pages.NewPasswordPage
 import com.zhmu100.ma.ui.components.pages.NewPasswordScreen
-import com.zhmu100.ma.ui.components.pages.PostPage
 import com.zhmu100.ma.ui.components.pages.PostScreen
 import com.zhmu100.ma.ui.components.pages.ProfilePage
-import com.zhmu100.ma.ui.components.pages.ProfileRegPage
-import com.zhmu100.ma.ui.components.pages.ProfileRegScreen
 import com.zhmu100.ma.ui.components.pages.ProfileParametersPage
 import com.zhmu100.ma.ui.components.pages.ProfileParametersScreen
+import com.zhmu100.ma.ui.components.pages.ProfileRegPage
+import com.zhmu100.ma.ui.components.pages.ProfileRegScreen
 import com.zhmu100.ma.ui.components.pages.ProfileScreen
 import com.zhmu100.ma.ui.components.pages.RegisterPage
 import com.zhmu100.ma.ui.components.pages.RegisterScreen
-import com.zhmu100.ma.ui.components.pages.ResetPasswordPage
-import com.zhmu100.ma.ui.components.pages.ResetPasswordScreen
 import com.zhmu100.ma.ui.components.pages.ReminderPage
 import com.zhmu100.ma.ui.components.pages.ReminderScreen
 import com.zhmu100.ma.ui.components.pages.RemindersPage
 import com.zhmu100.ma.ui.components.pages.RemindersScreen
+import com.zhmu100.ma.ui.components.pages.ResetPasswordPage
+import com.zhmu100.ma.ui.components.pages.ResetPasswordScreen
 import com.zhmu100.ma.ui.components.pages.SettingsPage
 import com.zhmu100.ma.ui.components.pages.SettingsScreen
-import com.zhmu100.ma.ui.components.pages.WeightRegPage
-import com.zhmu100.ma.ui.components.pages.WeightRegScreen
 import com.zhmu100.ma.ui.components.pages.StatisticPage
 import com.zhmu100.ma.ui.components.pages.StatisticsScreen
 import com.zhmu100.ma.ui.components.pages.TrainCategoryPage
@@ -66,8 +66,12 @@ import com.zhmu100.ma.ui.components.pages.TrainMapPage
 import com.zhmu100.ma.ui.components.pages.TrainMapScreen
 import com.zhmu100.ma.ui.components.pages.TrainMoodPage
 import com.zhmu100.ma.ui.components.pages.TrainMoodScreen
-
+import com.zhmu100.ma.ui.components.pages.WeightRegPage
+import com.zhmu100.ma.ui.components.pages.WeightRegScreen
 import com.zhmu100.ma.ui.theme.MATheme
+import org.koin.android.ext.koin.androidContext
+import org.koin.compose.KoinContext
+import org.koin.core.context.GlobalContext.startKoin
 
 /**
  * Главная Activity приложения, содержащая навигационный граф.
@@ -82,36 +86,49 @@ import com.zhmu100.ma.ui.theme.MATheme
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        startKoin {
+            androidContext(this@MainActivity)
+            modules(
+                networkModule,
+                storageModule,
+                viewModelModule
+            )
+        }
+
+
         enableEdgeToEdge()
         setContent {
             MATheme {
-                val navController = rememberNavController()
-                NavHost(navController = navController, startDestination = ProfileScreen) {
-                    composable<ProfileScreen> { ProfilePage(navController = navController) }
-                    composable<DevicesScreen> { DevicesPage(navController = navController) }
-                    composable<DeviceScreen> { DevicePage(navController = navController) }
-                    composable<PostScreen> { IntroPage(navController = navController) }
-                    composable<RemindersScreen> { RemindersPage(navController = navController) }
-                    composable<ReminderScreen> { ReminderPage(navController = navController) }
-                    composable<SettingsScreen> { SettingsPage(navController = navController) }
-                    composable<IntroScreen> { IntroPage(navController = navController) }
-                    composable<GenderRegScreen> { GenderRegPage(navController = navController) }
-                    composable<AgeRegScreen> { AgeRegPage(navController = navController) }
-                    composable<WeightRegScreen> { WeightRegPage(navController = navController) }
-                    composable<HeightRegScreen> { HeightRegPage(navController = navController) }
-                    composable<GoalsRegScreen> { GoalsRegPage(navController = navController) }
-                    composable<ActivityLevelRegScreen> { ActivityLevelRegPage(navController = navController) }
-                    composable<ProfileRegScreen> { ProfileRegPage(navController = navController) }
-                    composable<StatisticsScreen> { StatisticPage(navController = navController) }
-                    composable<ProfileParametersScreen> { ProfileParametersPage(navController = navController) }
-                    composable<LoginScreen> { LoginPage(navController = navController) }
-                    composable<RegisterScreen> { RegisterPage(navController = navController) }
-                    composable<ResetPasswordScreen> { ResetPasswordPage(navController = navController) }
-                    composable<NewPasswordScreen> { NewPasswordPage(navController = navController) }
-                    composable<TrainCategoryScreen> { TrainCategoryPage(navController = navController) }
-                    composable<TrainMapScreen> { TrainMapPage(navController = navController) }
-                    composable<TrainGymScreen> { TrainGymPage(navController = navController) }
-                    composable<TrainMoodScreen> { TrainMoodPage(navController = navController) }
+                KoinContext {
+                    val navController = rememberNavController()
+                    NavHost(navController = navController, startDestination = ProfileScreen) {
+                        composable<ProfileScreen> { ProfilePage(navController = navController) }
+                        composable<DevicesScreen> { DevicesPage(navController = navController) }
+                        composable<DeviceScreen> { DevicePage(navController = navController) }
+                        composable<PostScreen> { IntroPage(navController = navController) }
+                        composable<RemindersScreen> { RemindersPage(navController = navController) }
+                        composable<ReminderScreen> { ReminderPage(navController = navController) }
+                        composable<SettingsScreen> { SettingsPage(navController = navController) }
+                        composable<IntroScreen> { IntroPage(navController = navController) }
+                        composable<GenderRegScreen> { GenderRegPage(navController = navController) }
+                        composable<AgeRegScreen> { AgeRegPage(navController = navController) }
+                        composable<WeightRegScreen> { WeightRegPage(navController = navController) }
+                        composable<HeightRegScreen> { HeightRegPage(navController = navController) }
+                        composable<GoalsRegScreen> { GoalsRegPage(navController = navController) }
+                        composable<ActivityLevelRegScreen> { ActivityLevelRegPage(navController = navController) }
+                        composable<ProfileRegScreen> { ProfileRegPage(navController = navController) }
+                        composable<StatisticsScreen> { StatisticPage(navController = navController) }
+                        composable<ProfileParametersScreen> { ProfileParametersPage(navController = navController) }
+                        composable<LoginScreen> { LoginPage(navController = navController) }
+                        composable<RegisterScreen> { RegisterPage(navController = navController) }
+                        composable<ResetPasswordScreen> { ResetPasswordPage(navController = navController) }
+                        composable<NewPasswordScreen> { NewPasswordPage(navController = navController) }
+                        composable<TrainCategoryScreen> { TrainCategoryPage(navController = navController) }
+                        composable<TrainMapScreen> { TrainMapPage(navController = navController) }
+                        composable<TrainGymScreen> { TrainGymPage(navController = navController) }
+                        composable<TrainMoodScreen> { TrainMoodPage(navController = navController) }
+                    }
                 }
             }
         }

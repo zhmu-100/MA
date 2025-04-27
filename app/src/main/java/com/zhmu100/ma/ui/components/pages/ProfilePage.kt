@@ -14,6 +14,8 @@ import androidx.compose.material.icons.filled.Create
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -26,17 +28,34 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil3.compose.AsyncImage
 import com.zhmu100.ma.R
+import com.zhmu100.ma.domain.model.profile.UserProfile
+import com.zhmu100.ma.domain.utils.rememberImagePicker
+import com.zhmu100.ma.domain.viewModel.ProfileViewModel
+import com.zhmu100.ma.domain.viewModel.ViewState
 import com.zhmu100.ma.ui.components.buttons.BackButton
 import com.zhmu100.ma.ui.components.buttons.BigIconButton
 import com.zhmu100.ma.ui.components.buttons.RoundButton
-import com.zhmu100.ma.ui.components.buttons.StringButton
 import com.zhmu100.ma.ui.components.buttons.ThemedIconButton
 import com.zhmu100.ma.ui.theme.LightGray
 import com.zhmu100.ma.ui.theme.MATheme
 import kotlinx.serialization.Serializable
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
-fun ProfilePage(modifier: Modifier = Modifier, navController: NavController? = null) {
+fun ProfilePage(
+    modifier: Modifier = Modifier,
+    navController: NavController? = null,
+    viewModel: ProfileViewModel = koinViewModel()
+) {
+    val profileState by viewModel.profileState.collectAsState()
+    val profilePhotoUrl by viewModel.profilePhotoUrl.collectAsState()
+
+    val openGallery = rememberImagePicker { bytes, fileName, mimeType ->
+        viewModel.updateProfilePhoto(bytes, fileName, mimeType)
+    }
+
+    val profile: UserProfile? = (profileState as? ViewState.Success)?.data
+
     BasePage(
         true,
         navIndex = 4,
@@ -47,50 +66,11 @@ fun ProfilePage(modifier: Modifier = Modifier, navController: NavController? = n
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = baseModifier
         ) {
-            Row(
-                horizontalArrangement = Arrangement.Absolute.SpaceBetween,
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                BackButton(text = "Назад")
-                BackButton(
-                    text = "•••",
-                    isIconActive = false,
-                    onClick = { navController?.navigate(SettingsScreen) })
-            }
-            ProfileImage(
-                url = "https://avatars.mds.yandex.net/i?id=973900345cef4fb385b6142051e2cd9b81e0ff0a-9856853-images-thumbs&n=13"
-            )
-            // Заменяем обычный текст на кликабельный StringButton
-            StringButton(
-                text = "Login",
-                onClick = { navController?.navigate(LoginScreen) }
-            )
-            Text("online", fontSize = 12.sp, color = MaterialTheme.colorScheme.primary)
-            BigIconButton(
-                text = "Мои параметры",
-                drawableResId = R.drawable.ruler,
-                modifier = Modifier.padding(bottom = 8.dp),
-                onClick = { navController?.navigate(ProfileParametersScreen) }
-            )
-            BigIconButton(
-                text = "Напоминания",
-                drawableResId = R.drawable.alarm,
-                modifier = Modifier.padding(bottom = 8.dp),
-                onClick = { navController?.navigate(RemindersScreen) }
-            )
-            BigIconButton(
-                text = "Мои устройства",
-                drawableResId = R.drawable.devices,
-                modifier = Modifier.padding(bottom = 8.dp),
-                onClick = { navController?.navigate(DevicesScreen) }
-
-            )
-            BigIconButton(
-                text = "Статистика",
-                drawableResId = R.drawable.bars,
-                modifier = Modifier.padding(bottom = 8.dp),
-                onClick = { navController?.navigate(StatisticsScreen) }
-            )
+            Header(navController)
+            ProfileImage(url = profilePhotoUrl ?: "", onEditClick = openGallery)
+            Text(profile?.name ?: "", fontSize = 20.sp)
+            Text("online", fontSize = 14.sp, color = MaterialTheme.colorScheme.primary)
+            MiddleButtons(navController)
             Text(
                 "Мои записи",
                 fontWeight = FontWeight.Bold,
@@ -102,8 +82,49 @@ fun ProfilePage(modifier: Modifier = Modifier, navController: NavController? = n
 }
 
 @Composable
-private fun ProfileImage(url: String) {
-    Box {
+private fun MiddleButtons(navController: NavController?) {
+    BigIconButton(
+        text = "Мои параметры",
+        drawableResId = R.drawable.ruler,
+        modifier = Modifier.padding(bottom = 8.dp),
+        onClick = { navController?.navigate(ProfileParametersScreen) }
+    )
+    BigIconButton(
+        text = "Напоминания",
+        drawableResId = R.drawable.alarm,
+        modifier = Modifier.padding(bottom = 8.dp),
+        onClick = { navController?.navigate(RemindersScreen) }
+    )
+    BigIconButton(
+        text = "Мои устройства",
+        drawableResId = R.drawable.devices,
+        modifier = Modifier.padding(bottom = 8.dp),
+        onClick = { navController?.navigate(DevicesScreen) }
+    )
+    BigIconButton(
+        text = "Статистика",
+        drawableResId = R.drawable.bars,
+        modifier = Modifier.padding(bottom = 8.dp),
+        onClick = { navController?.navigate(StatisticsScreen) }
+    )
+}
+
+@Composable
+private fun Header(navController: NavController?) {
+    Row(
+        horizontalArrangement = Arrangement.End,
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        BackButton(
+            text = "•••",
+            isIconActive = false,
+            onClick = { navController?.navigate(SettingsScreen) })
+    }
+}
+
+@Composable
+private fun ProfileImage(url: String, onEditClick: () -> Unit) {
+    Box(modifier = Modifier.padding(bottom = 8.dp)) {
         AsyncImage(
             model = url,
             contentDescription = "Profile picture",
@@ -117,7 +138,8 @@ private fun ProfileImage(url: String) {
         )
         ThemedIconButton(
             imageVector = Icons.Default.Create,
-            modifier = Modifier.align(Alignment.BottomEnd)
+            modifier = Modifier.align(Alignment.BottomEnd),
+            onClick = onEditClick
         )
     }
 }

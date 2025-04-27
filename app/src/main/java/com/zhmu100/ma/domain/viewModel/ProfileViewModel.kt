@@ -19,6 +19,10 @@ class ProfileViewModel(
     private val _profilePhotoUrl = MutableStateFlow<String?>(null)
     val profilePhotoUrl = _profilePhotoUrl.asStateFlow()
 
+    init {
+        loadProfile()
+    }
+
     fun loadProfile(forceRefresh: Boolean = false) {
         if (_profileState.value is ViewState.Loading && !forceRefresh) {
             return

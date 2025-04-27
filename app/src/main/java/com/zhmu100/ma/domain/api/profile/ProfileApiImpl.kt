@@ -15,9 +15,7 @@ import io.ktor.client.request.setBody
 import io.ktor.http.ContentType
 import io.ktor.http.contentType
 
-class ProfileApiImpl(private val client: HttpClient) : ProfileApi {
-    private val baseUrl = "http://localhost:8080/api/profiles"
-
+class ProfileApiImpl(private val client: HttpClient, private val baseUrl: String) : ProfileApi {
     override suspend fun getMyProfile(): UserProfile {
         return client.get("$baseUrl/me").body()
     }

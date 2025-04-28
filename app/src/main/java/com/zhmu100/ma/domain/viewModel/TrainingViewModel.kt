@@ -6,10 +6,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.zhmu100.ma.domain.api.training.TrainingApi
-import com.zhmu100.ma.domain.model.training.Exercise
-import com.zhmu100.ma.domain.model.training.ExerciseName
 import com.zhmu100.ma.domain.model.training.ExerciseReaction
-import com.zhmu100.ma.domain.model.training.ExerciseType
 import com.zhmu100.ma.domain.model.training.Workout
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -93,6 +90,7 @@ class TrainingViewModel(
             runCatching {
                 trainingApi.createWorkout(finalWorkout)
             }.onSuccess { createdWorkout ->
+                Log.i("TRAIN", createdWorkout.toString())
                 _workoutState.value = ViewState.Success(
                     createdWorkout,
                     "Workout published"

@@ -5,15 +5,14 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.zhmu100.ma.domain.api.auth.AuthApiImpl
 import com.zhmu100.ma.domain.storage.TokenStorage
-import com.zhmu100.ma.domain.Network
 import com.zhmu100.ma.domain.model.RegisterRequest
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
-class RegisterViewModel : ViewModel() {
-    private val api = AuthApiImpl(Network.httpClient)
-
+class RegisterViewModel(
+    private val authApiImpl: AuthApiImpl
+) : ViewModel() {
     private val _message = MutableStateFlow<String?>(null)
     val message = _message.asStateFlow()
 
@@ -42,7 +41,7 @@ class RegisterViewModel : ViewModel() {
 
         viewModelScope.launch {
             runCatching {
-                api.register(RegisterRequest(name, email, password))
+                authApiImpl.register(RegisterRequest(name, email, password))
             }.onSuccess {
                 TokenStorage.saveAccessToken(it.accessToken)
                 TokenStorage.saveRefreshToken(it.refreshToken)

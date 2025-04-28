@@ -1,7 +1,5 @@
 package com.zhmu100.ma.ui.activities
 
-import com.zhmu100.ma.ui.components.pages.TrainStaticHistoryPage
-import com.zhmu100.ma.ui.components.pages.TrainStaticHistoryScreen
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent

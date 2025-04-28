@@ -1,0 +1,103 @@
+package com.zhmu100.ma.ui.components.buttons
+
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
+import androidx.compose.material3.Button
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import com.zhmu100.ma.R
+import com.zhmu100.ma.ui.theme.MATheme
+
+/**
+ * Компонент кнопки с крупной иконкой и текстом.
+ *
+ * @param text Текст, отображаемый на кнопке.
+ * @param drawableResId Ресурс иконки (Drawable), отображаемой на кнопке.
+ * @param modifier Модификатор для настройки внешнего вида и расположения кнопки.
+ * @param onClick Обработчик нажатия на кнопку.
+ */
+@Composable
+fun BigIconButton(
+    text: String,
+    drawableResId: Int,
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit = {}
+) = BaseBigIconButton(text, modifier, onClick)
+{
+    Icon(painterResource(drawableResId), null, modifier.size(30.dp))
+}
+
+/**
+ * Компонент кнопки с крупной иконкой и текстом.
+ *
+ * @param text Текст, отображаемый на кнопке.
+ * @param imageVector Векторное изображение (ImageVector), отображаемое на кнопке.
+ * @param modifier Модификатор для настройки внешнего вида и расположения кнопки.
+ * @param onClick Обработчик нажатия на кнопку.
+ */
+@Composable
+fun BigIconButton(
+    text: String,
+    imageVector: ImageVector,
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit = {}
+) = BaseBigIconButton(text, modifier, onClick)
+{
+    Icon(imageVector = imageVector, null, modifier.size(30.dp))
+}
+
+@Composable
+private fun BaseBigIconButton(
+    text: String,
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit = {},
+    content: @Composable () -> Unit
+) {
+    Button(
+        onClick = onClick,
+        shape = RoundedCornerShape(25),
+        modifier = modifier
+    ) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            content()
+            Text(
+                text = text,
+                fontWeight = FontWeight.Normal,
+                modifier = Modifier.padding(horizontal = 16.dp)
+            )
+            Spacer(modifier = Modifier.weight(1f))
+            Icon(
+                imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
+                null,
+                modifier.size(30.dp)
+            )
+        }
+
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun BigIconButtonPreview() {
+    var text by remember { mutableStateOf("Test") }
+    MATheme {
+        BigIconButton(text, R.drawable.male, onClick = { text = "Test1" })
+    }
+}

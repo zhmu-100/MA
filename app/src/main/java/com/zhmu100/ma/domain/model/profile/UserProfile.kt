@@ -7,7 +7,7 @@ package com.zhmu100.ma.domain.model.profile
  * @property name Имя пользователя.
  * @property email Электронная почта пользователя.
  * @property imageId Идентификатор изображения профиля (может быть null).
- * @property bio Краткая биография пользователя (может быть null).
+ * @property bio Пол пользователя "M" | "F" (может быть null).
  * @property location Местоположение пользователя (может быть null).
  * @property birthdate Дата рождения пользователя (может быть null).
  * @property weight Вес пользователя в кг (может быть null).

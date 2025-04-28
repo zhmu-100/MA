@@ -96,7 +96,7 @@ fun ProfilePage(modifier: Modifier = Modifier, navController: NavController? = n
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.inversePrimary
             )
-            RoundButton("Создать запись", onClick = { navController?.navigate(PostScreen) })
+            RoundButton("Создать запись", onClick = { navController?.navigate(FeedScreen) })
         }
     }
 }

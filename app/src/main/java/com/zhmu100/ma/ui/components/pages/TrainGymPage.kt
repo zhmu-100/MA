@@ -113,7 +113,10 @@ fun TrainGymPage(
             }
             if (!trainViewModel.isTrainingStarted.value) {
                 Button(
-                    onClick = { trainViewModel.startTraining() },
+                    onClick = {
+                        gymViewModel.clearStats()
+                        trainViewModel.startTraining()
+                    },
                     modifier = Modifier.padding(16.dp)
                 ) {
                     Text("Начать тренировку")

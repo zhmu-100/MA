@@ -42,7 +42,10 @@ import com.zhmu100.ma.ui.theme.MATheme
 import kotlinx.serialization.Serializable
 
 @Composable
-fun TrainGymPage(modifier: Modifier = Modifier, navController: NavController? = null) {
+fun TrainGymPage(
+    modifier: Modifier = Modifier,
+    navController: NavController? = null
+) {
     var workoutName by remember { mutableStateOf("") }
     val trainRows = remember { mutableStateListOf<TrainRowData>() }
 

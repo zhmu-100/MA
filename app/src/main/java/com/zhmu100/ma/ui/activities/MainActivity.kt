@@ -96,11 +96,10 @@ class MainActivity : ComponentActivity() {
             )
         }
 
-
         enableEdgeToEdge()
         setContent {
-            MATheme {
-                KoinContext {
+            KoinContext {
+                MATheme {
                     val navController = rememberNavController()
                     NavHost(navController = navController, startDestination = ProfileScreen) {
                         composable<ProfileScreen> { ProfilePage(navController = navController) }

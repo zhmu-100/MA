@@ -162,7 +162,7 @@ private fun MainContent(
                     route = mapViewModel.routePoints,
                     isPaused = trainViewModel.isPaused.value,
                     onUserLocationFound = { location ->
-                        if (trainViewModel.totalExerciseTime.value.toSeconds() > DEFAULT_INITIAL_SYNC_TIME) {
+                        if (trainViewModel.totalExerciseTime.value.seconds > DEFAULT_INITIAL_SYNC_TIME) {
                             mapViewModel.addNewPoint(
                                 location,
                                 trainViewModel.totalExerciseTime.value

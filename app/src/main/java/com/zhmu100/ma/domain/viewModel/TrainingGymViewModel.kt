@@ -14,10 +14,16 @@ import java.time.Duration
 import java.time.Instant
 
 class TrainingGymViewModel : ViewModel() {
-    private val _trainRows = mutableStateListOf<TrainRowData>()
+    private var _trainRows = mutableStateListOf<TrainRowData>()
     val trainRows: SnapshotStateList<TrainRowData> = _trainRows
+    private val _workoutName = mutableStateOf("")
+    val workoutName: State<String> = _workoutName
 
-    private val _exerciseOptions = ExerciseName.values().filter {
+    fun setWorkoutName(name: String) {
+        _workoutName.value = name
+    }
+
+    private val _exerciseOptions = ExerciseName.entries.filter {
         it != ExerciseName.UNSPECIFIED && it != ExerciseName.RUNNING && it != ExerciseName.CYCLING
     }
     val exerciseOptions: List<ExerciseName> = _exerciseOptions
@@ -36,6 +42,10 @@ class TrainingGymViewModel : ViewModel() {
 
     fun removeExercise(index: Int) {
         _trainRows.removeAt(index)
+    }
+
+    fun clearStats() {
+        _trainRows = mutableStateListOf<TrainRowData>()
     }
 
     fun getWorkout(

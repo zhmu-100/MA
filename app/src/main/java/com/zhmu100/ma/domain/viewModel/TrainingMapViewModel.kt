@@ -1,8 +1,9 @@
 package com.zhmu100.ma.domain.viewModel
 
 import androidx.compose.runtime.State
+import androidx.compose.runtime.mutableDoubleStateOf
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.lifecycle.ViewModel
 import com.google.android.gms.maps.model.LatLng
@@ -12,7 +13,6 @@ import com.zhmu100.ma.domain.model.training.Exercise
 import com.zhmu100.ma.domain.model.training.ExerciseName
 import com.zhmu100.ma.domain.model.training.ExerciseType
 import com.zhmu100.ma.domain.model.training.Workout
-import com.zhmu100.ma.domain.utils.DurationUtils
 import java.time.Duration
 
 const val DEFAULT_DISTANCE_THRESHOLD = 20.0 // meters
@@ -25,12 +25,19 @@ class TrainingMapViewModel(
 ) : ViewModel() {
     private var _routePoints = mutableStateListOf<LatLng>()
     val routePoints: SnapshotStateList<LatLng> = _routePoints
-    private var _totalDistance = mutableStateOf(0.0)
+    private var _totalDistance = mutableDoubleStateOf(0.0)
     val totalDistance: State<Double> = _totalDistance
-    private var _stepsCount = mutableStateOf(0)
+    private var _stepsCount = mutableIntStateOf(0)
     val stepsCount: State<Int> = _stepsCount
-    private var _caloriesBurned = mutableStateOf(0)
+    private var _caloriesBurned = mutableIntStateOf(0)
     val caloriesBurned: State<Int> = _caloriesBurned
+
+    fun clearStats() {
+        _routePoints = mutableStateListOf<LatLng>()
+        _totalDistance = mutableDoubleStateOf(0.0)
+        _stepsCount = mutableIntStateOf(0)
+        _caloriesBurned = mutableIntStateOf(0)
+    }
 
     // Функции для управления тренировкой
     fun addNewPoint(newPoint: LatLng, totalExerciseTime: Duration) {
@@ -55,7 +62,9 @@ class TrainingMapViewModel(
         if (routePoints.isEmpty()) return null
 
         val hours = totalExerciseTime.toHours().toDouble() +
-                totalExerciseTime.toMinutes().toDouble() / 60
+                totalExerciseTime.toMinutes().toDouble() / 60 +
+                totalExerciseTime.seconds.toDouble() / 3600
+
         val speed = if (hours > 0) {
             ((totalDistance.value / 1000) / hours).toInt()
         } else {
@@ -79,9 +88,9 @@ class TrainingMapViewModel(
     }
 
     private fun updateStats(totalExerciseTime: Duration) {
-        _totalDistance.value = calculateTotalDistance(routePoints)
-        _stepsCount.value = calculateSteps(totalDistance.value)
-        _caloriesBurned.value = calculateCalories(totalDistance.value, totalExerciseTime)
+        _totalDistance.doubleValue = calculateTotalDistance(routePoints)
+        _stepsCount.intValue = calculateSteps(totalDistance.value)
+        _caloriesBurned.intValue = calculateCalories(totalDistance.value, totalExerciseTime)
     }
 
     /**

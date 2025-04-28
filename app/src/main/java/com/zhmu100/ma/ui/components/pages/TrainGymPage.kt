@@ -12,6 +12,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.Delete
@@ -20,9 +21,10 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MenuDefaults
-import androidx.compose.material3.MenuItemColors
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -30,7 +32,6 @@ import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -45,7 +46,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.zhmu100.ma.domain.model.training.ExerciseName
-import com.zhmu100.ma.domain.model.training.ExerciseReaction
 import com.zhmu100.ma.domain.viewModel.TrainingGymViewModel
 import com.zhmu100.ma.domain.viewModel.TrainingViewModel
 import com.zhmu100.ma.ui.components.buttons.SquareIconButton
@@ -58,7 +58,6 @@ import kotlinx.coroutines.delay
 import kotlinx.serialization.Serializable
 import org.koin.androidx.compose.koinViewModel
 import java.time.Duration
-import kotlin.math.roundToInt
 
 @Composable
 fun TrainGymPage(
@@ -67,7 +66,7 @@ fun TrainGymPage(
     gymViewModel: TrainingGymViewModel = koinViewModel(),
     trainViewModel: TrainingViewModel = koinViewModel()
 ) {
-    var workoutName by remember { mutableStateOf("") }
+    val workoutName = gymViewModel.workoutName.value
 
     // Обновление таймера каждую секунду
     LaunchedEffect(trainViewModel.isTrainingStarted.value, trainViewModel.isPaused.value) {
@@ -84,9 +83,34 @@ fun TrainGymPage(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = baseModifier.fillMaxWidth()
         ) {
-            BorderlessInputLine(
-                placeholder = "Тренировка",
-                onTextChanged = { workoutName = it })
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 16.dp)
+            ) {
+                if (!trainViewModel.isTrainingStarted.value) {
+                    IconButton(
+                        onClick = { navController?.popBackStack() },
+                        colors = IconButtonDefaults.iconButtonColors(
+                            containerColor = MaterialTheme.colorScheme.primary,
+                            contentColor = MaterialTheme.colorScheme.background
+                        )
+                    ) {
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Filled.KeyboardArrowLeft,
+                            contentDescription = "Back"
+                        )
+                    }
+                }
+                BorderlessInputLine(
+                    workoutName,
+                    placeholder = "Тренировка",
+                    onTextChanged = { gymViewModel.setWorkoutName(it) },
+                    modifier = Modifier
+                        .align(Alignment.Center)
+                        .padding(horizontal = 48.dp)
+                )
+            }
             if (!trainViewModel.isTrainingStarted.value) {
                 Button(
                     onClick = { trainViewModel.startTraining() },
@@ -132,11 +156,11 @@ fun TrainGymPage(
                     }
                     Button(
                         onClick = {
-                            val workout =
-                                gymViewModel.getWorkout(trainViewModel.totalExerciseTime.value)
-                            workout?.let {
-                                trainViewModel.endTraining(it)
-                                trainViewModel.saveWorkout(it, ExerciseReaction.EXCELLENT, "None")
+                            gymViewModel.getWorkout(
+                                trainViewModel.totalExerciseTime.value,
+                                workoutName = workoutName.ifEmpty { "Тренировка в зале" }
+                            )?.let {
+                                trainViewModel.rateTraining(it)
                             }
                             navController?.navigate(TrainMoodScreen)
                         },

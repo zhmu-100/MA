@@ -51,7 +51,6 @@ import com.google.maps.android.compose.Marker
 import com.google.maps.android.compose.MarkerState
 import com.google.maps.android.compose.Polyline
 import com.google.maps.android.compose.rememberCameraPositionState
-import com.zhmu100.ma.domain.model.training.ExerciseReaction
 import com.zhmu100.ma.domain.viewModel.TrainingMapViewModel
 import com.zhmu100.ma.domain.viewModel.TrainingViewModel
 import com.zhmu100.ma.ui.theme.MATheme
@@ -62,6 +61,7 @@ import java.time.Duration
 import kotlin.math.roundToInt
 
 const val DEFAULT_UPDATE_INTERVAL = 5000L // ms
+const val DEFAULT_INITIAL_SYNC_TIME = 10 // s
 
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
@@ -149,7 +149,10 @@ private fun MainContent(
             Header(trainViewModel.isTrainingStarted.value) { navController?.popBackStack() }
             if (!trainViewModel.isTrainingStarted.value) {
                 Button(
-                    onClick = { trainViewModel.startTraining() },
+                    onClick = {
+                        mapViewModel.clearStats()
+                        trainViewModel.startTraining()
+                    },
                     modifier = Modifier.padding(16.dp)
                 ) {
                     Text("Начать тренировку")
@@ -159,7 +162,12 @@ private fun MainContent(
                     route = mapViewModel.routePoints,
                     isPaused = trainViewModel.isPaused.value,
                     onUserLocationFound = { location ->
-                        mapViewModel.addNewPoint(location, trainViewModel.totalExerciseTime.value)
+                        if (trainViewModel.totalExerciseTime.value.toSeconds() > DEFAULT_INITIAL_SYNC_TIME) {
+                            mapViewModel.addNewPoint(
+                                location,
+                                trainViewModel.totalExerciseTime.value
+                            )
+                        }
                     },
                 )
                 StatsByRoute(
@@ -172,11 +180,8 @@ private fun MainContent(
                     isPaused = trainViewModel.isPaused.value,
                     onPause = { trainViewModel.togglePause() },
                     onEnd = {
-                        val workout =
-                            mapViewModel.getWorkout(trainViewModel.totalExerciseTime.value)
-                        workout?.let {
-                            trainViewModel.endTraining(it)
-                            trainViewModel.saveWorkout(it, ExerciseReaction.EXCELLENT, "None")
+                        mapViewModel.getWorkout(trainViewModel.totalExerciseTime.value)?.let {
+                            trainViewModel.rateTraining(it)
                         }
                         navController?.navigate(TrainMoodScreen)
                     },
@@ -315,7 +320,6 @@ private fun MapWithLocation(
     // Update location periodically when not paused
     LaunchedEffect(isPaused) {
         if (!isPaused) {
-            delay(5000)
             while (true) {
                 try {
                     val locationResult = fusedLocationClient.lastLocation

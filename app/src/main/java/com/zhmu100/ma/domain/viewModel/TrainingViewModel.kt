@@ -75,9 +75,15 @@ class TrainingViewModel(
         _isPaused.value = !_isPaused.value
     }
 
-    fun endTraining(workout: Workout) {
-        _isTrainingStarted.value = false
+    fun rateTraining(workout: Workout) {
         _currentWorkout.value = workout
+        if (!isPaused.value) {
+            togglePause()
+        }
+    }
+
+    fun clearTraining() {
+        _isTrainingStarted.value = false
     }
 
     fun saveWorkout(workout: Workout, reaction: ExerciseReaction, note: String) {
@@ -101,6 +107,8 @@ class TrainingViewModel(
                     error
                 )
             }
+            _isTrainingStarted.value = false
+            _currentWorkout.value = null
         }
     }
 }

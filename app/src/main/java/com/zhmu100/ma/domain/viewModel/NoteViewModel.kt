@@ -2,100 +2,102 @@ package com.zhmu100.ma.domain.viewModel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.zhmu100.ma.domain.api.notes.NoteApiImpl
+import com.zhmu100.ma.domain.api.notes.NoteApi
 import com.zhmu100.ma.domain.model.Note
-import com.zhmu100.ma.domain.Network
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
-class NoteViewModel : ViewModel() {
-    private val api = NoteApiImpl(Network.httpClient)
+class NoteViewModel(
+    private val noteApi: NoteApi
+) : ViewModel() {
+    private val _notesState = MutableStateFlow<ViewState<List<Note>>>(ViewState.Uninitialized)
+    val notesState = _notesState.asStateFlow()
 
-    private val _note = MutableStateFlow<Note?>(null)
-    val note = _note.asStateFlow()
-
-    private val _notes = MutableStateFlow<List<Note>>(emptyList())
-    val notes = _notes.asStateFlow()
-
-    private val _message = MutableStateFlow<String?>(null)
-    val message = _message.asStateFlow()
+    private val _currentNoteState = MutableStateFlow<ViewState<Note>>(ViewState.Uninitialized)
+    val currentNoteState = _currentNoteState.asStateFlow()
 
     fun getNoteById(id: String) {
+        if (_currentNoteState.value is ViewState.Loading) return
+
+        _currentNoteState.value = ViewState.Loading
+
         viewModelScope.launch {
             runCatching {
-                api.getNoteById(id)
-            }.onSuccess {
-                _note.value = it
-                _message.value = "Note got"
+                noteApi.getNoteById(id)
+            }.onSuccess { note ->
+                _currentNoteState.value = ViewState.Success(note)
             }.onFailure {
-                _message.value = "Get note error: ${it.message}"
+                _currentNoteState.value = ViewState.Error("Get note error: ${it.message}", it)
             }
         }
     }
 
-    fun getNotes(userId: String, page: Int, pageSize: Int) {
+    fun listNotes(userId: String, page: Int = 1, pageSize: Int = 10) {
+        if (_notesState.value is ViewState.Loading) return
+
+        _notesState.value = ViewState.Loading
+
         viewModelScope.launch {
             runCatching {
-                api.getNotes(userId, page, pageSize)
-            }.onSuccess {
-                _notes.value = it
-                _message.value = "Notes got"
+                noteApi.getNotes(userId, page, pageSize)
+            }.onSuccess { notes ->
+                _notesState.value = ViewState.Success(notes)
             }.onFailure {
-                _message.value = "Notes got error: ${it.message}"
+                _notesState.value = ViewState.Error("Error to load notes: ${it.message}", it)
             }
         }
     }
 
     fun createNote(userId: String, title: String, content: String) {
-        if (!isValidFields(title, content)) {
-            _message.value = "Fields must not be empty"
-            return
-        }
+        if (_currentNoteState.value is ViewState.Loading) return
+
+        _currentNoteState.value = ViewState.Loading
 
         viewModelScope.launch {
             runCatching {
-                api.createNote(userId, title, content)
-            }.onSuccess {
-                _note.value = it
-                _message.value = "Note created"
+                noteApi.createNote(userId, title, content)
+            }.onSuccess { createdNote ->
+                _currentNoteState.value = ViewState.Success(createdNote, "Note created")
             }.onFailure {
-                _message.value = "Note creating error: ${it.message}"
+                _currentNoteState.value = ViewState.Error("Note creating error: ${it.message}", it)
             }
         }
     }
 
     fun updateNote(id: String, title: String, content: String) {
-        if (!isValidFields(title, content)) {
-            _message.value = "Fields must not be empty"
-            return
-        }
+        if (_currentNoteState.value is ViewState.Loading) return
+
+        _currentNoteState.value = ViewState.Loading
 
         viewModelScope.launch {
             runCatching {
-                api.updateNote(id, title, content)
-            }.onSuccess {
-                _note.value = it
-                _message.value = "Note updated"
+                noteApi.updateNote(id, title, content)
+            }.onSuccess { updatedNote ->
+                _currentNoteState.value = ViewState.Success(updatedNote, "Note updated")
             }.onFailure {
-                _message.value = "Note updating error: ${it.message}"
+                _currentNoteState.value = ViewState.Error("Note updating error: ${it.message}", it)
             }
         }
     }
 
     fun deleteNote(id: String) {
+        if (_currentNoteState.value is ViewState.Loading) return
+
+        _currentNoteState.value = ViewState.Loading
+
         viewModelScope.launch {
             runCatching {
-                api.deleteNote(id)
-            }.onSuccess {
-                _message.value = "Note deleted"
+                noteApi.deleteNote(id)
+                _currentNoteState.value = ViewState.Success(Note(id = ""), "Note deleted")
             }.onFailure {
-                _message.value = "Note deleting error: ${it.message}"
+                _currentNoteState.value = ViewState.Error("Note deleting error: ${it.message}", it)
             }
         }
     }
 
-    private fun isValidFields(title: String, content: String): Boolean {
-        return title.isNotBlank() && content.isNotBlank()
+    fun clearErrors() {
+        _notesState.value = ViewState.Uninitialized
+        _currentNoteState.value = ViewState.Uninitialized
     }
 }

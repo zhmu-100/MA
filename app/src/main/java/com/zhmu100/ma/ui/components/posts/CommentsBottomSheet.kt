@@ -1,4 +1,4 @@
-package com.zhmu100.ma.ui.components.buttons
+package com.zhmu100.ma.ui.components.posts
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable

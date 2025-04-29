@@ -4,7 +4,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.rememberModalBottomSheetState
@@ -15,8 +14,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.zhmu100.ma.ui.components.buttons.*
+import com.zhmu100.ma.ui.components.posts.Comment
+import com.zhmu100.ma.ui.components.posts.CommentsBottomSheet
+import com.zhmu100.ma.ui.components.posts.PostCard
+import com.zhmu100.ma.ui.components.posts.ShareBottomSheet
 import com.zhmu100.ma.ui.theme.MATheme
-import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -52,7 +54,7 @@ fun FeedPage(modifier: Modifier = Modifier, navController: NavController? = null
 
     BasePage(
         true,
-        navIndex = 4,
+        navIndex = 0,
         navController = navController,
         modifier = modifier.background(MaterialTheme.colorScheme.surfaceVariant)
     ) { baseModifier ->

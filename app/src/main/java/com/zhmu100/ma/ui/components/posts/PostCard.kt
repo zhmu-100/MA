@@ -1,4 +1,4 @@
-package com.zhmu100.ma.ui.components.buttons
+package com.zhmu100.ma.ui.components.posts
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -21,7 +21,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.zhmu100.ma.R
 import com.zhmu100.ma.ui.theme.MATheme
-import com.zhmu100.ma.ui.theme.LightGray
 
 /**
  * Компонент карточки поста для ленты.

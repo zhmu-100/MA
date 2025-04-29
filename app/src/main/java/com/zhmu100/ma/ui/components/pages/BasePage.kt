@@ -29,7 +29,7 @@ fun BasePage(
     content: @Composable (Modifier) -> Unit
 ) {
     val navPath =
-        listOf(ProfileScreen, TrainCategoryScreen, ProfileScreen, ProfileScreen, ProfileScreen)
+        listOf(FeedScreen, TrainCategoryScreen, ProfileScreen, ProfileScreen, ProfileScreen)
 
     val bottomBar: @Composable (() -> Unit) = if (hasNavBar) {
         {

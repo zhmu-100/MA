@@ -37,6 +37,8 @@ import com.zhmu100.ma.ui.components.pages.LoginScreen
 import com.zhmu100.ma.ui.components.pages.NewPasswordPage
 import com.zhmu100.ma.ui.components.pages.NewPasswordScreen
 import com.zhmu100.ma.ui.components.pages.PostPage
+import com.zhmu100.ma.ui.components.pages.FeedPage
+import com.zhmu100.ma.ui.components.pages.FeedScreen
 import com.zhmu100.ma.ui.components.pages.PostScreen
 import com.zhmu100.ma.ui.components.pages.ProfilePage
 import com.zhmu100.ma.ui.components.pages.ProfileRegPage
@@ -103,6 +105,8 @@ class MainActivity : ComponentActivity() {
                     composable<ActivityLevelRegScreen> { ActivityLevelRegPage(navController = navController) }
                     composable<ProfileRegScreen> { ProfileRegPage(navController = navController) }
                     composable<StatisticsScreen> { StatisticPage(navController = navController) }
+                    composable<PostScreen> { PostPage(navController = navController) }
+                    composable<FeedScreen> { FeedPage(navController = navController) }
                     composable<ProfileParametersScreen> { ProfileParametersPage(navController = navController) }
                     composable<LoginScreen> { LoginPage(navController = navController) }
                     composable<RegisterScreen> { RegisterPage(navController = navController) }

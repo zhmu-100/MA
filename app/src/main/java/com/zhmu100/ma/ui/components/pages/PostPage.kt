@@ -59,13 +59,12 @@ fun PostPage(modifier: Modifier = Modifier, navController: NavController? = null
                 BackButton(
                     text = "Назад",
                     modifier = Modifier.align(Alignment.CenterStart),
-                    onClick = { navController?.navigate(ProfileScreen) })
-                Text(
-                    "Новый пост",
-                    fontWeight = FontWeight.Bold,
-                    modifier = Modifier.align(Alignment.Center)
-                )
-                SaveButton(text = "Опубликовать", modifier = Modifier.align(Alignment.CenterEnd))
+                    onClick = { navController?.navigate(FeedScreen) })
+
+                SaveButton(
+                    text = "Опубликовать",
+                    modifier = Modifier.align(Alignment.CenterEnd),
+                    onClick = { navController?.navigate(FeedScreen)} )
             }
             url?.let {
                 Box(

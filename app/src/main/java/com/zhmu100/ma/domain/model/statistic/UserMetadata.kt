@@ -6,7 +6,7 @@ package com.zhmu100.ma.domain.model.statistic
  * @property userId Идентификатор пользователя
  * @property timestamp Временная метка в формате ISO-8601
  */
-data class CaloriesMetadata(
+data class UserMetadata(
     val id: String? = null,
     val userId: String,
     val timestamp: String

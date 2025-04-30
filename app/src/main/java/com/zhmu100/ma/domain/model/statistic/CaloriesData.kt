@@ -6,6 +6,6 @@ package com.zhmu100.ma.domain.model.statistic
  * @property calories Количество калорий
  */
 data class CaloriesData(
-    val meta: CaloriesMetadata,
+    val meta: UserMetadata,
     val calories: Double
 )

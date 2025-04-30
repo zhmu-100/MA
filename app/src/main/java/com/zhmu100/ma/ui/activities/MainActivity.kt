@@ -18,6 +18,8 @@ import androidx.navigation.compose.rememberNavController
 import com.zhmu100.ma.di.networkModule
 import com.zhmu100.ma.di.storageModule
 import com.zhmu100.ma.di.viewModelModule
+import com.zhmu100.ma.domain.viewModel.ProfileViewModel
+import com.zhmu100.ma.domain.viewModel.TrainingViewModel
 import com.zhmu100.ma.ui.components.NavBar
 import com.zhmu100.ma.ui.components.pages.ActivityLevelRegPage
 import com.zhmu100.ma.ui.components.pages.ActivityLevelRegScreen
@@ -70,6 +72,7 @@ import com.zhmu100.ma.ui.components.pages.WeightRegPage
 import com.zhmu100.ma.ui.components.pages.WeightRegScreen
 import com.zhmu100.ma.ui.theme.MATheme
 import org.koin.android.ext.koin.androidContext
+import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.KoinContext
 import org.koin.core.context.GlobalContext.startKoin
 
@@ -96,14 +99,26 @@ class MainActivity : ComponentActivity() {
             )
         }
 
-
         enableEdgeToEdge()
         setContent {
-            MATheme {
-                KoinContext {
+            KoinContext {
+                MATheme {
                     val navController = rememberNavController()
+                    val profileViewModel: ProfileViewModel = koinViewModel()
+                    val trainingViewModel: TrainingViewModel = koinViewModel()
                     NavHost(navController = navController, startDestination = ProfileScreen) {
-                        composable<ProfileScreen> { ProfilePage(navController = navController) }
+                        composable<ProfileScreen> {
+                            ProfilePage(
+                                navController = navController,
+                                viewModel = profileViewModel
+                            )
+                        }
+                        composable<ProfileParametersScreen> {
+                            ProfileParametersPage(
+                                navController = navController,
+                                viewModel = profileViewModel
+                            )
+                        }
                         composable<DevicesScreen> { DevicesPage(navController = navController) }
                         composable<DeviceScreen> { DevicePage(navController = navController) }
                         composable<PostScreen> { IntroPage(navController = navController) }
@@ -119,15 +134,29 @@ class MainActivity : ComponentActivity() {
                         composable<ActivityLevelRegScreen> { ActivityLevelRegPage(navController = navController) }
                         composable<ProfileRegScreen> { ProfileRegPage(navController = navController) }
                         composable<StatisticsScreen> { StatisticPage(navController = navController) }
-                        composable<ProfileParametersScreen> { ProfileParametersPage(navController = navController) }
                         composable<LoginScreen> { LoginPage(navController = navController) }
                         composable<RegisterScreen> { RegisterPage(navController = navController) }
                         composable<ResetPasswordScreen> { ResetPasswordPage(navController = navController) }
                         composable<NewPasswordScreen> { NewPasswordPage(navController = navController) }
                         composable<TrainCategoryScreen> { TrainCategoryPage(navController = navController) }
-                        composable<TrainMapScreen> { TrainMapPage(navController = navController) }
-                        composable<TrainGymScreen> { TrainGymPage(navController = navController) }
-                        composable<TrainMoodScreen> { TrainMoodPage(navController = navController) }
+                        composable<TrainMapScreen> {
+                            TrainMapPage(
+                                navController = navController,
+                                trainViewModel = trainingViewModel
+                            )
+                        }
+                        composable<TrainGymScreen> {
+                            TrainGymPage(
+                                navController = navController,
+                                trainViewModel = trainingViewModel
+                            )
+                        }
+                        composable<TrainMoodScreen> {
+                            TrainMoodPage(
+                                navController = navController,
+                                trainViewModel = trainingViewModel
+                            )
+                        }
                     }
                 }
             }

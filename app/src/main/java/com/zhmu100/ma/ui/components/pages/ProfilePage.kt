@@ -55,6 +55,8 @@ fun ProfilePage(
     }
 
     val profile: UserProfile? = (profileState as? ViewState.Success)?.data
+    val followersCount = profile?.followerCount
+    val followingCount = profile?.followingCount
 
     BasePage(
         true,
@@ -70,6 +72,11 @@ fun ProfilePage(
             ProfileImage(url = profilePhotoUrl ?: "", onEditClick = openGallery)
             Text(profile?.name ?: "", fontSize = 20.sp)
             Text("online", fontSize = 14.sp, color = MaterialTheme.colorScheme.primary)
+            SocialStats(
+                followersCount = followersCount ?: 0,
+                followingCount = followingCount ?: 0,
+                modifier = Modifier.padding(vertical = 8.dp)
+            )
             MiddleButtons(navController)
             Text(
                 "Мои записи",
@@ -140,6 +147,52 @@ private fun ProfileImage(url: String, onEditClick: () -> Unit) {
             imageVector = Icons.Default.Create,
             modifier = Modifier.align(Alignment.BottomEnd),
             onClick = onEditClick
+        )
+    }
+}
+
+@Composable
+private fun SocialStats(
+    followersCount: Int,
+    followingCount: Int,
+    modifier: Modifier = Modifier
+) {
+    Row(
+        horizontalArrangement = Arrangement.SpaceEvenly,
+        modifier = modifier.fillMaxWidth()
+    ) {
+        StatItem(
+            count = followersCount,
+            label = "Подписчики",
+            modifier = Modifier.weight(1f)
+        )
+        StatItem(
+            count = followingCount,
+            label = "Подписки",
+            modifier = Modifier.weight(1f)
+        )
+    }
+}
+
+@Composable
+private fun StatItem(
+    count: Int,
+    label: String,
+    modifier: Modifier = Modifier
+) {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = modifier
+    ) {
+        Text(
+            text = count.toString(),
+            fontSize = 18.sp,
+            fontWeight = FontWeight.Bold
+        )
+        Text(
+            text = label,
+            fontSize = 14.sp,
+            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
         )
     }
 }

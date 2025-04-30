@@ -50,6 +50,7 @@ import com.zhmu100.ma.domain.model.statistic.GPSPosition
 import com.zhmu100.ma.domain.viewModel.TrainingMapViewModel
 import com.zhmu100.ma.domain.viewModel.TrainingViewModel
 import com.zhmu100.ma.ui.components.buttons.BackIconButton
+import com.zhmu100.ma.ui.components.inputs.BorderlessInputLine
 import com.zhmu100.ma.ui.theme.MATheme
 import kotlinx.coroutines.delay
 import kotlinx.serialization.Serializable
@@ -143,7 +144,7 @@ private fun MainContent(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = baseModifier.fillMaxWidth()
         ) {
-            Header(trainViewModel.isTrainingStarted.value) { navController?.popBackStack() }
+            Header(trainViewModel) { navController?.popBackStack() }
             if (!trainViewModel.isTrainingStarted.value) {
                 Button(
                     onClick = {
@@ -167,7 +168,6 @@ private fun MainContent(
                         }
                     },
                 )
-                Log.i("TRAIN", mapViewModel.totalDistance.value.toString())
                 StatsByRoute(
                     distance = mapViewModel.totalDistance.value,
                     duration = trainViewModel.totalExerciseTime.value,
@@ -178,7 +178,10 @@ private fun MainContent(
                     isPaused = trainViewModel.isPaused.value,
                     onPause = { trainViewModel.togglePause() },
                     onEnd = {
-                        mapViewModel.getWorkout(trainViewModel.totalExerciseTime.value)?.let {
+                        mapViewModel.getWorkout(
+                            trainViewModel.totalExerciseTime.value,
+                            workoutName = trainViewModel.workoutName.value.ifEmpty { "Пробежка" }
+                        )?.let {
                             trainViewModel.rateTraining(it, mapViewModel.routePoints)
                         }
                         navController?.navigate(TrainMoodScreen)
@@ -190,19 +193,25 @@ private fun MainContent(
 }
 
 @Composable
-private fun Header(isTrainingStarted: Boolean, onBackClick: () -> Unit = {}) {
+private fun Header(
+    trainViewModel: TrainingViewModel,
+    onBackClick: () -> Unit = {}
+) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
             .padding(bottom = 16.dp)
     ) {
-        if (!isTrainingStarted) {
+        if (!trainViewModel.isTrainingStarted.value) {
             BackIconButton(onClick = onBackClick)
         }
-        Text(
-            text = "Тренировка",
-            fontWeight = FontWeight.Bold,
-            modifier = Modifier.align(Alignment.Center)
+        BorderlessInputLine(
+            trainViewModel.workoutName.value,
+            placeholder = "Тренировка",
+            onTextChanged = { trainViewModel.setWorkoutName(it) },
+            modifier = Modifier
+                .align(Alignment.Center)
+                .padding(horizontal = 48.dp)
         )
     }
 }

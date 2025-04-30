@@ -1,6 +1,5 @@
 package com.zhmu100.ma.domain.viewModel
 
-import android.util.Log
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
@@ -26,30 +25,28 @@ class TrainingViewModel(
 
     private var _isPaused = mutableStateOf(false)
     val isPaused: State<Boolean> = _isPaused
-
     private var _startTime = mutableStateOf<Instant?>(null)
-    val startTime: State<Instant?> = _startTime
-
+    private val startTime: State<Instant?> = _startTime
     private var _pausedTime = mutableStateOf<Instant?>(null)
-    val pausedTime: State<Instant?> = _pausedTime
-
+    private val pausedTime: State<Instant?> = _pausedTime
     private var _totalPausedDuration = mutableStateOf(Duration.ZERO)
     val totalPausedDuration: State<Duration> = _totalPausedDuration
-
     private var _totalExerciseTime = mutableStateOf(Duration.ZERO)
     val totalExerciseTime: State<Duration> = _totalExerciseTime
-
     private var _isTrainingStarted = mutableStateOf(false)
     val isTrainingStarted: State<Boolean> = _isTrainingStarted
-
     private var _currentWorkout = mutableStateOf<Workout?>(null)
     val currentWorkout: State<Workout?> = _currentWorkout
-
     private var _currentGPS = mutableStateOf<List<GPSPosition>?>(null)
-    val currentGPS: State<List<GPSPosition>?> = _currentGPS
-
+    private val currentGPS: State<List<GPSPosition>?> = _currentGPS
     private val _workoutState = MutableStateFlow<ViewState<Workout>>(ViewState.Uninitialized)
     val workoutState = _workoutState.asStateFlow()
+    private val _workoutName = mutableStateOf("")
+    val workoutName: State<String> = _workoutName
+
+    fun setWorkoutName(name: String) {
+        _workoutName.value = name
+    }
 
     // Функции для управления тренировкой
     fun startTraining() {

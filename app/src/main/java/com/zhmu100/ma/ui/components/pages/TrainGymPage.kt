@@ -12,7 +12,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.Delete
@@ -21,8 +20,6 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MenuDefaults
 import androidx.compose.material3.OutlinedTextField
@@ -67,7 +64,7 @@ fun TrainGymPage(
     gymViewModel: TrainingGymViewModel = koinViewModel(),
     trainViewModel: TrainingViewModel = koinViewModel()
 ) {
-    val workoutName = gymViewModel.workoutName.value
+    val workoutName = trainViewModel.workoutName.value
 
     // Обновление таймера каждую секунду
     LaunchedEffect(trainViewModel.isTrainingStarted.value, trainViewModel.isPaused.value) {
@@ -95,7 +92,7 @@ fun TrainGymPage(
                 BorderlessInputLine(
                     workoutName,
                     placeholder = "Тренировка",
-                    onTextChanged = { gymViewModel.setWorkoutName(it) },
+                    onTextChanged = { trainViewModel.setWorkoutName(it) },
                     modifier = Modifier
                         .align(Alignment.Center)
                         .padding(horizontal = 48.dp)

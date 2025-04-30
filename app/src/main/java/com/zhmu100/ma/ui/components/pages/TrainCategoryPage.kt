@@ -51,6 +51,9 @@ fun TrainCategoryPage(modifier: Modifier = Modifier, navController: NavControlle
                 rightText = "Спортзал",
                 onLeftClick = {
                     navController?.navigate(TrainDynamicHistoryScreen)
+                },
+                onRightClick = {
+                    navController?.navigate(TrainStaticHistoryScreen)
                 }
             )
             Text("Выбрать категорию", modifier = Modifier.padding(bottom = 16.dp))

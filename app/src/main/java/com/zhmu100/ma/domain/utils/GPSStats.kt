@@ -5,9 +5,9 @@ import com.google.maps.android.ktx.utils.sphericalDistance
 import java.time.Duration
 
 object GPSStats {
-    const val AVERAGE_STEP_LENGTH = 0.762 // meters
-    const val CALORIES_PER_KM = 60
-    const val CALORIES_SPEED_FACTOR = 1 / 12
+    private const val AVERAGE_STEP_LENGTH = 0.762 // meters
+    private const val CALORIES_PER_KM = 60
+    private const val CALORIES_SPEED_FACTOR = 1 / 12
 
     /**
      * Calculates distance between two points in meters

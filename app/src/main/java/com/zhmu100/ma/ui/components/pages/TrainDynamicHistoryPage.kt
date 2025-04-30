@@ -1,16 +1,11 @@
 package com.zhmu100.ma.ui.components.pages
 
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -23,9 +18,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -38,15 +31,13 @@ import com.google.maps.android.compose.Marker
 import com.google.maps.android.compose.MarkerState
 import com.google.maps.android.compose.Polyline
 import com.google.maps.android.compose.rememberCameraPositionState
-import com.zhmu100.ma.R
 import com.zhmu100.ma.domain.model.statistic.GPSPosition
-import com.zhmu100.ma.domain.model.training.Exercise
 import com.zhmu100.ma.domain.model.training.ExerciseType
 import com.zhmu100.ma.domain.model.training.WorkoutStats
 import com.zhmu100.ma.domain.viewModel.TrainingHistoryViewModel
-import com.zhmu100.ma.ui.components.buttons.BackIconButton
-import com.zhmu100.ma.ui.components.inputs.MultiLineTextField
-import com.zhmu100.ma.ui.data.MoodOption
+import com.zhmu100.ma.ui.components.train.EmptyHistoryState
+import com.zhmu100.ma.ui.components.train.HistoryHeader
+import com.zhmu100.ma.ui.components.train.WorkoutFeedback
 import kotlinx.serialization.Serializable
 import org.koin.androidx.compose.koinViewModel
 
@@ -122,61 +113,6 @@ fun TrainDynamicHistoryPage(
                 WorkoutFeedback(workout.exercises[0])
             }
         }
-    }
-}
-
-@Composable
-private fun HistoryHeader(
-    onBackClick: () -> Unit,
-    onPrevious: () -> Unit,
-    onNext: () -> Unit,
-    currentIndex: Int,
-    total: Int
-) {
-    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(bottom = 16.dp)
-        ) {
-            BackIconButton(onClick = onBackClick)
-            Text(
-                text = "История тренировок",
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier.align(Alignment.Center)
-            )
-        }
-        Row(
-            horizontalArrangement = Arrangement.SpaceAround,
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            IconButton(
-                onClick = onPrevious,
-                enabled = currentIndex > 0
-            ) {
-                Icon(painter = painterResource(R.drawable.triangle_left), "Previous")
-            }
-            Text("Тренировка ${currentIndex + 1} из ${total}")
-            IconButton(
-                onClick = onNext,
-                enabled = currentIndex < total - 1
-            ) {
-                Icon(painter = painterResource(R.drawable.triangle_right), "Next")
-            }
-        }
-    }
-}
-
-@Composable
-private fun EmptyHistoryState() {
-    Column(
-        modifier = Modifier.fillMaxSize(),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
-    ) {
-        Text("Нет завершенных пробежек", style = MaterialTheme.typography.headlineMedium)
-        Text("Ваши тренировки будут отображаться здесь", textAlign = TextAlign.Center)
     }
 }
 
@@ -264,42 +200,6 @@ private fun StatItem(value: String, label: String) {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         Text(text = value, fontSize = 18.sp, fontWeight = FontWeight.Bold)
         Text(text = label)
-    }
-}
-
-@Composable
-private fun WorkoutFeedback(exercise: Exercise) {
-    Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.padding(16.dp)) {
-        // Mood display
-        exercise.reaction?.let {
-            val mood = MoodOption.getByReaction(it)
-            Row(modifier = Modifier.padding(bottom = 8.dp)) {
-                Icon(
-                    painter = painterResource(id = mood.iconId),
-                    contentDescription = mood.description,
-                    modifier = Modifier.size(40.dp),
-                    tint = MaterialTheme.colorScheme.tertiary
-                )
-                Text(
-                    text = "Оценка: ${mood.description}",
-                    modifier = Modifier.align(Alignment.CenterVertically),
-                    style = MaterialTheme.typography.titleMedium
-                )
-            }
-        }
-
-        // Notes
-        exercise.note?.let {
-            MultiLineTextField(
-                text = it,
-                placeholder = "Заметки о тренировке",
-                onTextChanged = { },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .heightIn(min = 100.dp),
-                readOnly = true
-            )
-        }
     }
 }
 

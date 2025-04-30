@@ -31,7 +31,7 @@ import com.zhmu100.ma.ui.theme.proteinsColor
 private val BAR_WIDTH = 25.dp
 private val CHART_HEIGHT = 400.dp
 private val LEGEND_HEIGHT = 30.dp
-private val Y_STEP_SIZE = 5
+private const val Y_STEP_SIZE = 5
 private val COLOR_PALETTE = listOf(caloriesColor, carbsColor, fatsColor, proteinsColor)
 private val LABELS = listOf("Белки", "Углеводы", "Жиры", "Калории")
 

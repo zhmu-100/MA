@@ -8,7 +8,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -27,7 +27,7 @@ import kotlinx.serialization.Serializable
 @Composable
 fun WeightRegPage(modifier: Modifier = Modifier, navController: NavController? = null) {
     BasePage(false, modifier = modifier) { baseModifier ->
-        var weightSliderValue by remember { mutableStateOf(21f) }
+        var weightSliderValue by remember { mutableFloatStateOf(21f) }
 
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,

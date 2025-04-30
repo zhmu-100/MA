@@ -9,6 +9,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -43,10 +44,10 @@ fun ProfileParametersPage(
 
     val profile: UserProfile? = (profileState as? ViewState.Success)?.data
     var name by remember { mutableStateOf(profile?.name ?: "") }
-    var height by remember { mutableStateOf(profile?.height?.toFloat() ?: 170f) }
-    var weight by remember { mutableStateOf(profile?.weight?.toFloat() ?: 70f) }
+    var height by remember { mutableFloatStateOf(profile?.height?.toFloat() ?: 170f) }
+    var weight by remember { mutableFloatStateOf(profile?.weight?.toFloat() ?: 70f) }
     var age by remember {
-        mutableStateOf(
+        mutableFloatStateOf(
             calculateAge(profile?.birthdate?.year ?: 2000).toFloat()
         )
     }
@@ -94,7 +95,7 @@ fun ProfileParametersPage(
                 valueRange = 0f..100f,
                 steps = 99
             )
-            Text("Пол ${gender}")
+            Text("Пол $gender")
             DoubleButton(
                 leftText = "Мужской",
                 rightText = "Женский",

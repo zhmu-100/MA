@@ -42,10 +42,10 @@ fun TrainCategoryPage(modifier: Modifier = Modifier, navController: NavControlle
             BigIconButton(
                 text = "Статистика",
                 drawableResId = R.drawable.bars,
-                modifier = Modifier.padding(bottom = 8.dp),
+                modifier = Modifier.padding(bottom = 16.dp),
                 onClick = { navController?.navigate(StatisticsScreen) }
             )
-            Text("История тренировок", modifier = Modifier.padding(bottom = 16.dp))
+            Text("История тренировок", modifier = Modifier.padding(bottom = 8.dp))
             DoubleButton(
                 leftText = "Пробежки",
                 rightText = "Спортзал",
@@ -54,9 +54,10 @@ fun TrainCategoryPage(modifier: Modifier = Modifier, navController: NavControlle
                 },
                 onRightClick = {
                     navController?.navigate(TrainStaticHistoryScreen)
-                }
+                },
+                modifier = Modifier.padding(bottom = 16.dp)
             )
-            Text("Выбрать категорию", modifier = Modifier.padding(bottom = 16.dp))
+            Text("Выбрать категорию", modifier = Modifier.padding(bottom = 8.dp))
             Row {
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,

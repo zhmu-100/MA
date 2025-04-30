@@ -12,6 +12,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -33,8 +34,10 @@ fun WorkoutFeedback(exercise: Exercise) {
                 Icon(
                     painter = painterResource(id = mood.iconId),
                     contentDescription = mood.description,
-                    modifier = Modifier.size(40.dp),
-                    tint = MaterialTheme.colorScheme.tertiary
+                    modifier = Modifier
+                        .size(40.dp)
+                        .padding(horizontal = 8.dp),
+                    tint = Color(mood.color)
                 )
                 Text(
                     text = "Оценка: ${mood.description}",

@@ -5,8 +5,13 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.zhmu100.ma.domain.api.statistic.StatisticsApi
 import com.zhmu100.ma.domain.api.training.TrainingApi
+import com.zhmu100.ma.domain.model.statistic.ExerciseMetadata
+import com.zhmu100.ma.domain.model.statistic.GPSData
+import com.zhmu100.ma.domain.model.statistic.GPSPosition
 import com.zhmu100.ma.domain.model.training.ExerciseReaction
+import com.zhmu100.ma.domain.model.training.ExerciseType
 import com.zhmu100.ma.domain.model.training.Workout
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -15,7 +20,8 @@ import java.time.Duration
 import java.time.Instant
 
 class TrainingViewModel(
-    private val trainingApi: TrainingApi
+    private val trainingApi: TrainingApi,
+    private val statisticApi: StatisticsApi
 ) : ViewModel() {
 
     private var _isPaused = mutableStateOf(false)
@@ -39,6 +45,9 @@ class TrainingViewModel(
     private var _currentWorkout = mutableStateOf<Workout?>(null)
     val currentWorkout: State<Workout?> = _currentWorkout
 
+    private var _currentGPS = mutableStateOf<List<GPSPosition>?>(null)
+    val currentGPS: State<List<GPSPosition>?> = _currentGPS
+
     private val _workoutState = MutableStateFlow<ViewState<Workout>>(ViewState.Uninitialized)
     val workoutState = _workoutState.asStateFlow()
 
@@ -47,6 +56,7 @@ class TrainingViewModel(
         _isTrainingStarted.value = true
         _startTime.value = Instant.now()
         _currentWorkout.value = null
+        _currentGPS.value = null
     }
 
     fun updateTimer() {
@@ -75,8 +85,9 @@ class TrainingViewModel(
         _isPaused.value = !_isPaused.value
     }
 
-    fun rateTraining(workout: Workout) {
+    fun rateTraining(workout: Workout, gpsPositions: List<GPSPosition>? = null) {
         _currentWorkout.value = workout
+        _currentGPS.value = gpsPositions
         if (!isPaused.value) {
             togglePause()
         }
@@ -86,7 +97,11 @@ class TrainingViewModel(
         _isTrainingStarted.value = false
     }
 
-    fun saveWorkout(workout: Workout, reaction: ExerciseReaction, note: String) {
+    fun saveWorkout(
+        workout: Workout,
+        reaction: ExerciseReaction,
+        note: String
+    ) {
         viewModelScope.launch {
             val finalExercises = workout.exercises.map {
                 it.copy(note = note, reaction = reaction)
@@ -94,9 +109,23 @@ class TrainingViewModel(
             val finalWorkout = workout.copy(exercises = finalExercises)
 
             runCatching {
-                trainingApi.createWorkout(finalWorkout)
+                val newWorkout = trainingApi.createWorkout(finalWorkout)
+                newWorkout.exercises[0].id?.let { id ->
+                    if (newWorkout.exercises[0].exerciseType == ExerciseType.DYNAMIC) {
+                        currentGPS.value?.let { gps ->
+                            val gpsData = GPSData(
+                                ExerciseMetadata(
+                                    exerciseId = id,
+                                    timestamp = Instant.now().toString()
+                                ),
+                                gps
+                            )
+                            statisticApi.uploadGPSData(gpsData)
+                        }
+                    }
+                }
+                newWorkout
             }.onSuccess { createdWorkout ->
-                Log.i("TRAIN", createdWorkout.toString())
                 _workoutState.value = ViewState.Success(
                     createdWorkout,
                     "Workout published"

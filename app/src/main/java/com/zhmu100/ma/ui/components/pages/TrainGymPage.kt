@@ -48,6 +48,7 @@ import androidx.navigation.NavController
 import com.zhmu100.ma.domain.model.training.ExerciseName
 import com.zhmu100.ma.domain.viewModel.TrainingGymViewModel
 import com.zhmu100.ma.domain.viewModel.TrainingViewModel
+import com.zhmu100.ma.ui.components.buttons.BackIconButton
 import com.zhmu100.ma.ui.components.buttons.SquareIconButton
 import com.zhmu100.ma.ui.components.buttons.ThemedIconButton
 import com.zhmu100.ma.ui.components.inputs.BorderlessInputLine
@@ -89,18 +90,7 @@ fun TrainGymPage(
                     .padding(bottom = 16.dp)
             ) {
                 if (!trainViewModel.isTrainingStarted.value) {
-                    IconButton(
-                        onClick = { navController?.popBackStack() },
-                        colors = IconButtonDefaults.iconButtonColors(
-                            containerColor = MaterialTheme.colorScheme.primary,
-                            contentColor = MaterialTheme.colorScheme.background
-                        )
-                    ) {
-                        Icon(
-                            imageVector = Icons.AutoMirrored.Filled.KeyboardArrowLeft,
-                            contentDescription = "Back"
-                        )
-                    }
+                    BackIconButton(onClick = { navController?.popBackStack() })
                 }
                 BorderlessInputLine(
                     workoutName,

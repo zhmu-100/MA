@@ -11,13 +11,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -51,8 +46,10 @@ import com.google.maps.android.compose.Marker
 import com.google.maps.android.compose.MarkerState
 import com.google.maps.android.compose.Polyline
 import com.google.maps.android.compose.rememberCameraPositionState
+import com.zhmu100.ma.domain.model.statistic.GPSPosition
 import com.zhmu100.ma.domain.viewModel.TrainingMapViewModel
 import com.zhmu100.ma.domain.viewModel.TrainingViewModel
+import com.zhmu100.ma.ui.components.buttons.BackIconButton
 import com.zhmu100.ma.ui.theme.MATheme
 import kotlinx.coroutines.delay
 import kotlinx.serialization.Serializable
@@ -170,6 +167,7 @@ private fun MainContent(
                         }
                     },
                 )
+                Log.i("TRAIN", mapViewModel.totalDistance.value.toString())
                 StatsByRoute(
                     distance = mapViewModel.totalDistance.value,
                     duration = trainViewModel.totalExerciseTime.value,
@@ -181,7 +179,7 @@ private fun MainContent(
                     onPause = { trainViewModel.togglePause() },
                     onEnd = {
                         mapViewModel.getWorkout(trainViewModel.totalExerciseTime.value)?.let {
-                            trainViewModel.rateTraining(it)
+                            trainViewModel.rateTraining(it, mapViewModel.routePoints)
                         }
                         navController?.navigate(TrainMoodScreen)
                     },
@@ -199,18 +197,7 @@ private fun Header(isTrainingStarted: Boolean, onBackClick: () -> Unit = {}) {
             .padding(bottom = 16.dp)
     ) {
         if (!isTrainingStarted) {
-            IconButton(
-                onClick = onBackClick,
-                colors = IconButtonDefaults.iconButtonColors(
-                    containerColor = MaterialTheme.colorScheme.primary,
-                    contentColor = MaterialTheme.colorScheme.background
-                )
-            ) {
-                Icon(
-                    imageVector = Icons.AutoMirrored.Filled.KeyboardArrowLeft,
-                    contentDescription = "Back"
-                )
-            }
+            BackIconButton(onClick = onBackClick)
         }
         Text(
             text = "Тренировка",
@@ -290,7 +277,7 @@ private fun ActionButtons(
 @Composable
 private fun MapWithLocation(
     modifier: Modifier = Modifier,
-    route: SnapshotStateList<LatLng>,
+    route: SnapshotStateList<GPSPosition>,
     isPaused: Boolean,
     onUserLocationFound: (LatLng) -> Unit = {},
 ) {
@@ -353,7 +340,7 @@ private fun MapWithLocation(
         }
         // Рисуем линию маршрута
         Polyline(
-            points = route.toList(),
+            points = route.map { it.toLatLng() },
             color = MaterialTheme.colorScheme.primary,
             width = 10f
         )

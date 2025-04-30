@@ -33,6 +33,7 @@ import androidx.navigation.NavController
 import com.zhmu100.ma.R
 import com.zhmu100.ma.domain.model.training.ExerciseReaction
 import com.zhmu100.ma.domain.viewModel.TrainingViewModel
+import com.zhmu100.ma.ui.components.buttons.BackIconButton
 import com.zhmu100.ma.ui.components.buttons.SquareIconButton
 import com.zhmu100.ma.ui.components.inputs.MultiLineTextField
 import com.zhmu100.ma.ui.data.MoodOption
@@ -82,7 +83,7 @@ fun TrainMoodPage(
                 onTextChanged = { commentValue = it },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(bottom = 8.dp)
+                    .padding(bottom = 16.dp)
                     .requiredHeightIn(max = 400.dp)
             )
             SquareIconButton(
@@ -106,18 +107,7 @@ private fun HeaderSection(
             .fillMaxWidth()
             .padding(bottom = 16.dp)
     ) {
-        IconButton(
-            onClick = onBackClick,
-            colors = IconButtonDefaults.iconButtonColors(
-                containerColor = MaterialTheme.colorScheme.primary,
-                contentColor = MaterialTheme.colorScheme.background
-            )
-        ) {
-            Icon(
-                imageVector = Icons.AutoMirrored.Filled.KeyboardArrowLeft,
-                contentDescription = "Back"
-            )
-        }
+        BackIconButton(onClick = onBackClick)
         Text(
             text = "Оценка тренировки",
             fontWeight = FontWeight.Bold,
@@ -150,7 +140,7 @@ private fun MoodSelectionRow(
         horizontalArrangement = Arrangement.SpaceBetween,
         modifier = Modifier
             .fillMaxWidth()
-            .padding(bottom = 8.dp)
+            .padding(bottom = 16.dp)
     ) {
         moods.forEachIndexed { ind, mood ->
             MoodIcon(

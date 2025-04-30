@@ -14,6 +14,7 @@ import com.zhmu100.ma.domain.api.training.TrainingApi
 import com.zhmu100.ma.domain.api.training.TrainingApiImpl
 import com.zhmu100.ma.domain.api.statistic.StatisticsApi
 import com.zhmu100.ma.domain.api.statistic.StatisticsApiImpl
+import com.zhmu100.ma.domain.api.statistic.StatisticsApiMock
 import com.zhmu100.ma.domain.api.training.TrainingApiMock
 import org.koin.dsl.module
 
@@ -27,10 +28,11 @@ val networkModule = module {
 //    single<FilesApi> { FilesApiImpl(get(),  "http://localhost:8080/api/profiles") }
 //    single<TrainingApi> { TrainingApiImpl(get(), "http://localhost:8080/api/training") }
 //    single<DietApi> { DietApiImpl(get(),  "http://localhost:8080/api/diet") }
+//    single<StatisticsApi> { StatisticsApiImpl(get(), "http://localhost:8080/api/statistics") }
 
     single<ProfileApi> { ProfileApiMock() }
     single<FilesApi> { FilesApiMock() }
     single<TrainingApi> { TrainingApiMock() }
     single<DietApi> { DietApiMock() }
-    single<StatisticsApi> { StatisticsApiImpl(get(), "http://localhost:8080/api/statistics") }
+    single<StatisticsApi> { StatisticsApiMock() }
 }

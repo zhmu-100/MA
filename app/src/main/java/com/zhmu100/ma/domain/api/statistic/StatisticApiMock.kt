@@ -1,11 +1,11 @@
 package com.zhmu100.ma.domain.api.statistic
 
 import com.zhmu100.ma.domain.model.statistic.CaloriesData
-import com.zhmu100.ma.domain.model.statistic.UserMetadata
 import com.zhmu100.ma.domain.model.statistic.ExerciseMetadata
 import com.zhmu100.ma.domain.model.statistic.GPSData
 import com.zhmu100.ma.domain.model.statistic.GPSPosition
 import com.zhmu100.ma.domain.model.statistic.HeartRateData
+import com.zhmu100.ma.domain.model.statistic.UserMetadata
 import java.time.Instant
 import kotlin.random.Random
 
@@ -16,7 +16,7 @@ class StatisticsApiMock : StatisticsApi {
 
     init {
         // Инициализация фейковыми данными
-        repeat(5) { exerciseNum ->
+        repeat(10) { exerciseNum ->
             val exerciseId = "exercise_$exerciseNum"
             fakeGPSData.add(createFakeGPSData(exerciseId))
             fakeHeartRateData.add(createFakeHeartRateData(exerciseId))

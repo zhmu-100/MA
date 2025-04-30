@@ -1,6 +1,5 @@
 package com.zhmu100.ma.ui.components.inputs
 
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -25,48 +24,47 @@ import com.zhmu100.ma.ui.theme.MATheme
  * Компонент текстового поля ввода без границ для именования объектов пользователем.
  *
  * @param modifier Модификатор для настройки внешнего вида и расположения компонента
- * @param label Текстовая метка над полем ввода (опционально)
  * @param onTextChanged Обработчик изменения текста (возвращает текущее значение)
  * @param placeholder Текст показываемый до пользовательского ввода
  */
 @Composable
 fun BorderlessInputLine(
+    initValue: String,
     modifier: Modifier = Modifier,
     onTextChanged: (String) -> Unit = {},
     placeholder: String = ""
 ) {
-    var textState by remember { mutableStateOf("") }
+    var textState by remember { mutableStateOf(initValue) }
 
-    Column(modifier = modifier) {
-        TextField(
-            value = textState,
-            onValueChange = {
-                textState = it
-                onTextChanged(it)
-            },
-            placeholder = {
-                Text(
-                    placeholder,
-                    textAlign = TextAlign.Center,
-                    color = LightGray,
-                    modifier = Modifier.fillMaxWidth()
-                )
-            },
-            singleLine = true,
-            colors = TextFieldDefaults.colors(
-                unfocusedContainerColor = MaterialTheme.colorScheme.background,
-                focusedContainerColor = MaterialTheme.colorScheme.background,
-                unfocusedIndicatorColor = Color.Transparent,
-                focusedIndicatorColor = Color.Transparent,
-            ),
-            textStyle = TextStyle(
+    TextField(
+        value = textState,
+        onValueChange = {
+            textState = it
+            onTextChanged(it)
+        },
+        placeholder = {
+            Text(
+                placeholder,
                 textAlign = TextAlign.Center,
-                fontWeight = FontWeight.Bold,
-                fontSize = 20.sp
-            ),
-            modifier = Modifier.fillMaxWidth()
-        )
-    }
+                color = LightGray,
+                modifier = Modifier.fillMaxWidth()
+            )
+        },
+        singleLine = true,
+        colors = TextFieldDefaults.colors(
+            unfocusedContainerColor = MaterialTheme.colorScheme.background,
+            focusedContainerColor = MaterialTheme.colorScheme.background,
+            unfocusedIndicatorColor = Color.Transparent,
+            focusedIndicatorColor = Color.Transparent,
+        ),
+        textStyle = TextStyle(
+            textAlign = TextAlign.Center,
+            fontWeight = FontWeight.Bold,
+            fontSize = 20.sp
+        ),
+        modifier = modifier
+    )
+
 }
 
 @Preview(showBackground = true)
@@ -76,6 +74,7 @@ private fun BorderlessInputLinePreview() {
         var text by remember { mutableStateOf("Test") }
         Text(text)
         BorderlessInputLine(
+            text,
             placeholder = "Введите свой текст здесь",
             onTextChanged = { text = it }
         )

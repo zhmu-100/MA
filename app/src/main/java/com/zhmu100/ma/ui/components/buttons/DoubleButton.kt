@@ -38,6 +38,7 @@ import com.zhmu100.ma.ui.theme.MATheme
 fun DoubleButton(
     leftText: String,
     rightText: String,
+    modifier: Modifier = Modifier,
     onLeftClick: () -> Unit = {},
     onRightClick: () -> Unit = {}
 ) {
@@ -45,7 +46,7 @@ fun DoubleButton(
         .fillMaxHeight()
         .background(MaterialTheme.colorScheme.inversePrimary)
     Row(
-        modifier = Modifier
+        modifier = modifier
             .height(50.dp)
             .border(0.dp, Color.Black, RoundedCornerShape(16.dp))
             .clip(shape = RoundedCornerShape(16.dp))

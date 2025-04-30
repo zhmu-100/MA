@@ -1,0 +1,23 @@
+1. ADD in the MainActivity:
+startKoin {
+    androidLogger()
+    androidContext(this@MyApplication)
+    modules(
+        storageModule,
+        networkModule,
+        viewModelModule
+    )
+}
+
+2. ADD to the NavGraph:
+KoinContext {
+        NavHost(navController, startDestination = "profile") {
+            ...
+        }
+    }
+
+3. Manifest
+<application
+    android:name=".MyApplication"
+    ...>
+</application>

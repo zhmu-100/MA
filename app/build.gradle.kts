@@ -152,4 +152,21 @@ dependencies {
 
     // Разрешения
     implementation(libs.accompanist.permissions)
+
+    // ktor
+    implementation(libs.ktor.client.core)
+    implementation(libs.ktor.client.cio)
+    implementation(libs.ktor.client.content.negotiation)
+    implementation(libs.ktor.serialization.kotlinx.json)
+    implementation(libs.ktor.client.plugins)
+    implementation(libs.slf4j.android)
+    implementation(libs.ktor.client.logging)
+    implementation(libs.androidx.lifecycle.viewmodel.ktx)
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
+    implementation(libs.shared.preferences)
+
+    // koin di
+    implementation(libs.koin.core)
+    implementation(libs.koin.android)
+    implementation(libs.koin.androidx.compose)
 }

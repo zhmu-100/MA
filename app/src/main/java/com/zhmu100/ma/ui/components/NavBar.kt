@@ -32,7 +32,6 @@ import com.zhmu100.ma.ui.theme.MATheme
  * @param startingActiveInd Индекс начальной активной иконки
  * @param onClick Обработчик клика по иконке (возвращает индекс нажатой иконки)
  * @param modifier Модификатор для настройки внешнего вида
- * @param navController Контроллер навигации (опционально)
  */
 @Composable
 fun NavBar(

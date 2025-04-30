@@ -31,24 +31,46 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.zhmu100.ma.R
+import com.zhmu100.ma.domain.model.training.ExerciseReaction
+import com.zhmu100.ma.domain.viewModel.TrainingViewModel
 import com.zhmu100.ma.ui.components.buttons.SquareIconButton
 import com.zhmu100.ma.ui.components.inputs.MultiLineTextField
+import com.zhmu100.ma.ui.data.MoodOption
 import com.zhmu100.ma.ui.theme.Black
 import com.zhmu100.ma.ui.theme.MATheme
 import kotlinx.serialization.Serializable
+import org.koin.androidx.compose.koinViewModel
+
+private val moods = listOf(
+    MoodOption(R.drawable.sentiment_very_dissatisfied, "Very bad", ExerciseReaction.VERY_BAD),
+    MoodOption(R.drawable.sentiment_dissatisfied, "Bad", ExerciseReaction.BAD),
+    MoodOption(R.drawable.sentiment_neutral, "Ok", ExerciseReaction.OK),
+    MoodOption(R.drawable.sentiment_satisfied, "Good", ExerciseReaction.GOOD),
+    MoodOption(R.drawable.sentiment_very_satisfied, "Very good", ExerciseReaction.EXCELLENT)
+)
 
 @Composable
-fun TrainMoodPage(modifier: Modifier = Modifier, navController: NavController? = null) {
+fun TrainMoodPage(
+    modifier: Modifier = Modifier,
+    navController: NavController? = null,
+    trainViewModel: TrainingViewModel = koinViewModel()
+) {
     BasePage(false, modifier = modifier) { baseModifier ->
         var moodIndex by remember { mutableIntStateOf(-1) }
         var commentValue by remember { mutableStateOf("") }
+
         Column(
             horizontalAlignment = Alignment.CenterHorizontally, modifier = baseModifier
         ) {
             HeaderSection(
                 moodIndex = moodIndex,
-                onBackClick = { navController?.navigate(TrainCategoryScreen) },
-                onSaveClick = { navController?.navigate(TrainCategoryScreen) }
+                onBackClick = { navController?.popBackStack() },
+                onSaveClick = {
+                    trainViewModel.currentWorkout.value?.let {
+                        trainViewModel.saveWorkout(it, moods[moodIndex].emotion, commentValue)
+                    }
+                    navController?.navigate(TrainCategoryScreen)
+                }
             )
             MoodSelectionRow(
                 moodIndex = moodIndex,
@@ -65,7 +87,10 @@ fun TrainMoodPage(modifier: Modifier = Modifier, navController: NavController? =
             )
             SquareIconButton(
                 Icons.Default.Delete,
-                onClick = { navController?.navigate(TrainCategoryScreen) })
+                onClick = {
+                    trainViewModel.clearTraining()
+                    navController?.navigate(TrainCategoryScreen)
+                })
         }
     }
 }
@@ -127,20 +152,12 @@ private fun MoodSelectionRow(
             .fillMaxWidth()
             .padding(bottom = 8.dp)
     ) {
-        val moods = listOf(
-            MoodOption(1, R.drawable.sentiment_very_dissatisfied, "Very bad"),
-            MoodOption(2, R.drawable.sentiment_dissatisfied, "Bad"),
-            MoodOption(3, R.drawable.sentiment_neutral, "Ok"),
-            MoodOption(4, R.drawable.sentiment_satisfied, "Good"),
-            MoodOption(5, R.drawable.sentiment_very_satisfied, "Very good")
-        )
-
-        moods.forEach { mood ->
+        moods.forEachIndexed { ind, mood ->
             MoodIcon(
-                onClick = { onMoodSelected(mood.index) },
+                onClick = { onMoodSelected(ind) },
                 iconId = mood.iconId,
                 desc = mood.description,
-                isSelected = moodIndex == mood.index
+                isSelected = moodIndex == ind
             )
         }
     }
@@ -157,12 +174,6 @@ private fun MoodIcon(onClick: () -> Unit, iconId: Int, desc: String, isSelected:
         )
     }
 }
-
-private data class MoodOption(
-    val index: Int,
-    val iconId: Int,
-    val description: String
-)
 
 @Serializable
 object TrainMoodScreen

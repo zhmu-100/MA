@@ -1,6 +1,8 @@
 package com.zhmu100.ma.domain.utils
 
+import java.time.DayOfWeek
 import java.time.Instant
+import java.time.LocalDate
 import java.time.ZoneId
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
@@ -29,5 +31,20 @@ object DateTimeUtils {
     fun instantToLocalDateTime(instant: Instant, zoneId: ZoneId = ZoneId.systemDefault()): String {
         return ZonedDateTime.ofInstant(instant, zoneId)
             .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
+    }
+
+    fun getMondayOfThisWeek(): LocalDate {
+        val now = LocalDate.now()
+        return now.minusDays((now.dayOfWeek.value - DayOfWeek.MONDAY.value).toLong())
+    }
+
+    fun getSevenDaysFrom(start: LocalDate): List<LocalDate> {
+        return (0..6).map { start.plusDays(it.toLong()) }
+    }
+
+    fun String.isInDay(date: LocalDate): Boolean {
+        val instant = Instant.parse(this)
+        val itemDate = LocalDate.ofInstant(instant, ZoneId.systemDefault())
+        return itemDate == date
     }
 }

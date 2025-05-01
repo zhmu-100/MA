@@ -16,8 +16,12 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.zhmu100.ma.R
 import com.zhmu100.ma.ui.components.buttons.*
-import com.zhmu100.ma.ui.components.buttons.FoodRecommendationCard
-import com.zhmu100.ma.ui.components.buttons.Recommendation
+import com.zhmu100.ma.ui.components.food.FoodRecommendationCard
+import com.zhmu100.ma.ui.components.food.MealEntrySwitcher
+import com.zhmu100.ma.ui.components.food.NutrientSummaryRow
+import com.zhmu100.ma.ui.components.food.NutritionWeekIndicator
+import com.zhmu100.ma.ui.data.FoodItem
+import com.zhmu100.ma.ui.data.Recommendation
 import com.zhmu100.ma.ui.theme.MATheme
 import kotlinx.serialization.Serializable
 import java.time.LocalDate
@@ -25,7 +29,7 @@ import java.time.LocalDate
 @Composable
 fun FoodPage(modifier: Modifier = Modifier, navController: NavController? = null) {
     val filledDays = listOf(0, 1, 2)
-    val currentDayIndex = LocalDate.now().dayOfWeek.value % 7
+    val currentDayIndex = (LocalDate.now().dayOfWeek.value - 1) % 7
     val recommendations = listOf(
         Recommendation(1, "Как вкусно готовить ?", "25 марта 2025", "", "https://example.com/1"),
         Recommendation(2, "Полезные советы", "24 марта 2025", "", "https://example.com/2")
@@ -45,7 +49,7 @@ fun FoodPage(modifier: Modifier = Modifier, navController: NavController? = null
 
     BasePage(
         true,
-        navIndex = 4,
+        navIndex = 2,
         modifier = modifier.background(MaterialTheme.colorScheme.surfaceVariant),
         navController = navController
     ) { baseModifier ->

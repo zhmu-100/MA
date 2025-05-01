@@ -1,9 +1,16 @@
-package com.zhmu100.ma.ui.components.buttons
+package com.zhmu100.ma.ui.components.food
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -22,25 +29,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.zhmu100.ma.R
+import com.zhmu100.ma.ui.data.Recommendation
 import com.zhmu100.ma.ui.theme.MATheme
-
-/**
- * Модель данных, представляющая одну рекомендацию по питанию.
- *
- * @property id Уникальный идентификатор рекомендации.
- * @property title Заголовок или название рекомендации.
- * @property date Дата публикации в формате строки.
- * @property imageUrl URL изображения (не используется в текущей реализации, заменён локальным ресурсом).
- * @property url Ссылка на подробности рекомендации.
- */
-
-data class Recommendation(
-    val id: Int,
-    val title: String,
-    val date: String,
-    val imageUrl: String,
-    val url: String
-)
 
 /**
  * Горизонтальный список карточек с рекомендациями по питанию.

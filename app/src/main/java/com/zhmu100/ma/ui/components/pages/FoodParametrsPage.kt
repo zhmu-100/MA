@@ -18,6 +18,9 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.zhmu100.ma.R
 import com.zhmu100.ma.ui.components.buttons.*
+import com.zhmu100.ma.ui.components.food.FoodParametersTable
+import com.zhmu100.ma.ui.data.Mineral
+import com.zhmu100.ma.ui.data.Vitamin
 import com.zhmu100.ma.ui.theme.MATheme
 import kotlinx.serialization.Serializable
 

@@ -1,4 +1,4 @@
-package com.zhmu100.ma.ui.components.buttons
+package com.zhmu100.ma.ui.components.posts
 
 import androidx.compose.foundation.layout.*
 import com.zhmu100.ma.R
@@ -8,6 +8,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.zhmu100.ma.ui.components.buttons.SquareIconButton
 import com.zhmu100.ma.ui.theme.MATheme
 
 /**

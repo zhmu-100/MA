@@ -8,7 +8,7 @@ val LightBlue = Color(0xFF8EA3FF)
 val Orange = Color(0xFFBD5D34)
 val White = Color(0xFFFFFFFF)
 val Black = Color(0xFF000000)
-val LightGray = Color(0xFFCCCCCC)
+val LightGray = Color(0xFFE5E5E5)
 val LightGreenTransparent = Color(0x334FA997)
 
 // graphs

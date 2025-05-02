@@ -1,5 +1,6 @@
 package com.zhmu100.ma.di
 
+import com.zhmu100.ma.domain.viewModel.NoteViewModel
 import com.zhmu100.ma.domain.viewModel.ProfileViewModel
 import com.zhmu100.ma.domain.viewModel.SettingsViewModel
 import com.zhmu100.ma.domain.viewModel.StatisticViewModel
@@ -16,6 +17,7 @@ import org.koin.dsl.module
 val viewModelModule = module {
     viewModel { ProfileViewModel(get(), get()) }
     viewModel { SettingsViewModel(get()) }
+    viewModel { NoteViewModel(get()) }
     viewModel { TrainingViewModel(get(), get()) }
     viewModel { TrainingMapViewModel() }
     viewModel { TrainingGymViewModel() }

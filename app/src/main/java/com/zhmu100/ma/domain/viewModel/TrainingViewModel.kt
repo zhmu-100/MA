@@ -52,8 +52,13 @@ class TrainingViewModel(
     fun startTraining() {
         _isTrainingStarted.value = true
         _startTime.value = Instant.now()
+        _pausedTime.value = null
+        _totalPausedDuration.value = Duration.ZERO
+        _totalExerciseTime.value = Duration.ZERO
+        _isPaused.value = false
         _currentWorkout.value = null
         _currentGPS.value = null
+        _workoutName.value = ""
     }
 
     fun updateTimer() {

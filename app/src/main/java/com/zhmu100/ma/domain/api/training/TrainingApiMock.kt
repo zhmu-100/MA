@@ -146,9 +146,12 @@ class TrainingApiMock : TrainingApi {
 
     override suspend fun createWorkout(workout: Workout): Workout {
         val id = "workout_${UUID.randomUUID()}"
-        val newWorkout = workout.copy(id = id)
+        val newExercises = workout.exercises.mapIndexed { index, exercise ->
+            exercise.copy(id = "exercise_${index}_${UUID.randomUUID()}")
+        }
+        val newWorkout = workout.copy(id = id, exercises = newExercises)
         workouts.add(newWorkout)
-        exercises[id] = workout.exercises
+        exercises[id] = newWorkout.exercises
         return newWorkout
     }
 

@@ -1,6 +1,5 @@
 package com.zhmu100.ma.domain.viewModel
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.zhmu100.ma.domain.api.diet.DietApi
@@ -147,9 +146,6 @@ class StatisticViewModel(
             var totalProtein = 0.0
             var totalCarbs = 0.0
             var totalFats = 0.0
-
-            Log.i("STAT", meals.toString())
-
 
             meals.forEach { meal ->
                 totalCalories += meal.foods.sumOf { it.calories }

@@ -1,8 +1,6 @@
 package com.zhmu100.ma.domain.viewModel
 
-import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.lifecycle.ViewModel
 import com.zhmu100.ma.domain.model.training.Exercise
@@ -16,12 +14,6 @@ import java.time.Instant
 class TrainingGymViewModel : ViewModel() {
     private var _trainRows = mutableStateListOf<TrainRowData>()
     val trainRows: SnapshotStateList<TrainRowData> = _trainRows
-    private val _workoutName = mutableStateOf("")
-    val workoutName: State<String> = _workoutName
-
-    fun setWorkoutName(name: String) {
-        _workoutName.value = name
-    }
 
     private val _exerciseOptions = ExerciseName.entries.filter {
         it != ExerciseName.UNSPECIFIED && it != ExerciseName.RUNNING && it != ExerciseName.CYCLING
@@ -45,7 +37,7 @@ class TrainingGymViewModel : ViewModel() {
     }
 
     fun clearStats() {
-        _trainRows = mutableStateListOf<TrainRowData>()
+        _trainRows.clear()
     }
 
     fun getWorkout(

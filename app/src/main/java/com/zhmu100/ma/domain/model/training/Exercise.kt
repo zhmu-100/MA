@@ -18,6 +18,7 @@ package com.zhmu100.ma.domain.model.training
  * @property note Дополнительные заметки (опционально)
  */
 data class Exercise(
+    val id: String? = null,
     val name: ExerciseName,
     val duration: String, // ISO-8601 duration
     val exerciseType: ExerciseType,

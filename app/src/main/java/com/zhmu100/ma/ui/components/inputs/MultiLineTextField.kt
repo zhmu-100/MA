@@ -43,9 +43,11 @@ fun MultiLineTextField(
     text: String,
     modifier: Modifier = Modifier,
     placeholder: String = "",
-    onTextChanged: (String) -> Unit = {}
+    onTextChanged: (String) -> Unit = {},
+    readOnly: Boolean = false
 ) {
     TextField(
+        readOnly = readOnly,
         singleLine = false,
         value = text,
         onValueChange = onTextChanged,

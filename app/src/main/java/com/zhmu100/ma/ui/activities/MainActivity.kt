@@ -1,5 +1,7 @@
 package com.zhmu100.ma.ui.activities
 
+import com.zhmu100.ma.ui.components.pages.TrainStaticHistoryPage
+import com.zhmu100.ma.ui.components.pages.TrainStaticHistoryScreen
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -73,6 +75,8 @@ import com.zhmu100.ma.ui.components.pages.StatisticPage
 import com.zhmu100.ma.ui.components.pages.StatisticsScreen
 import com.zhmu100.ma.ui.components.pages.TrainCategoryPage
 import com.zhmu100.ma.ui.components.pages.TrainCategoryScreen
+import com.zhmu100.ma.ui.components.pages.TrainDynamicHistoryPage
+import com.zhmu100.ma.ui.components.pages.TrainDynamicHistoryScreen
 import com.zhmu100.ma.ui.components.pages.TrainGymPage
 import com.zhmu100.ma.ui.components.pages.TrainGymScreen
 import com.zhmu100.ma.ui.components.pages.TrainMapPage
@@ -171,6 +175,16 @@ class MainActivity : ComponentActivity() {
                             TrainMoodPage(
                                 navController = navController,
                                 trainViewModel = trainingViewModel
+                            )
+                        }
+                        composable<TrainDynamicHistoryScreen> {
+                            TrainDynamicHistoryPage(
+                                navController = navController
+                            )
+                        }
+                        composable<TrainStaticHistoryScreen> {
+                            TrainStaticHistoryPage(
+                                navController = navController
                             )
                         }
                     }

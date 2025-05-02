@@ -23,7 +23,7 @@ class ProfileViewModel(
         loadProfile()
     }
 
-    fun loadProfile(forceRefresh: Boolean = false) {
+    private fun loadProfile(forceRefresh: Boolean = false) {
         if (_profileState.value is ViewState.Loading && !forceRefresh) {
             return
         }

@@ -43,6 +43,7 @@ import com.zhmu100.ma.ui.components.pages.LoginPage
 import com.zhmu100.ma.ui.components.pages.LoginScreen
 import com.zhmu100.ma.ui.components.pages.NewPasswordPage
 import com.zhmu100.ma.ui.components.pages.NewPasswordScreen
+import com.zhmu100.ma.ui.components.pages.PostPage
 import com.zhmu100.ma.ui.components.pages.PostScreen
 import com.zhmu100.ma.ui.components.pages.ProfilePage
 import com.zhmu100.ma.ui.components.pages.ProfileParametersPage
@@ -125,7 +126,7 @@ class MainActivity : ComponentActivity() {
                         }
                         composable<DevicesScreen> { DevicesPage(navController = navController) }
                         composable<DeviceScreen> { DevicePage(navController = navController) }
-                        composable<PostScreen> { IntroPage(navController = navController) }
+                        composable<PostScreen> { PostPage(navController = navController) }
                         composable<RemindersScreen> { RemindersPage(navController = navController) }
                         composable<ReminderScreen> { ReminderPage(navController = navController) }
                         composable<SettingsScreen> { SettingsPage(navController = navController) }

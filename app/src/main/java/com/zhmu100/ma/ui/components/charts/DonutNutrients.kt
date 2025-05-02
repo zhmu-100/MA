@@ -25,7 +25,7 @@ import com.zhmu100.ma.ui.theme.carbsColor
 import com.zhmu100.ma.ui.theme.fatsColor
 import com.zhmu100.ma.ui.theme.proteinsColor
 
-private val COLOR_PALETTE = listOf(caloriesColor, carbsColor, fatsColor, proteinsColor)
+private val COLOR_PALETTE = listOf(proteinsColor, fatsColor, carbsColor, caloriesColor)
 private val LABELS = listOf("Белки", "Углеводы", "Жиры", "Калории")
 
 /**
@@ -95,7 +95,7 @@ private fun nutrientsToPieData(nutrients: NutrientsData): PieChartData {
     return PieChartData(
         plotType = PlotType.Donut,
         slices = listOf(
-            PieChartData.Slice(label = "Белки", value = nutrients.carbs, color = proteinsColor),
+            PieChartData.Slice(label = "Белки", value = nutrients.proteins, color = proteinsColor),
             PieChartData.Slice(label = "Жиры", value = nutrients.fats, color = fatsColor),
             PieChartData.Slice(label = "Углеводы", value = nutrients.carbs, color = carbsColor),
             PieChartData.Slice(label = "Калории", value = nutrients.calories, color = caloriesColor)
@@ -107,7 +107,7 @@ private fun nutrientsToPieData(nutrients: NutrientsData): PieChartData {
 @Composable
 private fun DonutNutrientsPreview() {
     MATheme {
-        val nutritionData = NutrientsData(100f, 30f, 30f, 100f)
+        val nutritionData = NutrientsData(100f, 20f, 30f, 40f)
         DonutNutrients(nutritionData)
     }
 }

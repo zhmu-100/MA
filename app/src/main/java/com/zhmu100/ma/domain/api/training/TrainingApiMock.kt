@@ -13,12 +13,12 @@ class TrainingApiMock : TrainingApi {
     private val exercises = mutableMapOf<String, List<Exercise>>()
 
     init {
-        // Инициализация тестовыми данными
+        // Инициализация тестовыми данными с датами в диапазоне 20.04.2025 - 05.05.2025
         val testWorkouts = listOf(
             Workout(
                 id = "workout_1",
                 name = "Пробежка",
-                date = "2023-05-15T08:00:00Z",
+                date = "2025-04-20T08:00:00Z",
                 exercises = listOf(
                     Exercise(
                         id = "exercise_0",
@@ -26,6 +26,7 @@ class TrainingApiMock : TrainingApi {
                         duration = "PT30M",
                         exerciseType = ExerciseType.DYNAMIC,
                         distance = 3000,
+                        steps = 2000,
                         reaction = ExerciseReaction.EXCELLENT,
                         note = "Как я рад, что смог пробежать"
                     )
@@ -34,7 +35,7 @@ class TrainingApiMock : TrainingApi {
             Workout(
                 id = "workout_2",
                 name = "Силовая тренировка",
-                date = "2023-05-16T09:00:00Z",
+                date = "2025-04-22T09:00:00Z",
                 exercises = listOf(
                     Exercise(
                         id = "exercise_1",
@@ -61,7 +62,7 @@ class TrainingApiMock : TrainingApi {
             Workout(
                 id = "workout_3",
                 name = "Велопрогулка",
-                date = "2023-05-17T07:30:00Z",
+                date = "2025-04-24T07:30:00Z",
                 exercises = listOf(
                     Exercise(
                         id = "exercise_3",
@@ -69,6 +70,7 @@ class TrainingApiMock : TrainingApi {
                         duration = "PT45M",
                         exerciseType = ExerciseType.DYNAMIC,
                         distance = 15000,
+                        steps = 8000,
                         reaction = ExerciseReaction.EXCELLENT,
                         note = "Прекрасная погода для велопрогулки!"
                     )
@@ -77,7 +79,7 @@ class TrainingApiMock : TrainingApi {
             Workout(
                 id = "workout_4",
                 name = "Планка",
-                date = "2023-05-18T06:00:00Z",
+                date = "2025-04-26T06:00:00Z",
                 exercises = listOf(
                     Exercise(
                         id = "exercise_4",
@@ -92,7 +94,7 @@ class TrainingApiMock : TrainingApi {
             Workout(
                 id = "workout_5",
                 name = "Тренировка с отжиманиями и подтягиваниями",
-                date = "2023-05-19T10:00:00Z",
+                date = "2025-05-01T10:00:00Z",
                 exercises = listOf(
                     Exercise(
                         id = "exercise_5",

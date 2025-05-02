@@ -1,16 +1,13 @@
 package com.zhmu100.ma.domain.viewModel
 
-import android.text.format.DateUtils
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.zhmu100.ma.domain.api.diet.DietApi
-import com.zhmu100.ma.domain.api.statistic.StatisticsApi
 import com.zhmu100.ma.domain.api.training.TrainingApi
-import com.zhmu100.ma.domain.model.statistic.CaloriesData
 import com.zhmu100.ma.domain.model.statistic.DailyStats
 import com.zhmu100.ma.domain.model.statistic.NutritionDay
 import com.zhmu100.ma.domain.model.statistic.WeeklyStatItem
-import com.zhmu100.ma.domain.model.training.Workout
 import com.zhmu100.ma.domain.utils.DateTimeUtils
 import com.zhmu100.ma.domain.utils.DateTimeUtils.isInDay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -32,10 +29,27 @@ class StatisticViewModel(
     private val _todayStats = MutableStateFlow<DailyStats?>(null)
     val todayStats = _todayStats.asStateFlow()
 
-    // Статистика за неделю (7 дней ПН–ВС)
-    private val _weeklySteps = MutableStateFlow<List<Pair<LocalDate, Int>>>(emptyList())
-    private val _weeklyDistance = MutableStateFlow<List<Pair<LocalDate, Double>>>(emptyList())
-    private val _weeklyNutrition = MutableStateFlow<List<Pair<LocalDate, NutritionDay>>>(emptyList())
+    // Статистика за неделю (7 дней ПН–ВС), изначально заполнены нулями
+    private val initialDates = DateTimeUtils.getSevenDaysFrom(DateTimeUtils.getMondayOfThisWeek())
+    private val _weeklySteps = MutableStateFlow<List<Pair<LocalDate, Int>>>(
+        initialDates.map { Pair(it, 0) }
+    )
+    private val _weeklyDistance = MutableStateFlow<List<Pair<LocalDate, Double>>>(
+        initialDates.map { Pair(it, 0.0) }
+    )
+    private val _weeklyNutrition = MutableStateFlow<List<Pair<LocalDate, NutritionDay>>>(
+        initialDates.map {
+            Pair(
+                it,
+                NutritionDay(
+                    calories = 0,
+                    protein = 0.0,
+                    carbs = 0.0,
+                    fats = 0.0
+                )
+            )
+        }
+    )
 
     val weeklySteps = _weeklySteps.asStateFlow()
     val weeklyDistance = _weeklyDistance.asStateFlow()
@@ -79,31 +93,44 @@ class StatisticViewModel(
      * Загрузка данных по шагам и дистанции
      */
     private suspend fun fetchTrainingStats(days: List<LocalDate>) {
-        val workoutData = mutableListOf<Workout>()
         val dailySteps = mutableListOf<Pair<LocalDate, Int>>()
         val dailyDistance = mutableListOf<Pair<LocalDate, Double>>()
 
         for (day in days) {
-            val dayStart = DateTimeFormatter.ISO_LOCAL_DATE.format(day)
-            val dayEnd = DateTimeFormatter.ISO_LOCAL_DATE.format(day.plusDays(1))
+            val dayWorkouts = trainingApi.listWorkouts(page = 1, pageSize = 20)
+                .filter { it.date.isInDay(day) }
 
-            runCatching {
-                trainingApi.listWorkouts(page = 0, pageSize = 20)
-                    .filter { it.date.isInDay(day) }
-                    .forEach { workout ->
-                        val totalSteps = workout.exercises.sumOf { it.steps ?: 0 }
-                        val totalDistance = workout.exercises.sumOf { it.distance ?: 0 }
-                        dailySteps.add(Pair(day, totalSteps))
-                        dailyDistance.add(Pair(day, totalDistance.toDouble()))
-                    }
-            }.onFailure {
-                dailySteps.add(Pair(day, 0))
-                dailyDistance.add(Pair(day, 0.0))
+            val totalSteps = dayWorkouts.sumOf { workout ->
+                workout.exercises.sumOf { it.steps ?: 0 }
+            }
+
+            val totalDistance = dayWorkouts.sumOf { workout ->
+                workout.exercises.sumOf { it.distance ?: 0 }
+            }
+
+            // Добавляем данные за день
+            dailySteps.add(Pair(day, totalSteps))
+            dailyDistance.add(Pair(day, totalDistance.toDouble()))
+        }
+
+        // Убедимся, что список содержит ровно 7 дней
+        if (dailySteps.size < 7) {
+            for (day in days) {
+                if (!dailySteps.any { it.first == day }) {
+                    dailySteps.add(Pair(day, 0))
+                }
+                if (!dailyDistance.any { it.first == day }) {
+                    dailyDistance.add(Pair(day, 0.0))
+                }
             }
         }
 
-        _weeklySteps.value = dailySteps
-        _weeklyDistance.value = dailyDistance
+        // Сортируем по дате (на случай, если API вернул данные не по порядку)
+        val sortedSteps = dailySteps.sortedBy { it.first }
+        val sortedDistance = dailyDistance.sortedBy { it.first }
+
+        _weeklySteps.value = sortedSteps
+        _weeklyDistance.value = sortedDistance
     }
 
     /**
@@ -120,6 +147,9 @@ class StatisticViewModel(
             var totalProtein = 0.0
             var totalCarbs = 0.0
             var totalFats = 0.0
+
+            Log.i("STAT", meals.toString())
+
 
             meals.forEach { meal ->
                 totalCalories += meal.foods.sumOf { it.calories }

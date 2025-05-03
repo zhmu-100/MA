@@ -71,6 +71,10 @@ import com.zhmu100.ma.ui.components.pages.SettingsPage
 import com.zhmu100.ma.ui.components.pages.SettingsScreen
 import com.zhmu100.ma.ui.components.pages.StatisticPage
 import com.zhmu100.ma.ui.components.pages.StatisticsScreen
+import com.zhmu100.ma.ui.components.pages.NotesPage
+import com.zhmu100.ma.ui.components.pages.NotesScreen
+import com.zhmu100.ma.ui.components.pages.NotePage
+import com.zhmu100.ma.ui.components.pages.NoteScreen
 import com.zhmu100.ma.ui.components.pages.TrainCategoryPage
 import com.zhmu100.ma.ui.components.pages.TrainCategoryScreen
 import com.zhmu100.ma.ui.components.pages.TrainDynamicHistoryPage
@@ -186,6 +190,11 @@ class MainActivity : ComponentActivity() {
                             TrainStaticHistoryPage(
                                 navController = navController
                             )
+                        }
+                        composable<NotesScreen> { NotesPage(navController = navController) }
+                        composable("$NoteScreen/{noteId}") { backStackEntry ->
+                            val noteId = backStackEntry.arguments?.getString("noteId")
+                            NotePage(navController = navController, noteId = noteId)
                         }
                     }
                 }

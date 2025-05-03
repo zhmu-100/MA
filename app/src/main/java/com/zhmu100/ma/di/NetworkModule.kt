@@ -6,6 +6,7 @@ import com.zhmu100.ma.domain.api.auth.AuthApiImpl
 import com.zhmu100.ma.domain.api.diet.DietApi
 import com.zhmu100.ma.domain.api.diet.DietApiImpl
 import com.zhmu100.ma.domain.api.diet.DietApiMock
+import com.zhmu100.ma.domain.api.feed.FeedApiImpl
 import com.zhmu100.ma.domain.api.files.FilesApi
 import com.zhmu100.ma.domain.api.files.FilesApiImpl
 import com.zhmu100.ma.domain.api.files.FilesApiMock
@@ -42,4 +43,5 @@ val networkModule = module {
     single<NotificationApi> { NotificationApiImpl(get(), "http://localhost:8080/api/notebook") }
     single<NoteApi> { NoteApiImpl(get(), "http://localhost:8080/api/notebook") }
     single<StatisticsApi> { StatisticsApiMock() }
+    single { FeedApiImpl(get(), "http://localhost:8080/api/feed") }
 }

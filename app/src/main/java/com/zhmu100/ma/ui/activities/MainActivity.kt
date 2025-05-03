@@ -50,6 +50,10 @@ import com.zhmu100.ma.ui.components.pages.WeightRegPage
 import com.zhmu100.ma.ui.components.pages.WeightRegScreen
 import com.zhmu100.ma.ui.components.pages.StatisticPage
 import com.zhmu100.ma.ui.components.pages.StatisticsScreen
+import com.zhmu100.ma.ui.components.pages.NotesPage
+import com.zhmu100.ma.ui.components.pages.NotesScreen
+import com.zhmu100.ma.ui.components.pages.NotePage
+import com.zhmu100.ma.ui.components.pages.NoteScreen
 
 import com.zhmu100.ma.ui.theme.MATheme
 
@@ -69,26 +73,42 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             MATheme {
-                val navContoller = rememberNavController()
-                NavHost(navController = navContoller, startDestination = ProfileScreen) {
-                    composable<ProfileScreen> { ProfilePage(navController = navContoller) }
-                    composable<DevicesScreen> { DevicesPage(navController = navContoller) }
-                    composable<DeviceScreen> { DevicePage(navController = navContoller) }
-                    composable<PostScreen> { IntroPage(navController = navContoller) }
-                    composable<RemindersScreen> { RemindersPage(navController = navContoller) }
-                    composable<ReminderScreen> { ReminderPage(navController = navContoller) }
-                    composable<SettingsScreen> { SettingsPage(navController = navContoller) }
-                    composable<IntroScreen> { IntroPage(navController = navContoller) }
-                    composable<GenderRegScreen> { GenderRegPage(navController = navContoller) }
-                    composable<AgeRegScreen> { AgeRegPage(navController = navContoller) }
-                    composable<WeightRegScreen> { WeightRegPage(navController = navContoller) }
-                    composable<HeightRegScreen> { HeightRegPage(navController = navContoller) }
-                    composable<GoalsRegScreen> { GoalsRegPage(navController = navContoller) }
-                    composable<ActivityLevelRegScreen> { ActivityLevelRegPage(navController = navContoller) }
-                    composable<ProfileRegScreen> { ProfileRegPage(navController = navContoller) }
-                    composable<StatisticsScreen> { StatisticPage(navController = navContoller) }
-                    composable<ProfileParametersScreen> { ProfileParametersPage(navController = navContoller) }
+                val navController = rememberNavController()
+                
+                Scaffold(
+                    bottomBar = { NavBar(4, {}, navController = navController, modifier = Modifier.padding(vertical = 8.dp)) }
+                ) { innerPadding ->
+                
+                NavHost(
+                    navController = navController, 
+                    startDestination = ProfileScreen,
+                    modifier = Modifier.padding(innerPadding)
+                ) {
+                    composable<ProfileScreen> { ProfilePage(navController = navController) }
+                    composable<DevicesScreen> { DevicesPage(navController = navController) }
+                    composable<DeviceScreen> { DevicePage(navController = navController) }
+                    composable<PostScreen> { IntroPage(navController = navController) }
+                    composable<RemindersScreen> { RemindersPage(navController = navController) }
+                    composable<ReminderScreen> { ReminderPage(navController = navController) }
+                    composable<SettingsScreen> { SettingsPage(navController = navController) }
+                    composable<IntroScreen> { IntroPage(navController = navController) }
+                    composable<GenderRegScreen> { GenderRegPage(navController = navController) }
+                    composable<AgeRegScreen> { AgeRegPage(navController = navController) }
+                    composable<WeightRegScreen> { WeightRegPage(navController = navController) }
+                    composable<HeightRegScreen> { HeightRegPage(navController = navController) }
+                    composable<GoalsRegScreen> { GoalsRegPage(navController = navController) }
+                    composable<ActivityLevelRegScreen> { ActivityLevelRegPage(navController = navController) }
+                    composable<ProfileRegScreen> { ProfileRegPage(navController = navController) }
+                    composable<StatisticsScreen> { StatisticPage(navController = navController) }
+                    composable<ProfileParametersScreen> { ProfileParametersPage(navController = navController) }
+                    composable<NotesScreen> { NotesPage(navController = navController) }
+                    composable("$NoteScreen/{noteId}") { backStackEntry ->
+                        val noteId = backStackEntry.arguments?.getString("noteId")
+                        NotePage(navController = navController, noteId = noteId)
+                    }
 
+                }
+                // Закрывающая скобка для лямбда-выражения Scaffold
                 }
             }
         }

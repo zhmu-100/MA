@@ -68,6 +68,10 @@ import com.zhmu100.ma.ui.components.pages.WeightRegPage
 import com.zhmu100.ma.ui.components.pages.WeightRegScreen
 import com.zhmu100.ma.ui.components.pages.StatisticPage
 import com.zhmu100.ma.ui.components.pages.StatisticsScreen
+import com.zhmu100.ma.ui.components.pages.NotesPage
+import com.zhmu100.ma.ui.components.pages.NotesScreen
+import com.zhmu100.ma.ui.components.pages.NotePage
+import com.zhmu100.ma.ui.components.pages.NoteScreen
 import com.zhmu100.ma.ui.components.pages.TrainCategoryPage
 import com.zhmu100.ma.ui.components.pages.TrainCategoryScreen
 import com.zhmu100.ma.ui.components.pages.TrainGymPage
@@ -113,6 +117,11 @@ class MainActivity : ComponentActivity() {
                     composable<ActivityLevelRegScreen> { ActivityLevelRegPage(navController = navController) }
                     composable<ProfileRegScreen> { ProfileRegPage(navController = navController) }
                     composable<StatisticsScreen> { StatisticPage(navController = navController) }
+                    composable<NotesScreen> { NotesPage(navController = navController) }
+                    composable("$NoteScreen/{noteId}") { backStackEntry ->
+                        val noteId = backStackEntry.arguments?.getString("noteId")
+                        NotePage(navController = navController, noteId = noteId)
+                    }
                     composable<PostScreen> { PostPage(navController = navController) }
                     composable<FeedScreen> { FeedPage(navController = navController) }
                     composable<FoodScreen> { FoodPage(navController = navController) }

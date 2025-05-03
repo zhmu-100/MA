@@ -18,8 +18,8 @@ val viewModelModule = module {
     viewModel { ProfileViewModel(get(), get()) }
     viewModel { SettingsViewModel(get()) }
     viewModel { TrainingViewModel(get(), get()) }
-    viewModel { TrainingMapViewModel() }
-    viewModel { TrainingGymViewModel() }
+    viewModel { TrainingMapViewModel(get()) }
+    viewModel { TrainingGymViewModel(get()) }
     viewModel { TrainingHistoryViewModel(get(), get()) }
     viewModel { StatisticViewModel(get(), get()) }
     viewModel { DevicesViewModel(get()) }

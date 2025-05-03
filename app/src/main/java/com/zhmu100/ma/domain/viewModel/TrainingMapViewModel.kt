@@ -7,11 +7,13 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.lifecycle.ViewModel
 import com.google.android.gms.maps.model.LatLng
+import com.zhmu100.ma.domain.model.device.DeviceType
 import com.zhmu100.ma.domain.model.statistic.GPSPosition
 import com.zhmu100.ma.domain.model.training.Exercise
 import com.zhmu100.ma.domain.model.training.ExerciseName
 import com.zhmu100.ma.domain.model.training.ExerciseType
 import com.zhmu100.ma.domain.model.training.Workout
+import com.zhmu100.ma.domain.storage.DeviceStorage
 import com.zhmu100.ma.domain.utils.GPSStats.calculateCalories
 import com.zhmu100.ma.domain.utils.GPSStats.calculateSpeed
 import com.zhmu100.ma.domain.utils.GPSStats.calculateSteps
@@ -21,7 +23,9 @@ import java.time.Duration
 
 const val DEFAULT_DISTANCE_THRESHOLD = 20.0 // meters
 
-class TrainingMapViewModel : ViewModel() {
+class TrainingMapViewModel(
+    private val deviceStorage: DeviceStorage
+) : ViewModel() {
     private var _routePoints = mutableStateListOf<GPSPosition>()
     val routePoints: SnapshotStateList<GPSPosition> = _routePoints
     private var _totalDistance = mutableDoubleStateOf(0.0)
@@ -68,7 +72,11 @@ class TrainingMapViewModel : ViewModel() {
         customDate: String? = null
     ): Workout? {
         if (routePoints.isEmpty()) return null
+
+        val devices = deviceStorage.getDevicesByType(DeviceType.WATCH)
+        val device = devices.firstOrNull()
         val speed = calculateSpeed(totalExerciseTime, totalDistance.value)
+
         val exercise = Exercise(
             name = ExerciseName.RUNNING,
             exerciseType = ExerciseType.DYNAMIC,
@@ -76,7 +84,8 @@ class TrainingMapViewModel : ViewModel() {
             distance = totalDistance.value.toInt(),
             steps = stepsCount.value,
             calories = caloriesBurned.value.toDouble(),
-            speed = speed.toInt()
+            speed = speed.toInt(),
+            bmp = device?.getReading()?.value?.toInt()
         )
         return Workout(
             name = workoutName,

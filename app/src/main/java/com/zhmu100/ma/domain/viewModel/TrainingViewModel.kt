@@ -1,5 +1,6 @@
 package com.zhmu100.ma.domain.viewModel
 
+import android.util.Log
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
@@ -109,7 +110,7 @@ class TrainingViewModel(
                 it.copy(note = note, reaction = reaction)
             }.toList()
             val finalWorkout = workout.copy(exercises = finalExercises)
-
+            Log.i("TRAIN", finalWorkout.toString())
             runCatching {
                 val newWorkout = trainingApi.createWorkout(finalWorkout)
                 newWorkout.exercises[0].id?.let { id ->

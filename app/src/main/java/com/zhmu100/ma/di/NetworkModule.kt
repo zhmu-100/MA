@@ -1,11 +1,20 @@
 package com.zhmu100.ma.di
 
 import com.zhmu100.ma.domain.Network
+import com.zhmu100.ma.domain.api.auth.AuthApi
+import com.zhmu100.ma.domain.api.auth.AuthApiImpl
 import com.zhmu100.ma.domain.api.diet.DietApi
+import com.zhmu100.ma.domain.api.diet.DietApiImpl
 import com.zhmu100.ma.domain.api.diet.DietApiMock
 import com.zhmu100.ma.domain.api.files.FilesApi
+import com.zhmu100.ma.domain.api.files.FilesApiImpl
 import com.zhmu100.ma.domain.api.files.FilesApiMock
+import com.zhmu100.ma.domain.api.notification.NotificationApi
+import com.zhmu100.ma.domain.api.notification.NotificationApiImpl
+import com.zhmu100.ma.domain.api.notes.NoteApi
+import com.zhmu100.ma.domain.api.notes.NoteApiImpl
 import com.zhmu100.ma.domain.api.profile.ProfileApi
+import com.zhmu100.ma.domain.api.profile.ProfileApiImpl
 import com.zhmu100.ma.domain.api.profile.ProfileApiMock
 import com.zhmu100.ma.domain.api.statistic.StatisticsApi
 import com.zhmu100.ma.domain.api.statistic.StatisticsApiMock
@@ -29,5 +38,8 @@ val networkModule = module {
     single<FilesApi> { FilesApiMock() }
     single<TrainingApi> { TrainingApiMock() }
     single<DietApi> { DietApiMock() }
+    single<AuthApi> { AuthApiImpl(get(), "http://localhost:8080/api/auth") }
+    single<NotificationApi> { NotificationApiImpl(get(), "http://localhost:8080/api/notebook") }
+    single<NoteApi> { NoteApiImpl(get(), "http://localhost:8080/api/notebook") }
     single<StatisticsApi> { StatisticsApiMock() }
 }

@@ -14,18 +14,21 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.zhmu100.ma.domain.viewModel.RegisterViewModel
 import com.zhmu100.ma.ui.components.buttons.BackButton
 import com.zhmu100.ma.ui.components.buttons.StringButton
 import com.zhmu100.ma.ui.components.inputs.InputLine
@@ -33,19 +36,32 @@ import com.zhmu100.ma.ui.theme.LightGreen
 import com.zhmu100.ma.ui.theme.MATheme
 import com.zhmu100.ma.ui.theme.White
 import kotlinx.serialization.Serializable
+import org.koin.androidx.compose.koinViewModel
 
 
 @Composable
 fun RegisterPage(
     navController: NavController? = null,
     onBackClick: () -> Unit = {},
-    onRegisterClick: (String, String, String, String) -> Unit = { _, _, _, _ -> },
+    viewModel: RegisterViewModel = koinViewModel(),
+    onRegisterClick: (String, String, String, String) -> Unit = { name, email, password, confirmPassword ->viewModel.register(name, email, password, confirmPassword) },
     onLoginClick: () -> Unit = {}
 ) {
     var name by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var confirmPassword by remember { mutableStateOf("") }
+
+    val message by viewModel.message.collectAsState()
+    val isRegisterSuccessful by viewModel.isRegisterSuccessful.collectAsState()
+
+    if (isRegisterSuccessful) {
+        navController?.navigate(ProfileScreen)
+    }
+
+    if (message != null) {
+        Text(text = message!!, color = Color.Red)
+    }
 
     BasePage(
         hasNavBar = false,

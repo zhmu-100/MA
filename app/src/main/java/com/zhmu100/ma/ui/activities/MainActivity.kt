@@ -1,7 +1,5 @@
 package com.zhmu100.ma.ui.activities
 
-import com.zhmu100.ma.ui.components.pages.TrainStaticHistoryPage
-import com.zhmu100.ma.ui.components.pages.TrainStaticHistoryScreen
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -83,6 +81,8 @@ import com.zhmu100.ma.ui.components.pages.TrainMapPage
 import com.zhmu100.ma.ui.components.pages.TrainMapScreen
 import com.zhmu100.ma.ui.components.pages.TrainMoodPage
 import com.zhmu100.ma.ui.components.pages.TrainMoodScreen
+import com.zhmu100.ma.ui.components.pages.TrainStaticHistoryPage
+import com.zhmu100.ma.ui.components.pages.TrainStaticHistoryScreen
 import com.zhmu100.ma.ui.components.pages.WeightRegPage
 import com.zhmu100.ma.ui.components.pages.WeightRegScreen
 import com.zhmu100.ma.ui.theme.MATheme

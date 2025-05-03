@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.secrets.plugin)
     id("jacoco")
 }
 
@@ -56,6 +57,12 @@ jacoco {
     toolVersion = "0.8.11"
 }
 
+secrets {
+    propertiesFileName = "secrets.properties"
+    defaultPropertiesFileName = "local.defaults.properties"
+}
+
+
 tasks.withType<Test> {
     configure<JacocoTaskExtension> {
         isIncludeNoLocationClasses = true
@@ -92,9 +99,12 @@ tasks.register<JacocoReport>("jacocoTestReport") {
 }
 
 dependencies {
+    // базовые зависимости Android
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
+
+    // Jetpack Compose
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
     implementation(platform(libs.androidx.compose.bom))
@@ -102,16 +112,44 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
+
+    // Обработка изображений
     implementation(libs.coil.compose)
     implementation(libs.coil.network.okhttp)
+
+    // Навигация
     implementation(libs.androidx.navigation.compose)
+
+    // Сериализация
     implementation(libs.kotlinx.serialization.json)
+
+    // Графики
     implementation(libs.ycharts)
+
+    // Тестирование
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.ui.test.junit4)
+
+    // Отладка
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+
+    // Google Maps
+    implementation(libs.maps.compose)
+    implementation(libs.play.services.maps)
+    implementation(libs.play.services.location)
+    implementation(libs.maps.compose.utils)
+    implementation(libs.maps.ktx)
+
+    // Для фоновой работы
+    implementation(libs.androidx.work.runtime.ktx)
+
+    // Для работы с корутинами
+    implementation(libs.kotlinx.coroutines.android)
+
+    // Разрешения
+    implementation(libs.accompanist.permissions)
 }

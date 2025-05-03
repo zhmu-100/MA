@@ -1,5 +1,6 @@
 package com.zhmu100.ma.ui.components.pages
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -21,7 +22,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -35,21 +35,15 @@ import com.zhmu100.ma.ui.theme.MATheme
 import kotlinx.serialization.Serializable
 
 @Composable
-fun PostPage(modifier: Modifier = Modifier, navController: NavController? = null) {
+fun FoodCameraPage(modifier: Modifier = Modifier, navController: NavController? = null) {
     BasePage(false, modifier = modifier) { baseModifier ->
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = baseModifier
         ) {
-            val toolIconColors = IconButtonDefaults.iconButtonColors(
-                contentColor = MaterialTheme.colorScheme.primary,
-                containerColor = MaterialTheme.colorScheme.background
-            )
+
             val url =
                 "https://avatars.mds.yandex.net/i?id=973900345cef4fb385b6142051e2cd9b81e0ff0a-9856853-images-thumbs&n=13"
-            val text =
-                "Я снова оттягивала этот момент, но больше нельзя. Диван такой мягкий, сериальчик такой интересный... \n" +
-                        "Но нет! Сегодня день ног, и плевать, что они уже ноют от одной мысли о приседаниях. Нужно оторвать себя от этого уютного плена и заставить двигаться. Ладно, уговорила, сама себя. Пойду, отмучаюсь."
 
             Box(
                 modifier = Modifier
@@ -59,12 +53,12 @@ fun PostPage(modifier: Modifier = Modifier, navController: NavController? = null
                 BackButton(
                     text = "Назад",
                     modifier = Modifier.align(Alignment.CenterStart),
-                    onClick = { navController?.navigate(FeedScreen) })
+                    onClick = { navController?.navigate(FoodAddScreen) })
 
                 SaveButton(
-                    text = "Опубликовать",
+                    text = "Сохранить",
                     modifier = Modifier.align(Alignment.CenterEnd),
-                    onClick = { navController?.navigate(FeedScreen)} )
+                    onClick = { navController?.navigate(FoodAddScreen)} )
             }
             url?.let {
                 Box(
@@ -79,16 +73,8 @@ fun PostPage(modifier: Modifier = Modifier, navController: NavController? = null
                     )
                 }
             }
-            Row(modifier = Modifier.padding(8.dp)) {
-                IconButton({}, colors = toolIconColors) {
-                    Icon(painter = painterResource(R.drawable.image), "Image Icon")
-                }
-                IconButton({}, colors = toolIconColors) {
-                    Icon(painter = painterResource(R.drawable.play_circle), "Video Icon")
-                }
-            }
+
             HorizontalDivider(thickness = 1.dp, color = LightGray)
-            Text(text)
         }
     }
 }
@@ -104,12 +90,12 @@ private fun PostImage(url: String, modifier: Modifier = Modifier) {
 }
 
 @Serializable
-object PostScreen
+object FoodCameraScreen
 
 @Preview(showBackground = true)
 @Composable
-private fun PostPagePreview() {
+private fun FoodCameraPagePreview() {
     MATheme {
-        PostPage()
+        FoodCameraPage()
     }
 }

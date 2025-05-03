@@ -30,6 +30,7 @@ import com.zhmu100.ma.R
 import com.zhmu100.ma.ui.components.buttons.BackButton
 import com.zhmu100.ma.ui.components.buttons.BigIconButton
 import com.zhmu100.ma.ui.components.buttons.RoundButton
+import com.zhmu100.ma.ui.components.buttons.StringButton
 import com.zhmu100.ma.ui.components.buttons.ThemedIconButton
 import com.zhmu100.ma.ui.theme.LightGray
 import com.zhmu100.ma.ui.theme.MATheme
@@ -37,7 +38,12 @@ import kotlinx.serialization.Serializable
 
 @Composable
 fun ProfilePage(modifier: Modifier = Modifier, navController: NavController? = null) {
-    BasePage(true, modifier = modifier) { baseModifier ->
+    BasePage(
+        true,
+        navIndex = 4,
+        modifier = modifier,
+        navController = navController
+    ) { baseModifier ->
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = baseModifier
@@ -55,13 +61,17 @@ fun ProfilePage(modifier: Modifier = Modifier, navController: NavController? = n
             ProfileImage(
                 url = "https://avatars.mds.yandex.net/i?id=973900345cef4fb385b6142051e2cd9b81e0ff0a-9856853-images-thumbs&n=13"
             )
-            Text("Login")
+            // Заменяем обычный текст на кликабельный StringButton
+            StringButton(
+                text = "Login",
+                onClick = { navController?.navigate(LoginScreen) }
+            )
             Text("online", fontSize = 12.sp, color = MaterialTheme.colorScheme.primary)
             BigIconButton(
                 text = "Мои параметры",
                 drawableResId = R.drawable.ruler,
                 modifier = Modifier.padding(bottom = 8.dp),
-                onClick = {navController?.navigate(ProfileParametersScreen)}
+                onClick = { navController?.navigate(ProfileParametersScreen) }
             )
             BigIconButton(
                 text = "Напоминания",

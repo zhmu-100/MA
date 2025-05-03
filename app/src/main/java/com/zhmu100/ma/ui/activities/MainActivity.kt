@@ -32,7 +32,21 @@ import com.zhmu100.ma.ui.components.pages.HeightRegPage
 import com.zhmu100.ma.ui.components.pages.HeightRegScreen
 import com.zhmu100.ma.ui.components.pages.IntroPage
 import com.zhmu100.ma.ui.components.pages.IntroScreen
+import com.zhmu100.ma.ui.components.pages.LoginPage
+import com.zhmu100.ma.ui.components.pages.LoginScreen
+import com.zhmu100.ma.ui.components.pages.NewPasswordPage
+import com.zhmu100.ma.ui.components.pages.NewPasswordScreen
 import com.zhmu100.ma.ui.components.pages.PostPage
+import com.zhmu100.ma.ui.components.pages.FeedPage
+import com.zhmu100.ma.ui.components.pages.FeedScreen
+import com.zhmu100.ma.ui.components.pages.FoodAddPage
+import com.zhmu100.ma.ui.components.pages.FoodAddScreen
+import com.zhmu100.ma.ui.components.pages.FoodCameraPage
+import com.zhmu100.ma.ui.components.pages.FoodCameraScreen
+import com.zhmu100.ma.ui.components.pages.FoodPage
+import com.zhmu100.ma.ui.components.pages.FoodParametersPage
+import com.zhmu100.ma.ui.components.pages.FoodParametersScreen
+import com.zhmu100.ma.ui.components.pages.FoodScreen
 import com.zhmu100.ma.ui.components.pages.PostScreen
 import com.zhmu100.ma.ui.components.pages.ProfilePage
 import com.zhmu100.ma.ui.components.pages.ProfileRegPage
@@ -40,6 +54,10 @@ import com.zhmu100.ma.ui.components.pages.ProfileRegScreen
 import com.zhmu100.ma.ui.components.pages.ProfileParametersPage
 import com.zhmu100.ma.ui.components.pages.ProfileParametersScreen
 import com.zhmu100.ma.ui.components.pages.ProfileScreen
+import com.zhmu100.ma.ui.components.pages.RegisterPage
+import com.zhmu100.ma.ui.components.pages.RegisterScreen
+import com.zhmu100.ma.ui.components.pages.ResetPasswordPage
+import com.zhmu100.ma.ui.components.pages.ResetPasswordScreen
 import com.zhmu100.ma.ui.components.pages.ReminderPage
 import com.zhmu100.ma.ui.components.pages.ReminderScreen
 import com.zhmu100.ma.ui.components.pages.RemindersPage
@@ -54,6 +72,14 @@ import com.zhmu100.ma.ui.components.pages.NotesPage
 import com.zhmu100.ma.ui.components.pages.NotesScreen
 import com.zhmu100.ma.ui.components.pages.NotePage
 import com.zhmu100.ma.ui.components.pages.NoteScreen
+import com.zhmu100.ma.ui.components.pages.TrainCategoryPage
+import com.zhmu100.ma.ui.components.pages.TrainCategoryScreen
+import com.zhmu100.ma.ui.components.pages.TrainGymPage
+import com.zhmu100.ma.ui.components.pages.TrainGymScreen
+import com.zhmu100.ma.ui.components.pages.TrainMapPage
+import com.zhmu100.ma.ui.components.pages.TrainMapScreen
+import com.zhmu100.ma.ui.components.pages.TrainMoodPage
+import com.zhmu100.ma.ui.components.pages.TrainMoodScreen
 
 import com.zhmu100.ma.ui.theme.MATheme
 
@@ -74,16 +100,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             MATheme {
                 val navController = rememberNavController()
-                
-                Scaffold(
-                    bottomBar = { NavBar(4, {}, navController = navController, modifier = Modifier.padding(vertical = 8.dp)) }
-                ) { innerPadding ->
-                
-                NavHost(
-                    navController = navController, 
-                    startDestination = ProfileScreen,
-                    modifier = Modifier.padding(innerPadding)
-                ) {
+                NavHost(navController = navController, startDestination = ProfileScreen) {
                     composable<ProfileScreen> { ProfilePage(navController = navController) }
                     composable<DevicesScreen> { DevicesPage(navController = navController) }
                     composable<DeviceScreen> { DevicePage(navController = navController) }
@@ -100,15 +117,26 @@ class MainActivity : ComponentActivity() {
                     composable<ActivityLevelRegScreen> { ActivityLevelRegPage(navController = navController) }
                     composable<ProfileRegScreen> { ProfileRegPage(navController = navController) }
                     composable<StatisticsScreen> { StatisticPage(navController = navController) }
-                    composable<ProfileParametersScreen> { ProfileParametersPage(navController = navController) }
                     composable<NotesScreen> { NotesPage(navController = navController) }
                     composable("$NoteScreen/{noteId}") { backStackEntry ->
                         val noteId = backStackEntry.arguments?.getString("noteId")
                         NotePage(navController = navController, noteId = noteId)
                     }
-
-                }
-                // Закрывающая скобка для лямбда-выражения Scaffold
+                    composable<PostScreen> { PostPage(navController = navController) }
+                    composable<FeedScreen> { FeedPage(navController = navController) }
+                    composable<FoodScreen> { FoodPage(navController = navController) }
+                    composable<FoodAddScreen> { FoodAddPage(navController = navController) }
+                    composable<FoodCameraScreen> { FoodCameraPage(navController = navController) }
+                    composable<FoodParametersScreen> { FoodParametersPage(navController = navController) }
+                    composable<ProfileParametersScreen> { ProfileParametersPage(navController = navController) }
+                    composable<LoginScreen> { LoginPage(navController = navController) }
+                    composable<RegisterScreen> { RegisterPage(navController = navController) }
+                    composable<ResetPasswordScreen> { ResetPasswordPage(navController = navController) }
+                    composable<NewPasswordScreen> { NewPasswordPage(navController = navController) }
+                    composable<TrainCategoryScreen> { TrainCategoryPage(navController = navController) }
+                    composable<TrainMapScreen> { TrainMapPage(navController = navController) }
+                    composable<TrainGymScreen> { TrainGymPage(navController = navController) }
+                    composable<TrainMoodScreen> { TrainMoodPage(navController = navController) }
                 }
             }
         }

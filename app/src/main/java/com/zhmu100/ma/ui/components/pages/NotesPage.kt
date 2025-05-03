@@ -83,7 +83,7 @@ fun NotesPage(modifier: Modifier = Modifier, navController: NavController? = nul
         }
     }
 
-    BasePage(true, navIndex = 3, modifier = modifier) { baseModifier ->
+    BasePage(true, navIndex = 3, navController = navController, modifier = modifier) { baseModifier ->
         Column(
             modifier = baseModifier.fillMaxSize()
         ) {

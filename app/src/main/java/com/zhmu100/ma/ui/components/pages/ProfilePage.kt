@@ -1,7 +1,6 @@
 package com.zhmu100.ma.ui.components.pages
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -92,27 +91,12 @@ fun ProfilePage(modifier: Modifier = Modifier, navController: NavController? = n
                 modifier = Modifier.padding(bottom = 8.dp),
                 onClick = { navController?.navigate(StatisticsScreen) }
             )
-            BigIconButton(
-                text = "Мои заметки",
-                drawableResId = R.drawable.bars, // Здесь лучше использовать иконку заметок, если она есть
-                modifier = Modifier.padding(bottom = 8.dp),
-                onClick = { navController?.navigate(NotesScreen) }
-            )
             Text(
                 "Мои записи",
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.inversePrimary
             )
             RoundButton("Создать запись", onClick = { navController?.navigate(PostScreen) })
-            
-
-            Text(
-                text = "Заметки",
-                color = MaterialTheme.colorScheme.primary,
-                modifier = Modifier
-                    .padding(top = 16.dp)
-                    .clickable { navController?.navigate(NotesScreen) }
-            )
         }
     }
 }

@@ -1,27 +1,23 @@
 package com.zhmu100.ma.domain.viewModel
 
-import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.lifecycle.ViewModel
+import com.zhmu100.ma.domain.model.device.DeviceType
 import com.zhmu100.ma.domain.model.training.Exercise
 import com.zhmu100.ma.domain.model.training.ExerciseName
 import com.zhmu100.ma.domain.model.training.ExerciseType
 import com.zhmu100.ma.domain.model.training.Workout
+import com.zhmu100.ma.domain.storage.DeviceStorage
 import com.zhmu100.ma.ui.data.TrainRowData
 import java.time.Duration
 import java.time.Instant
 
-class TrainingGymViewModel : ViewModel() {
+class TrainingGymViewModel(
+    private val deviceStorage: DeviceStorage
+) : ViewModel() {
     private var _trainRows = mutableStateListOf<TrainRowData>()
     val trainRows: SnapshotStateList<TrainRowData> = _trainRows
-    private val _workoutName = mutableStateOf("")
-    val workoutName: State<String> = _workoutName
-
-    fun setWorkoutName(name: String) {
-        _workoutName.value = name
-    }
 
     private val _exerciseOptions = ExerciseName.entries.filter {
         it != ExerciseName.UNSPECIFIED && it != ExerciseName.RUNNING && it != ExerciseName.CYCLING
@@ -45,7 +41,7 @@ class TrainingGymViewModel : ViewModel() {
     }
 
     fun clearStats() {
-        _trainRows = mutableStateListOf<TrainRowData>()
+        _trainRows.clear()
     }
 
     fun getWorkout(
@@ -56,12 +52,16 @@ class TrainingGymViewModel : ViewModel() {
         if (trainRows.size == 0)
             return null
 
+        val devices = deviceStorage.getDevicesByType(DeviceType.WATCH)
+        val device = devices.firstOrNull()
+
         val exercises = trainRows.map { row ->
             Exercise(
                 name = row.exercise,
                 exerciseType = ExerciseType.STATIC,
                 reps = row.value.toIntOrNull() ?: 0,
-                duration = totalExerciseTime.toString()
+                duration = totalExerciseTime.toString(),
+                bmp = device?.getReading()?.value?.toInt()
             )
         }
         return Workout(

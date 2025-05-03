@@ -14,39 +14,53 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.zhmu100.ma.domain.viewModel.LoginViewModel
 import com.zhmu100.ma.ui.components.buttons.BackButton
 import com.zhmu100.ma.ui.components.buttons.StringButton
 import com.zhmu100.ma.ui.components.inputs.InputLine
-import com.zhmu100.ma.ui.components.pages.RegisterScreen
-import com.zhmu100.ma.ui.components.pages.ResetPasswordScreen
 import com.zhmu100.ma.ui.theme.LightGreen
 import com.zhmu100.ma.ui.theme.MATheme
 import com.zhmu100.ma.ui.theme.White
 import kotlinx.serialization.Serializable
+import org.koin.androidx.compose.koinViewModel
 
 
 @Composable
 fun LoginPage(
     navController: NavController? = null,
     onBackClick: () -> Unit = {},
-    onLoginClick: (String, String) -> Unit = { _, _ -> },
+    viewModel: LoginViewModel = koinViewModel(),
+    onLoginClick: (String, String) -> Unit = { email, password ->viewModel.login(email, password) },
     onRegisterClick: () -> Unit = {},
     onResetPasswordClick: () -> Unit = {}
 ) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
+
+    val message by viewModel.message.collectAsState()
+    val isLoginSuccessful by viewModel.isLoginSuccessful.collectAsState()
+
+    if (isLoginSuccessful) {
+        navController?.navigate(ProfileScreen)
+    }
+
+    if (message != null) {
+        Text(text = message!!, color = Color.Red)
+    }
 
     BasePage(
         hasNavBar = false,

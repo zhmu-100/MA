@@ -77,12 +77,16 @@ import com.zhmu100.ma.ui.components.pages.NotePage
 import com.zhmu100.ma.ui.components.pages.NoteScreen
 import com.zhmu100.ma.ui.components.pages.TrainCategoryPage
 import com.zhmu100.ma.ui.components.pages.TrainCategoryScreen
+import com.zhmu100.ma.ui.components.pages.TrainDynamicHistoryPage
+import com.zhmu100.ma.ui.components.pages.TrainDynamicHistoryScreen
 import com.zhmu100.ma.ui.components.pages.TrainGymPage
 import com.zhmu100.ma.ui.components.pages.TrainGymScreen
 import com.zhmu100.ma.ui.components.pages.TrainMapPage
 import com.zhmu100.ma.ui.components.pages.TrainMapScreen
 import com.zhmu100.ma.ui.components.pages.TrainMoodPage
 import com.zhmu100.ma.ui.components.pages.TrainMoodScreen
+import com.zhmu100.ma.ui.components.pages.TrainStaticHistoryPage
+import com.zhmu100.ma.ui.components.pages.TrainStaticHistoryScreen
 import com.zhmu100.ma.ui.components.pages.WeightRegPage
 import com.zhmu100.ma.ui.components.pages.WeightRegScreen
 import com.zhmu100.ma.ui.theme.MATheme
@@ -175,6 +179,16 @@ class MainActivity : ComponentActivity() {
                             TrainMoodPage(
                                 navController = navController,
                                 trainViewModel = trainingViewModel
+                            )
+                        }
+                        composable<TrainDynamicHistoryScreen> {
+                            TrainDynamicHistoryPage(
+                                navController = navController
+                            )
+                        }
+                        composable<TrainStaticHistoryScreen> {
+                            TrainStaticHistoryPage(
+                                navController = navController
                             )
                         }
                         composable<NotesScreen> { NotesPage(navController = navController) }

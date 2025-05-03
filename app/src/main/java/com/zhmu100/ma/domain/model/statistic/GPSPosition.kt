@@ -1,5 +1,7 @@
 package com.zhmu100.ma.domain.model.statistic
 
+import com.google.android.gms.maps.model.LatLng
+
 /**
  * Данные GPS позиции
  * @property timestamp Временная метка в формате ISO-8601
@@ -16,4 +18,8 @@ data class GPSPosition(
     val altitude: Double,
     val speed: Double,
     val accuracy: Double
-)
+) {
+    fun toLatLng(): LatLng {
+        return LatLng(latitude, longitude)
+    }
+}

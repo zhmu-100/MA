@@ -17,6 +17,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.zhmu100.ma.R
 import com.zhmu100.ma.ui.components.buttons.BigIconButton
+import com.zhmu100.ma.ui.components.buttons.DoubleButton
 import com.zhmu100.ma.ui.components.buttons.SquareIconButton
 import com.zhmu100.ma.ui.theme.MATheme
 import kotlinx.serialization.Serializable
@@ -41,10 +42,22 @@ fun TrainCategoryPage(modifier: Modifier = Modifier, navController: NavControlle
             BigIconButton(
                 text = "Статистика",
                 drawableResId = R.drawable.bars,
-                modifier = Modifier.padding(bottom = 8.dp),
+                modifier = Modifier.padding(bottom = 16.dp),
                 onClick = { navController?.navigate(StatisticsScreen) }
             )
-            Text("Выбрать категорию", modifier = Modifier.padding(bottom = 16.dp))
+            Text("История тренировок", modifier = Modifier.padding(bottom = 8.dp))
+            DoubleButton(
+                leftText = "Пробежки",
+                rightText = "Спортзал",
+                onLeftClick = {
+                    navController?.navigate(TrainDynamicHistoryScreen)
+                },
+                onRightClick = {
+                    navController?.navigate(TrainStaticHistoryScreen)
+                },
+                modifier = Modifier.padding(bottom = 16.dp)
+            )
+            Text("Выбрать категорию", modifier = Modifier.padding(bottom = 8.dp))
             Row {
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,

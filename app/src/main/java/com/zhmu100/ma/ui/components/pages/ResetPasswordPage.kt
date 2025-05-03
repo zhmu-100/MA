@@ -28,7 +28,6 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.zhmu100.ma.ui.components.buttons.BackButton
 import com.zhmu100.ma.ui.components.inputs.InputLine
-import com.zhmu100.ma.ui.components.pages.NewPasswordScreen
 import com.zhmu100.ma.ui.theme.LightGreen
 import com.zhmu100.ma.ui.theme.MATheme
 import com.zhmu100.ma.ui.theme.White

@@ -18,6 +18,7 @@ import androidx.navigation.compose.rememberNavController
 import com.zhmu100.ma.di.networkModule
 import com.zhmu100.ma.di.storageModule
 import com.zhmu100.ma.di.viewModelModule
+import com.zhmu100.ma.domain.viewModel.DietViewModel
 import com.zhmu100.ma.domain.viewModel.ProfileViewModel
 import com.zhmu100.ma.domain.viewModel.TrainingViewModel
 import com.zhmu100.ma.ui.components.NavBar
@@ -121,6 +122,7 @@ class MainActivity : ComponentActivity() {
                     val navController = rememberNavController()
                     val profileViewModel: ProfileViewModel = koinViewModel()
                     val trainingViewModel: TrainingViewModel = koinViewModel()
+                    val dietViewModel: DietViewModel = koinViewModel()
                     NavHost(navController = navController, startDestination = ProfileScreen) {
                         composable<ProfileScreen> {
                             ProfilePage(
@@ -138,10 +140,25 @@ class MainActivity : ComponentActivity() {
                         composable<DeviceScreen> { DevicePage(navController = navController) }
                         composable<PostScreen> { PostPage(navController = navController) }
                         composable<FeedScreen> { FeedPage(navController = navController) }
-                        composable<FoodScreen> { FoodPage(navController = navController) }
-                        composable<FoodAddScreen> { FoodAddPage(navController = navController) }
+                        composable<FoodScreen> {
+                            FoodPage(
+                                navController = navController,
+                                viewModel = dietViewModel
+                            )
+                        }
+                        composable<FoodAddScreen> {
+                            FoodAddPage(
+                                navController = navController,
+                                viewModel = dietViewModel
+                            )
+                        }
                         composable<FoodCameraScreen> { FoodCameraPage(navController = navController) }
-                        composable<FoodParametersScreen> { FoodParametersPage(navController = navController) }
+                        composable<FoodParametersScreen> {
+                            FoodParametersPage(
+                                navController = navController,
+                                viewModel = dietViewModel
+                            )
+                        }
                         composable<RemindersScreen> { RemindersPage(navController = navController) }
                         composable<ReminderScreen> { ReminderPage(navController = navController) }
                         composable<SettingsScreen> { SettingsPage(navController = navController) }

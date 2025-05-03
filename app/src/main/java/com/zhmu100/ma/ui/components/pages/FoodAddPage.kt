@@ -2,13 +2,29 @@ package com.zhmu100.ma.ui.components.pages
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -17,34 +33,46 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.zhmu100.ma.R
+import com.zhmu100.ma.domain.model.diet.MealType
+import com.zhmu100.ma.domain.viewModel.DietViewModel
 import com.zhmu100.ma.ui.components.buttons.BackButton
-import com.zhmu100.ma.ui.components.buttons.SquareIconButton
 import com.zhmu100.ma.ui.components.buttons.StringButton
 import com.zhmu100.ma.ui.theme.MATheme
 import kotlinx.serialization.Serializable
+import org.koin.androidx.compose.koinViewModel
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
-import java.util.*
+import java.util.Locale
 
 @Composable
-fun FoodAddPage(modifier: Modifier = Modifier, navController: NavController? = null) {
-    val meals = listOf("Завтрак", "Обед", "Ужин", "Перекус")
-    var selectedMeal by remember { mutableStateOf(meals[0]) }
+fun FoodAddPage(
+    modifier: Modifier = Modifier,
+    navController: NavController? = null,
+    viewModel: DietViewModel = koinViewModel()
+) {
+    val allFoods by viewModel.foods.collectAsStateWithLifecycle()
+    var searchQuery by rememberSaveable { mutableStateOf("") }
+    var selectedMealType by rememberSaveable { mutableStateOf(MealType.BREAKFAST) }
     var showMealDropdown by remember { mutableStateOf(false) }
 
-    var searchQuery by remember { mutableStateOf("") }
-    val allItems = listOf("Test11", "Test21", "Test31", "Test41", "Test51", "Test61", "Test1", "Test2", "Test3", "Test4", "Test5", "Test6")
-    val filteredItems = remember(searchQuery) {
-        if (searchQuery.isBlank()) emptyList() else
-            allItems.filter { it.contains(searchQuery, ignoreCase = true) }
+    val filteredItems by remember(searchQuery, allFoods) {
+        derivedStateOf {
+            if (searchQuery.isBlank()) allFoods
+            else allFoods.filter {
+                it.name.contains(searchQuery, ignoreCase = true)
+            }
+        }
     }
 
-    val currentDate = remember {
-        LocalDate.now().format(
-            DateTimeFormatter.ofPattern("EEEE, MMM d", Locale("ru"))
-        ).replaceFirstChar { it.uppercase() }
+    val currentDate by remember {
+        derivedStateOf {
+            LocalDate.now().format(
+                DateTimeFormatter.ofPattern("EEEE, d MMMM", Locale.getDefault())
+            ).replaceFirstChar { it.titlecase() }
+        }
     }
 
     BasePage(
@@ -52,15 +80,10 @@ fun FoodAddPage(modifier: Modifier = Modifier, navController: NavController? = n
         modifier = modifier.background(MaterialTheme.colorScheme.background)
     ) { baseModifier ->
         Box(modifier = baseModifier.fillMaxSize()) {
-
-            val scrollState = rememberScrollState()
-
             Column(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(bottom = 80.dp)
-                    .verticalScroll(scrollState)
-
             ) {
                 // Верхняя панель
                 Box(
@@ -77,7 +100,6 @@ fun FoodAddPage(modifier: Modifier = Modifier, navController: NavController? = n
                             onClick = { navController?.navigate(FoodScreen) }
                         )
                     }
-
                     Text(
                         text = currentDate,
                         fontSize = 14.sp,
@@ -93,7 +115,7 @@ fun FoodAddPage(modifier: Modifier = Modifier, navController: NavController? = n
                             modifier = Modifier.clickable { showMealDropdown = true }
                         ) {
                             Text(
-                                text = selectedMeal,
+                                text = selectedMealType.typeName,
                                 fontSize = 18.sp,
                                 fontWeight = FontWeight.Bold
                             )
@@ -107,14 +129,17 @@ fun FoodAddPage(modifier: Modifier = Modifier, navController: NavController? = n
                             expanded = showMealDropdown,
                             onDismissRequest = { showMealDropdown = false }
                         ) {
-                            meals.forEach { meal ->
-                                DropdownMenuItem(
-                                    text = { Text(meal) },
-                                    onClick = {
-                                        selectedMeal = meal
-                                        showMealDropdown = false
-                                    }
-                                )
+                            MealType.entries.forEach { type ->
+                                if (type != MealType.UNSPECIFIED) {
+                                    DropdownMenuItem(
+                                        text = { Text(type.typeName) },
+                                        onClick = {
+                                            selectedMealType = type
+                                            viewModel.selectMealType(type)
+                                            showMealDropdown = false
+                                        }
+                                    )
+                                }
                             }
                         }
                     }
@@ -157,39 +182,31 @@ fun FoodAddPage(modifier: Modifier = Modifier, navController: NavController? = n
                     }
                 )
 
-                filteredItems.forEachIndexed { index, item ->
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 16.dp)
-                    ) {
+                // Список продуктов
+                LazyColumn(modifier = Modifier.padding(horizontal = 16.dp)) {
+                    items(count = filteredItems.count(), key = { filteredItems[it].id ?: "" }) { index ->
+                        val food = filteredItems[index]
                         StringButton(
-                            text = item,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(start = 0.dp),
-                            onClick = { navController?.navigate(FoodParametersScreen)  }
+                            text = food.name,
+                            modifier = Modifier.fillMaxWidth(),
+                            onClick = {
+                                viewModel.selectFoodForMeal(food)
+                                navController?.navigate(FoodParametersScreen)
+                            }
                         )
-                    }
-
-                    if (index != filteredItems.lastIndex) {
-                        HorizontalDivider(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(horizontal = 16.dp)
-                        )
+                        HorizontalDivider()
                     }
                 }
             }
 
             // Кнопка камеры по центру снизу
-            SquareIconButton(
-                iconResourceId = R.drawable.camera,
-                onClick = { navController?.navigate(FoodCameraScreen) },
-                modifier = Modifier
-                    .align(Alignment.BottomCenter)
-                    .padding(bottom = 24.dp)
-            )
+//            SquareIconButton(
+//                iconResourceId = R.drawable.camera,
+//                onClick = { navController?.navigate(FoodCameraScreen) },
+//                modifier = Modifier
+//                    .align(Alignment.BottomCenter)
+//                    .padding(bottom = 24.dp)
+//            )
         }
     }
 }

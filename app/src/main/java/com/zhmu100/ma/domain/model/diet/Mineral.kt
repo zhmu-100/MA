@@ -23,4 +23,8 @@ data class Mineral(
     val name: String,
     val amount: Double,
     val unit: String
-)
+) {
+    fun withPortion(factor: Double): Mineral {
+        return copy(amount = amount * factor)
+    }
+}

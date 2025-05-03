@@ -46,4 +46,26 @@ data class Food(
     val sugar: Double,
     val vitamins: List<Vitamin> = emptyList(),
     val minerals: List<Mineral> = emptyList()
-)
+) {
+    /**
+     * Создаёт копию текущего продукта с учетом указанной массы.
+     *
+     * Все значения масштабируются пропорционально переданному весу.
+     * Например, если продукт описан на 100 г, а grams = 50 — все значения будут делены на 2.
+     */
+    fun withPortion(grams: Double): Food {
+        val factor = grams / 100.0
+
+        return copy(
+            calories = calories * factor,
+            protein = protein * factor,
+            carbs = carbs * factor,
+            saturatedFats = saturatedFats * factor,
+            transFats = transFats * factor,
+            fiber = fiber * factor,
+            sugar = sugar * factor,
+            vitamins = vitamins.map { it.withPortion(factor) },
+            minerals = minerals.map { it.withPortion(factor) }
+        )
+    }
+}

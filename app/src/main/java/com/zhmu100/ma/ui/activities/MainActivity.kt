@@ -20,6 +20,7 @@ import com.zhmu100.ma.di.storageModule
 import com.zhmu100.ma.di.viewModelModule
 import com.zhmu100.ma.domain.viewModel.DietViewModel
 import com.zhmu100.ma.domain.viewModel.ProfileViewModel
+import com.zhmu100.ma.domain.viewModel.SettingsViewModel
 import com.zhmu100.ma.domain.viewModel.TrainingViewModel
 import com.zhmu100.ma.ui.components.NavBar
 import com.zhmu100.ma.ui.components.pages.ActivityLevelRegPage
@@ -30,6 +31,16 @@ import com.zhmu100.ma.ui.components.pages.DevicePage
 import com.zhmu100.ma.ui.components.pages.DeviceScreen
 import com.zhmu100.ma.ui.components.pages.DevicesPage
 import com.zhmu100.ma.ui.components.pages.DevicesScreen
+import com.zhmu100.ma.ui.components.pages.FeedPage
+import com.zhmu100.ma.ui.components.pages.FeedScreen
+import com.zhmu100.ma.ui.components.pages.FoodAddPage
+import com.zhmu100.ma.ui.components.pages.FoodAddScreen
+import com.zhmu100.ma.ui.components.pages.FoodCameraPage
+import com.zhmu100.ma.ui.components.pages.FoodCameraScreen
+import com.zhmu100.ma.ui.components.pages.FoodPage
+import com.zhmu100.ma.ui.components.pages.FoodParametersPage
+import com.zhmu100.ma.ui.components.pages.FoodParametersScreen
+import com.zhmu100.ma.ui.components.pages.FoodScreen
 import com.zhmu100.ma.ui.components.pages.GenderRegPage
 import com.zhmu100.ma.ui.components.pages.GenderRegScreen
 import com.zhmu100.ma.ui.components.pages.GoalsRegPage
@@ -42,17 +53,11 @@ import com.zhmu100.ma.ui.components.pages.LoginPage
 import com.zhmu100.ma.ui.components.pages.LoginScreen
 import com.zhmu100.ma.ui.components.pages.NewPasswordPage
 import com.zhmu100.ma.ui.components.pages.NewPasswordScreen
+import com.zhmu100.ma.ui.components.pages.NotePage
+import com.zhmu100.ma.ui.components.pages.NoteScreen
+import com.zhmu100.ma.ui.components.pages.NotesPage
+import com.zhmu100.ma.ui.components.pages.NotesScreen
 import com.zhmu100.ma.ui.components.pages.PostPage
-import com.zhmu100.ma.ui.components.pages.FeedPage
-import com.zhmu100.ma.ui.components.pages.FeedScreen
-import com.zhmu100.ma.ui.components.pages.FoodAddPage
-import com.zhmu100.ma.ui.components.pages.FoodAddScreen
-import com.zhmu100.ma.ui.components.pages.FoodCameraPage
-import com.zhmu100.ma.ui.components.pages.FoodCameraScreen
-import com.zhmu100.ma.ui.components.pages.FoodPage
-import com.zhmu100.ma.ui.components.pages.FoodParametersPage
-import com.zhmu100.ma.ui.components.pages.FoodParametersScreen
-import com.zhmu100.ma.ui.components.pages.FoodScreen
 import com.zhmu100.ma.ui.components.pages.PostScreen
 import com.zhmu100.ma.ui.components.pages.ProfilePage
 import com.zhmu100.ma.ui.components.pages.ProfileParametersPage
@@ -72,10 +77,6 @@ import com.zhmu100.ma.ui.components.pages.SettingsPage
 import com.zhmu100.ma.ui.components.pages.SettingsScreen
 import com.zhmu100.ma.ui.components.pages.StatisticPage
 import com.zhmu100.ma.ui.components.pages.StatisticsScreen
-import com.zhmu100.ma.ui.components.pages.NotesPage
-import com.zhmu100.ma.ui.components.pages.NotesScreen
-import com.zhmu100.ma.ui.components.pages.NotePage
-import com.zhmu100.ma.ui.components.pages.NoteScreen
 import com.zhmu100.ma.ui.components.pages.TrainCategoryPage
 import com.zhmu100.ma.ui.components.pages.TrainCategoryScreen
 import com.zhmu100.ma.ui.components.pages.TrainDynamicHistoryPage
@@ -122,7 +123,8 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             KoinContext {
-                MATheme {
+                val settingsViewModel: SettingsViewModel = koinViewModel()
+                MATheme(settingsViewModel = settingsViewModel) {
                     val navController = rememberNavController()
                     val profileViewModel: ProfileViewModel = koinViewModel()
                     val trainingViewModel: TrainingViewModel = koinViewModel()
@@ -165,7 +167,12 @@ class MainActivity : ComponentActivity() {
                         }
                         composable<RemindersScreen> { RemindersPage(navController = navController) }
                         composable<ReminderScreen> { ReminderPage(navController = navController) }
-                        composable<SettingsScreen> { SettingsPage(navController = navController) }
+                        composable<SettingsScreen> {
+                            SettingsPage(
+                                navController = navController,
+                                viewModel = settingsViewModel
+                            )
+                        }
                         composable<IntroScreen> { IntroPage(navController = navController) }
                         composable<GenderRegScreen> { GenderRegPage(navController = navController) }
                         composable<AgeRegScreen> { AgeRegPage(navController = navController) }

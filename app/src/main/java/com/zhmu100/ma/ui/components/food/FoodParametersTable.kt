@@ -87,7 +87,7 @@ fun FoodParametersTable(
                 modifier = Modifier.padding(top = 12.dp, bottom = 4.dp)
             )
             vitamins.forEach {
-                InfoRow(it.name, "${it.amount}${it.unit}")
+                InfoRow(it.name, "${it.amount} ${it.unit}")
             }
         }
 
@@ -99,7 +99,7 @@ fun FoodParametersTable(
                 modifier = Modifier.padding(top = 12.dp, bottom = 4.dp)
             )
             minerals.forEach {
-                InfoRow(it.name, "${it.amount}${it.unit}")
+                InfoRow(it.name, "${it.amount} ${it.unit}")
             }
         }
     }

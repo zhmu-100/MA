@@ -23,4 +23,8 @@ data class Vitamin(
     val name: String,
     val amount: Double,
     val unit: String
-)
+) {
+    fun withPortion(factor: Double): Vitamin {
+        return copy(amount = amount * factor)
+    }
+}

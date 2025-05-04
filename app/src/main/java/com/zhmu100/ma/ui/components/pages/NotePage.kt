@@ -26,6 +26,8 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -39,40 +41,54 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.zhmu100.ma.domain.viewModel.NoteViewModel
+import com.zhmu100.ma.domain.viewModel.ViewState
 import com.zhmu100.ma.ui.data.Note
 import com.zhmu100.ma.ui.theme.MATheme
 import kotlinx.serialization.Serializable
+import org.koin.androidx.compose.koinViewModel
 
 
 @Composable
 fun NotePage(
     modifier: Modifier = Modifier,
     navController: NavController? = null,
-    noteId: String? = null
+    noteId: String? = null,
+    viewModel: NoteViewModel = koinViewModel()
 ) {
-    // В реальном приложении заметка будет загружаться из хранилища по ID
-    var note by remember {
-        mutableStateOf(
-            Note(
-                id = noteId ?: "preview",
-                title = "Заметка1",
-                content = "Подробный текст заметки подробный текст заметки подробный текст заметки подробный текст заметки подробный текст заметки"
-            )
-        )
-    }
-    
-
-    
+    val noteState by viewModel.currentNoteState.collectAsState()
+    var note by remember { mutableStateOf<Note?>(null) }
     var showDeleteConfirmation by remember { mutableStateOf(false) }
-    
+
+    LaunchedEffect(noteId) {
+        if (!noteId.isNullOrBlank()) {
+            viewModel.getNoteById(noteId)
+        } else {
+            note = Note()
+        }
+    }
+
+    LaunchedEffect(noteState) {
+        if (noteId.isNullOrBlank()) return@LaunchedEffect
+
+        if (noteState is ViewState.Success) {
+            val data = (noteState as ViewState.Success<com.zhmu100.ma.domain.model.Note>).data
+            note = Note(
+                id = data.id.toString(),
+                title = data.title ?: "",
+                content = data.content ?: ""
+            )
+        }
+    }
+
+    if (note == null) {
+        return
+    }
+
     BasePage(false, modifier = modifier) { baseModifier ->
         Box(modifier = baseModifier.fillMaxSize()) {
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .verticalScroll(rememberScrollState())
-            ) {
-
+            Column(modifier = Modifier.fillMaxSize()) {
+                // Header
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -96,12 +112,9 @@ fun NotePage(
                     
 
                     TextField(
-                        value = note.title,
-                        onValueChange = { newTitle ->
-                            note = note.copy(
-                                title = newTitle,
-                                updatedAt = System.currentTimeMillis()
-                            )
+                        value = note!!.title,
+                        onValueChange = {
+                            note = note!!.copy(title = it)
                         },
                         modifier = Modifier
                             .weight(1f)
@@ -123,6 +136,7 @@ fun NotePage(
 
                     IconButton(
                         onClick = { showDeleteConfirmation = true },
+                        enabled = noteId != null,
                         modifier = Modifier
                             .size(48.dp)
                             .clip(RoundedCornerShape(8.dp))
@@ -138,12 +152,9 @@ fun NotePage(
                 
 
                 TextField(
-                    value = note.content,
-                    onValueChange = { newContent ->
-                        note = note.copy(
-                            content = newContent,
-                            updatedAt = System.currentTimeMillis()
-                        )
+                    value = note!!.content,
+                    onValueChange = {
+                        note = note!!.copy(content = it)
                     },
                     modifier = Modifier
                         .fillMaxWidth()
@@ -165,7 +176,14 @@ fun NotePage(
             
 
             FloatingActionButton(
-                onClick = { /* Добавление нового пункта или другого контента */ },
+                onClick = {
+                    if (noteId != null) {
+                        viewModel.updateNote(noteId, note!!.title, note!!.content)
+                    } else {
+                        viewModel.createNote(note!!.title, note!!.content)
+                    }
+                    navController?.navigateUp()
+                },
                 modifier = Modifier
                     .align(Alignment.BottomEnd)
                     .padding(16.dp)
@@ -180,26 +198,23 @@ fun NotePage(
                 )
             }
         }
-        
+
         if (showDeleteConfirmation) {
             AlertDialog(
                 onDismissRequest = { showDeleteConfirmation = false },
                 title = { Text("Удаление заметки") },
                 text = { Text("Вы уверены, что хотите удалить эту заметку?") },
                 confirmButton = {
-                    TextButton(
-                        onClick = {
-                            showDeleteConfirmation = false
-                            navController?.navigateUp()
-                        }
-                    ) {
+                    TextButton(onClick = {
+                        showDeleteConfirmation = false
+                        viewModel.deleteNote(noteId!!)
+                        navController?.navigateUp()
+                    }) {
                         Text("Удалить", color = MaterialTheme.colorScheme.error)
                     }
                 },
                 dismissButton = {
-                    TextButton(
-                        onClick = { showDeleteConfirmation = false }
-                    ) {
+                    TextButton(onClick = { showDeleteConfirmation = false }) {
                         Text("Отмена")
                     }
                 }

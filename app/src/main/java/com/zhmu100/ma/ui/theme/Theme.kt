@@ -4,6 +4,9 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import com.zhmu100.ma.domain.storage.SettingsStorage
+import com.zhmu100.ma.domain.viewModel.SettingsViewModel
 
 /* Other default colors to override
 background = Color(0xFFFFFBFE),
@@ -35,13 +38,16 @@ private val LightColorScheme = lightColorScheme(
 
 @Composable
 fun MATheme(
-    darkTheme: Boolean = false,
+    settingsViewModel: SettingsViewModel? = null,
     content: @Composable () -> Unit
 ) {
-    val colorScheme = when {
-        darkTheme -> DarkColorScheme
+    val theme = settingsViewModel?.theme?.collectAsState()
+
+    val colorScheme = when (theme?.value) {
+        SettingsStorage.AppTheme.DARK -> DarkColorScheme
         else -> LightColorScheme
     }
+
 
     MaterialTheme(
         colorScheme = colorScheme,

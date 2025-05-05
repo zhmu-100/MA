@@ -11,7 +11,7 @@ class NoteApiImpl(
     private val baseUrl: String
 ) : NoteApi {
     override suspend fun getNoteById(id: String): Note {
-        return client.get("$baseUrl/$id").body()
+        return client.get("$baseUrl/notes/$id").body()
     }
 
     override suspend fun getNotes(userId: String, page: Int, pageSize: Int): List<Note> {

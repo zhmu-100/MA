@@ -21,6 +21,8 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -37,47 +39,44 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.zhmu100.ma.domain.viewModel.NoteViewModel
+import com.zhmu100.ma.domain.viewModel.ViewState
 import com.zhmu100.ma.ui.components.buttons.ThemedIconButton
 import com.zhmu100.ma.ui.data.Note
 import com.zhmu100.ma.ui.theme.MATheme
 import kotlinx.serialization.Serializable
+import org.koin.androidx.compose.koinViewModel
 
 
 @Composable
-fun NotesPage(modifier: Modifier = Modifier, navController: NavController? = null) {
+fun NotesPage(
+    modifier: Modifier = Modifier,
+    navController: NavController? = null,
+    viewModel: NoteViewModel = koinViewModel()
+) {
+    val notesState by viewModel.notesState.collectAsState()
+    var searchQuery by remember { mutableStateOf("") }
 
-    val notesList = remember {
-        mutableStateOf(
-            listOf(
-                Note(
-                    title = "Заметка",
-                    content = "Краткий текст заметки Краткий текст заметки Краткий текст заметки Краткий текст заметки",
-                    createdAt = System.currentTimeMillis() - 86400000
-                ),
-                Note(
-                    title = "Заметка",
-                    content = "Краткий текст заметки Краткий текст заметки Краткий текст заметки Краткий текст заметки",
-                    createdAt = System.currentTimeMillis() - 172800000
-                ),
-                Note(
-                    title = "Заметка",
-                    content = "Краткий текст заметки Краткий текст заметки Краткий текст заметки Краткий текст заметки",
-                    createdAt = System.currentTimeMillis() - 259200000
-                ),
-                Note(
-                    title = "Заметка",
-                    content = "Краткий текст заметки Краткий текст заметки Краткий текст заметки Краткий текст заметки",
-                    createdAt = System.currentTimeMillis() - 345600000
-                )
-            )
+    LaunchedEffect(Unit) {
+        viewModel.listNotes()
+    }
+
+    if (notesState !is ViewState.Success) {
+        return
+    }
+
+    val notes = (notesState as ViewState.Success<List<com.zhmu100.ma.domain.model.Note>>).data.map {
+        com.zhmu100.ma.ui.data.Note(
+            id = it.id.toString(),
+            title = it.title ?: "",
+            content = it.content ?: ""
         )
     }
 
-    var searchQuery by remember { mutableStateOf("") }
     val filteredNotes = if (searchQuery.isEmpty()) {
-        notesList.value
+        notes
     } else {
-        notesList.value.filter {
+        notes.filter {
             it.title.contains(searchQuery, ignoreCase = true) ||
                     it.content.contains(searchQuery, ignoreCase = true)
         }
@@ -136,9 +135,8 @@ fun NotesPage(modifier: Modifier = Modifier, navController: NavController? = nul
                 ThemedIconButton(
                     imageVector = Icons.Default.Add,
                     onClick = {
-
+                        viewModel.clearCurrentNote()
                         val newNote = Note()
-                        notesList.value = notesList.value + newNote
                         navController?.navigate("$NoteScreen/${newNote.id}")
                     }
                 )

@@ -30,22 +30,19 @@ object TokenStorage {
     fun getAccessToken(): String? = prefs.getString(KEY_ACCESS_TOKEN, null)
     fun getRefreshToken(): String? = prefs.getString(KEY_REFRESH_TOKEN, null)
 
-    fun getUserId(): String? {
-        val token = getAccessToken() ?: return null
-        return try {
-            val parts = token.split(".")
-            if (parts.size < 2) return null
+    fun getUserId(): String {
+        val token = getAccessToken() ?: throw IllegalStateException("Access token is null")
+        val parts = token.split(".")
+        if (parts.size < 2) throw IllegalStateException("Invalid token format")
 
-            val payloadJson = String(
-                AndroidBase64.decode(
-                    parts[1],
-                    AndroidBase64.URL_SAFE or AndroidBase64.NO_PADDING or AndroidBase64.NO_WRAP
-                )
+        val payloadJson = String(
+            AndroidBase64.decode(
+                parts[1],
+                AndroidBase64.URL_SAFE or AndroidBase64.NO_PADDING or AndroidBase64.NO_WRAP
             )
-            JSONObject(payloadJson).getString("sub")
-        } catch (e: Exception) {
-            null
-        }
+        )
+
+        return JSONObject(payloadJson).getString("sub")
     }
 
 

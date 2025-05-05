@@ -1,6 +1,7 @@
 package com.zhmu100.ma.di
 
 import com.zhmu100.ma.domain.storage.DeviceStorage
+import com.zhmu100.ma.domain.storage.NotificationStorage
 import com.zhmu100.ma.domain.storage.SettingsStorage
 import com.zhmu100.ma.domain.storage.TokenStorage
 import org.koin.android.ext.koin.androidContext
@@ -23,5 +24,10 @@ val storageModule = module {
     }
     single<DeviceStorage> {
         DeviceStorage
+    }
+    single<NotificationStorage> {
+        NotificationStorage.apply {
+            init(androidContext())
+        }
     }
 }

@@ -1,5 +1,6 @@
 package com.zhmu100.ma.ui.components.pages
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -14,11 +15,13 @@ import androidx.compose.material.icons.filled.Create
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -30,6 +33,7 @@ import coil3.compose.AsyncImage
 import com.zhmu100.ma.R
 import com.zhmu100.ma.domain.model.profile.UserProfile
 import com.zhmu100.ma.domain.utils.rememberImagePicker
+import com.zhmu100.ma.domain.viewModel.NotificationViewModel
 import com.zhmu100.ma.domain.viewModel.ProfileViewModel
 import com.zhmu100.ma.domain.viewModel.ViewState
 import com.zhmu100.ma.ui.components.buttons.BackButton
@@ -89,19 +93,36 @@ fun ProfilePage(
 }
 
 @Composable
-private fun MiddleButtons(navController: NavController?) {
+private fun MiddleButtons(navController: NavController?, notificationViewModel: NotificationViewModel = koinViewModel()) {
+
+    val triggeredNotificationIds by notificationViewModel.triggeredNotificationIds.collectAsState()
+
+    val activeNotifications = triggeredNotificationIds.isNotEmpty()
+
     BigIconButton(
         text = "Мои параметры",
         drawableResId = R.drawable.ruler,
         modifier = Modifier.padding(bottom = 8.dp),
         onClick = { navController?.navigate(ProfileParametersScreen) }
     )
-    BigIconButton(
-        text = "Напоминания",
-        drawableResId = R.drawable.alarm,
-        modifier = Modifier.padding(bottom = 8.dp),
-        onClick = { navController?.navigate(RemindersScreen) }
-    )
+    Box(modifier = Modifier.padding(bottom = 8.dp)) {
+        BigIconButton(
+            text = "Напоминания",
+            drawableResId = R.drawable.alarm,
+            modifier = Modifier,
+            onClick = { navController?.navigate(RemindersScreen) }
+        )
+
+        if (activeNotifications) {
+            Log.d(null, "notificaitons")
+            Box(
+                modifier = Modifier
+                    .size(20.dp)
+                    .background(Color.Red, shape = CircleShape)
+                    .align(Alignment.TopStart)
+            )
+        }
+    }
     BigIconButton(
         text = "Мои устройства",
         drawableResId = R.drawable.devices,

@@ -24,7 +24,7 @@ val viewModelModule = module {
     viewModel { SettingsViewModel(get()) }
     viewModel { LoginViewModel(get(), get()) }
     viewModel { RegisterViewModel(get(), get()) }
-    viewModel { NotificationViewModel(get()) }
+    viewModel { NotificationViewModel(get(), get()) }
     viewModel { NoteViewModel(get(), get()) }
     viewModel { TrainingViewModel(get(), get()) }
     viewModel { TrainingMapViewModel(get()) }

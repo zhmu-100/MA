@@ -166,7 +166,11 @@ class MainActivity : ComponentActivity() {
                             )
                         }
                         composable<RemindersScreen> { RemindersPage(navController = navController) }
-                        composable<ReminderScreen> { ReminderPage(navController = navController) }
+                        composable("$ReminderScreen/{reminderId}") { backStackEntry ->
+                            val reminderId = backStackEntry.arguments?.getString("reminderId")
+                            ReminderPage(navController = navController, reminderId = reminderId)
+                        }
+                        composable<ReminderScreen> { ReminderPage(navController=navController) }
                         composable<SettingsScreen> {
                             SettingsPage(
                                 navController = navController,

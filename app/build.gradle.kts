@@ -51,6 +51,15 @@ android {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
+
+    applicationVariants.all {
+        val variantName = name
+        outputs.all {
+            if (this is com.android.build.gradle.internal.api.BaseVariantOutputImpl) {
+                outputFileName = "ZHMU_100_$variantName.apk"
+            }
+        }
+    }
 }
 
 jacoco {

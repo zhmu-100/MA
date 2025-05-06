@@ -5,12 +5,12 @@ import kotlinx.serialization.Serializable
 /**
  * Запрос на авторизацию
  *
- * @property email почта
+ * @property username логин
  * @property password пароль
  */
 
 @Serializable
 data class LoginRequest(
-    val email: String,
+    val username: String,
     val password: String
 )

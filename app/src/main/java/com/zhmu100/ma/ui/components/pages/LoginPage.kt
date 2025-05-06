@@ -103,7 +103,7 @@ fun LoginPage(
 
             InputLine(
                 modifier = Modifier.padding(vertical = 8.dp),
-                label = "Почта",
+                label = "Логин",
                 onTextChanged = { email = it }
             )
 

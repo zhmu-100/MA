@@ -38,7 +38,7 @@ val networkModule = module {
     single<FilesApi> { FilesApiMock() }
     single<TrainingApi> { TrainingApiMock() }
     single<DietApi> { DietApiMock() }
-    single<AuthApi> { AuthApiImpl(get(), "http://localhost:8080/api/auth") }
+    single<AuthApi> { AuthApiImpl(get(), "http://188.225.77.13:8080/api/auth") }
     single<NotificationApi> { NotificationApiImpl(get(), "http://localhost:8080/api/notebook") }
     single<NoteApi> { NoteApiImpl(get(), "http://localhost:8080/api/notebook") }
     single<StatisticsApi> { StatisticsApiMock() }

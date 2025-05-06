@@ -5,13 +5,15 @@ import androidx.lifecycle.viewModelScope
 import com.zhmu100.ma.domain.api.files.FilesApi
 import com.zhmu100.ma.domain.api.profile.ProfileApi
 import com.zhmu100.ma.domain.model.profile.UserProfile
+import com.zhmu100.ma.domain.storage.TokenStorage
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 class ProfileViewModel(
     private val profileApi: ProfileApi,
-    private val filesApi: FilesApi
+    private val filesApi: FilesApi,
+    private val tokenStorage: TokenStorage
 ) : ViewModel() {
     private val _profileState = MutableStateFlow<ViewState<UserProfile>>(ViewState.Uninitialized)
     val profileState = _profileState.asStateFlow()
@@ -19,11 +21,11 @@ class ProfileViewModel(
     private val _profilePhotoUrl = MutableStateFlow<String?>(null)
     val profilePhotoUrl = _profilePhotoUrl.asStateFlow()
 
-    init {
-        loadProfile()
-    }
+//    init {
+//        loadProfile()
+//    }
 
-    private fun loadProfile(forceRefresh: Boolean = false) {
+    fun loadProfile(forceRefresh: Boolean = false) {
         if (_profileState.value is ViewState.Loading && !forceRefresh) {
             return
         }
@@ -32,7 +34,7 @@ class ProfileViewModel(
 
         viewModelScope.launch {
             runCatching {
-                val profile = profileApi.getMyProfile()
+                val profile = profileApi.getProfileById(tokenStorage.getUserId())
                 profile to (profile.imageId?.let { filesApi.getFileUrl(it) })
             }.onSuccess { (profile, photoUrl) ->
                 _profileState.value = ViewState.Success(profile, "Profile loaded")

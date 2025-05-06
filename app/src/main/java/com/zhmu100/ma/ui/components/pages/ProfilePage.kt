@@ -62,6 +62,10 @@ fun ProfilePage(
     val followersCount = profile?.followerCount
     val followingCount = profile?.followingCount
 
+    LaunchedEffect(Unit) {
+        viewModel.loadProfile()
+    }
+
     BasePage(
         true,
         navIndex = 4,

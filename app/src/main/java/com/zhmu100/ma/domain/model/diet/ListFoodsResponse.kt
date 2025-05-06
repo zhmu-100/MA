@@ -6,9 +6,6 @@ import kotlinx.serialization.Serializable
  * Ответ на запрос списка продуктов.
  *
  * @property foods Список продуктов
- * @property total Общее количество продуктов
- * @property page Номер текущей страницы
- * @property pageSize Количество продуктов на странице
  *
  * Используется для пагинации и фильтрации.
  */

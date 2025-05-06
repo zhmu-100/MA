@@ -9,6 +9,6 @@ interface AuthApi {
     suspend fun login(request: LoginRequest): AuthResponse
     suspend fun register(request: RegisterRequest): AuthResponse
     suspend fun logout()
-    suspend fun refresh(): AuthResponse
+    suspend fun refresh(refreshToken: String): AuthResponse
     suspend fun validate(): Boolean
 }

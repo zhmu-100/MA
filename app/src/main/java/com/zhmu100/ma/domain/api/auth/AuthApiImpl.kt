@@ -30,7 +30,7 @@ class AuthApiImpl(
         client.post("$baseUrl/logout")
     }
 
-    override suspend fun refresh(): AuthResponse {
+    override suspend fun refresh(refreshToken: String): AuthResponse {
         return client.post("$baseUrl/refresh").body()
     }
 

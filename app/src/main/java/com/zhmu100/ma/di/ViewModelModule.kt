@@ -1,5 +1,6 @@
 package com.zhmu100.ma.di
 
+import com.zhmu100.ma.domain.viewModel.AuthViewModel
 import com.zhmu100.ma.domain.viewModel.DevicesViewModel
 import com.zhmu100.ma.domain.viewModel.DietViewModel
 import com.zhmu100.ma.domain.viewModel.LoginViewModel
@@ -33,4 +34,5 @@ val viewModelModule = module {
     viewModel { StatisticViewModel(get(), get()) }
     viewModel { DevicesViewModel(get()) }
     viewModel { DietViewModel(get()) }
+    viewModel { AuthViewModel(get(), get()) }
 }

@@ -9,6 +9,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -18,6 +21,7 @@ import androidx.navigation.compose.rememberNavController
 import com.zhmu100.ma.di.networkModule
 import com.zhmu100.ma.di.storageModule
 import com.zhmu100.ma.di.viewModelModule
+import com.zhmu100.ma.domain.viewModel.AuthViewModel
 import com.zhmu100.ma.domain.viewModel.DietViewModel
 import com.zhmu100.ma.domain.viewModel.ProfileViewModel
 import com.zhmu100.ma.domain.viewModel.SettingsViewModel
@@ -123,106 +127,118 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             KoinContext {
+                val startDestination = remember { mutableStateOf<Any?>(null) }
                 val settingsViewModel: SettingsViewModel = koinViewModel()
                 MATheme(settingsViewModel = settingsViewModel) {
                     val navController = rememberNavController()
                     val profileViewModel: ProfileViewModel = koinViewModel()
                     val trainingViewModel: TrainingViewModel = koinViewModel()
                     val dietViewModel: DietViewModel = koinViewModel()
-                    NavHost(navController = navController, startDestination = ProfileScreen) {
-                        composable<ProfileScreen> {
-                            ProfilePage(
-                                navController = navController,
-                                viewModel = profileViewModel
-                            )
+                    val authViewModel: AuthViewModel = koinViewModel()
+                    LaunchedEffect(Unit) {
+                        val isValid = authViewModel.validateToken()
+                        if (!isValid) {
+                            authViewModel.refreshToken()
                         }
-                        composable<ProfileParametersScreen> {
-                            ProfileParametersPage(
-                                navController = navController,
-                                viewModel = profileViewModel
-                            )
-                        }
-                        composable<DevicesScreen> { DevicesPage(navController = navController) }
-                        composable<DeviceScreen> { DevicePage(navController = navController) }
-                        composable<PostScreen> { PostPage(navController = navController) }
-                        composable<FeedScreen> { FeedPage(navController = navController) }
-                        composable<FoodScreen> {
-                            FoodPage(
-                                navController = navController,
-                                viewModel = dietViewModel
-                            )
-                        }
-                        composable<FoodAddScreen> {
-                            FoodAddPage(
-                                navController = navController,
-                                viewModel = dietViewModel
-                            )
-                        }
-                        composable<FoodCameraScreen> { FoodCameraPage(navController = navController) }
-                        composable<FoodParametersScreen> {
-                            FoodParametersPage(
-                                navController = navController,
-                                viewModel = dietViewModel
-                            )
-                        }
-                        composable<RemindersScreen> { RemindersPage(navController = navController) }
-                        composable("$ReminderScreen/{reminderId}") { backStackEntry ->
-                            val reminderId = backStackEntry.arguments?.getString("reminderId")
-                            ReminderPage(navController = navController, reminderId = reminderId)
-                        }
-                        composable<ReminderScreen> { ReminderPage(navController=navController) }
-                        composable<SettingsScreen> {
-                            SettingsPage(
-                                navController = navController,
-                                viewModel = settingsViewModel
-                            )
-                        }
-                        composable<IntroScreen> { IntroPage(navController = navController) }
-                        composable<GenderRegScreen> { GenderRegPage(navController = navController) }
-                        composable<AgeRegScreen> { AgeRegPage(navController = navController) }
-                        composable<WeightRegScreen> { WeightRegPage(navController = navController) }
-                        composable<HeightRegScreen> { HeightRegPage(navController = navController) }
-                        composable<GoalsRegScreen> { GoalsRegPage(navController = navController) }
-                        composable<ActivityLevelRegScreen> { ActivityLevelRegPage(navController = navController) }
-                        composable<ProfileRegScreen> { ProfileRegPage(navController = navController) }
-                        composable<StatisticsScreen> { StatisticPage(navController = navController) }
-                        composable<LoginScreen> { LoginPage(navController = navController) }
-                        composable<RegisterScreen> { RegisterPage(navController = navController) }
-                        composable<ResetPasswordScreen> { ResetPasswordPage(navController = navController) }
-                        composable<NewPasswordScreen> { NewPasswordPage(navController = navController) }
-                        composable<TrainCategoryScreen> { TrainCategoryPage(navController = navController) }
-                        composable<TrainMapScreen> {
-                            TrainMapPage(
-                                navController = navController,
-                                trainViewModel = trainingViewModel
-                            )
-                        }
-                        composable<TrainGymScreen> {
-                            TrainGymPage(
-                                navController = navController,
-                                trainViewModel = trainingViewModel
-                            )
-                        }
-                        composable<TrainMoodScreen> {
-                            TrainMoodPage(
-                                navController = navController,
-                                trainViewModel = trainingViewModel
-                            )
-                        }
-                        composable<TrainDynamicHistoryScreen> {
-                            TrainDynamicHistoryPage(
-                                navController = navController
-                            )
-                        }
-                        composable<TrainStaticHistoryScreen> {
-                            TrainStaticHistoryPage(
-                                navController = navController
-                            )
-                        }
-                        composable<NotesScreen> { NotesPage(navController = navController) }
-                        composable("$NoteScreen/{noteId}") { backStackEntry ->
-                            val noteId = backStackEntry.arguments?.getString("noteId")
-                            NotePage(navController = navController, noteId = noteId)
+                        startDestination.value = if (isValid) ProfileScreen else LoginScreen
+                    }
+
+                    startDestination.value?.let { route ->
+                        NavHost(navController = navController, startDestination = route) {
+                            composable<ProfileScreen> {
+                                ProfilePage(
+                                    navController = navController,
+                                    viewModel = profileViewModel
+                                )
+                            }
+                            composable<ProfileParametersScreen> {
+                                ProfileParametersPage(
+                                    navController = navController,
+                                    viewModel = profileViewModel
+                                )
+                            }
+                            composable<DevicesScreen> { DevicesPage(navController = navController) }
+                            composable<DeviceScreen> { DevicePage(navController = navController) }
+                            composable<PostScreen> { PostPage(navController = navController) }
+                            composable<FeedScreen> { FeedPage(navController = navController) }
+                            composable<FoodScreen> {
+                                FoodPage(
+                                    navController = navController,
+                                    viewModel = dietViewModel
+                                )
+                            }
+                            composable<FoodAddScreen> {
+                                FoodAddPage(
+                                    navController = navController,
+                                    viewModel = dietViewModel
+                                )
+                            }
+                            composable<FoodCameraScreen> { FoodCameraPage(navController = navController) }
+                            composable<FoodParametersScreen> {
+                                FoodParametersPage(
+                                    navController = navController,
+                                    viewModel = dietViewModel
+                                )
+                            }
+                            composable<RemindersScreen> { RemindersPage(navController = navController) }
+                            composable("$ReminderScreen/{reminderId}") { backStackEntry ->
+                                val reminderId = backStackEntry.arguments?.getString("reminderId")
+                                ReminderPage(navController = navController, reminderId = reminderId)
+                            }
+                            composable<ReminderScreen> { ReminderPage(navController = navController) }
+                            composable<SettingsScreen> {
+                                SettingsPage(
+                                    navController = navController,
+                                    viewModel = settingsViewModel
+                                )
+                            }
+                            composable<IntroScreen> { IntroPage(navController = navController) }
+                            composable<GenderRegScreen> { GenderRegPage(navController = navController) }
+                            composable<AgeRegScreen> { AgeRegPage(navController = navController) }
+                            composable<WeightRegScreen> { WeightRegPage(navController = navController) }
+                            composable<HeightRegScreen> { HeightRegPage(navController = navController) }
+                            composable<GoalsRegScreen> { GoalsRegPage(navController = navController) }
+                            composable<ActivityLevelRegScreen> { ActivityLevelRegPage(navController = navController) }
+                            composable<ProfileRegScreen> { ProfileRegPage(navController = navController) }
+                            composable<StatisticsScreen> { StatisticPage(navController = navController) }
+                            composable<LoginScreen> { LoginPage(navController = navController) }
+                            composable<RegisterScreen> { RegisterPage(navController = navController) }
+                            composable<ResetPasswordScreen> { ResetPasswordPage(navController = navController) }
+                            composable<NewPasswordScreen> { NewPasswordPage(navController = navController) }
+                            composable<TrainCategoryScreen> { TrainCategoryPage(navController = navController) }
+                            composable<TrainMapScreen> {
+                                TrainMapPage(
+                                    navController = navController,
+                                    trainViewModel = trainingViewModel
+                                )
+                            }
+                            composable<TrainGymScreen> {
+                                TrainGymPage(
+                                    navController = navController,
+                                    trainViewModel = trainingViewModel
+                                )
+                            }
+                            composable<TrainMoodScreen> {
+                                TrainMoodPage(
+                                    navController = navController,
+                                    trainViewModel = trainingViewModel
+                                )
+                            }
+                            composable<TrainDynamicHistoryScreen> {
+                                TrainDynamicHistoryPage(
+                                    navController = navController
+                                )
+                            }
+                            composable<TrainStaticHistoryScreen> {
+                                TrainStaticHistoryPage(
+                                    navController = navController
+                                )
+                            }
+                            composable<NotesScreen> { NotesPage(navController = navController) }
+                            composable("$NoteScreen/{noteId}") { backStackEntry ->
+                                val noteId = backStackEntry.arguments?.getString("noteId")
+                                NotePage(navController = navController, noteId = noteId)
+                            }
                         }
                     }
                 }

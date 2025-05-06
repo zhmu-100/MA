@@ -10,8 +10,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
@@ -20,11 +22,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.zhmu100.ma.domain.storage.SettingsStorage
+import com.zhmu100.ma.domain.viewModel.AuthViewModel
 import com.zhmu100.ma.domain.viewModel.SettingsViewModel
 import com.zhmu100.ma.ui.components.buttons.BackButton
 import com.zhmu100.ma.ui.components.buttons.StringButton
 import com.zhmu100.ma.ui.components.buttons.ToggleButton
 import com.zhmu100.ma.ui.theme.MATheme
+import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
 import org.koin.androidx.compose.koinViewModel
 
@@ -32,10 +36,12 @@ import org.koin.androidx.compose.koinViewModel
 fun SettingsPage(
     modifier: Modifier = Modifier,
     navController: NavController? = null,
-    viewModel: SettingsViewModel = koinViewModel()
+    viewModel: SettingsViewModel = koinViewModel(),
+    authViewModel: AuthViewModel = koinViewModel()
 ) {
     val currentTheme by viewModel.theme.collectAsState()
     val currentLanguage by viewModel.language.collectAsState()
+    val coroutineScope = rememberCoroutineScope()
 
     BasePage(false, modifier = modifier) { baseModifier ->
         Column(
@@ -98,7 +104,12 @@ fun SettingsPage(
                 "ВЫЙТИ ИЗ АККАУНТА",
                 fontSize = 14.sp,
                 color = MaterialTheme.colorScheme.tertiary,
-                modifier = Modifier.clickable { navController?.navigate(LoginScreen) })
+                modifier = Modifier.clickable {
+                    coroutineScope.launch {
+                        authViewModel.logout()
+                        navController?.navigate(LoginScreen)
+                    }
+                })
         }
     }
 }

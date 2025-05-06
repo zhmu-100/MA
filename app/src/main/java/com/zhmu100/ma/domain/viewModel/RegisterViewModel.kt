@@ -44,8 +44,6 @@ class RegisterViewModel(
             runCatching {
                 authApi.register(RegisterRequest(name, email, password))
             }.onSuccess {
-                tokenStorage.saveAccessToken(it.accessToken)
-                tokenStorage.saveRefreshToken(it.refreshToken)
                 _isRegisterSuccessful.value = true
             }.onFailure {
                 _message.value = "Registration error: ${it.message}"

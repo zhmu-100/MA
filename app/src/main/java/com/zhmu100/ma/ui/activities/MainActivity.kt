@@ -239,6 +239,7 @@ class MainActivity : ComponentActivity() {
                                 val noteId = backStackEntry.arguments?.getString("noteId")
                                 NotePage(navController = navController, noteId = noteId)
                             }
+                            composable<NoteScreen> { NotePage(navController = navController) }
                         }
                     }
                 }

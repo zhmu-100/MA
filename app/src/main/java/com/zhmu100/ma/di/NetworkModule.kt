@@ -23,10 +23,8 @@ import com.zhmu100.ma.domain.api.profile.ProfileApiMock
 import com.zhmu100.ma.domain.api.reaction.ReactionApiImpl
 import com.zhmu100.ma.domain.api.reactions.ReactionApi
 import com.zhmu100.ma.domain.api.statistic.StatisticsApi
-import com.zhmu100.ma.domain.api.statistic.StatisticsApiImpl
 import com.zhmu100.ma.domain.api.statistic.StatisticsApiMock
 import com.zhmu100.ma.domain.api.training.TrainingApi
-import com.zhmu100.ma.domain.api.training.TrainingApiImpl
 import com.zhmu100.ma.domain.api.training.TrainingApiMock
 import org.koin.dsl.module
 

@@ -135,7 +135,10 @@ fun RegisterPage(
 
 
             Button(
-                onClick = { onRegisterClick(name, email, password, confirmPassword) },
+                onClick = {
+                    onRegisterClick(name, email, password, confirmPassword)
+                    navController?.navigate(LoginScreen)
+                          },
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(56.dp),

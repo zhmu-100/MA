@@ -71,12 +71,12 @@ class NoteViewModel(
 
     fun updateNote(id: String, title: String, content: String) {
         if (_currentNoteState.value is ViewState.Loading) return
-
         _currentNoteState.value = ViewState.Loading
 
         viewModelScope.launch {
             runCatching {
-                noteApi.updateNote(id, title, content)
+                val userId = tokenStorage.getUserId()
+                noteApi.updateNote(id, userId,  title, content)
             }.onSuccess { updatedNote ->
                 _currentNoteState.value = ViewState.Success(updatedNote, "Note updated")
             }.onFailure {
@@ -92,7 +92,8 @@ class NoteViewModel(
 
         viewModelScope.launch {
             runCatching {
-                noteApi.deleteNote(id)
+                val userId = tokenStorage.getUserId()
+                noteApi.deleteNote(id, userId)
                 _currentNoteState.value = ViewState.Success(Note(id = ""), "Note deleted")
             }.onFailure {
                 _currentNoteState.value = ViewState.Error("Note deleting error: ${it.message}", it)

@@ -72,3 +72,6 @@ data class Food(
         )
     }
 }
+
+@Serializable
+data class FoodRequest(val id: String)

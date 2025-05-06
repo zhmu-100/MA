@@ -140,7 +140,7 @@ class StatisticViewModel(
 
         for (day in days) {
             val formatted = DateTimeFormatter.ISO_LOCAL_DATE.format(day)
-            val meals = dietApi.listMeals(formatted, formatted).meals
+            val meals = dietApi.listMeals(formatted, formatted)
 
             var totalCalories = 0.0
             var totalProtein = 0.0
@@ -210,7 +210,7 @@ class StatisticViewModel(
             }
 
             // Берём только приёмы пищи за сегодня
-            val meals = dietApi.listMeals(formatted, formatted).meals
+            val meals = dietApi.listMeals(formatted, formatted)
 
             val calories = meals.sumOf { it.foods.sumOf { food -> food.calories.toInt() } }
             val protein = meals.sumOf { it.foods.sumOf { food -> food.protein } }

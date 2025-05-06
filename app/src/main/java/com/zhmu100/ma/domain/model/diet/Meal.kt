@@ -29,3 +29,12 @@ data class Meal(
     val foods: List<Food> = emptyList(),
     val date: String // ISO-8601 timestamp
 )
+
+@Serializable
+data class MealRequest(
+    val userId: String? = null,
+    val name: String,
+    val mealType: MealType,
+    val foods: List<FoodRequest> = emptyList(),
+    val date: String // ISO-8601 timestamp
+)

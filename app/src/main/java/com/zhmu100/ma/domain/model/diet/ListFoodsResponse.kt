@@ -15,7 +15,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class ListFoodsResponse(
     val foods: List<Food>,
-    val total: Int,
-    val page: Int,
-    val pageSize: Int
+//    val total: Int,
+//    val page: Int,
+//    val pageSize: Int
 )

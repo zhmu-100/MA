@@ -14,9 +14,9 @@ import kotlinx.serialization.Serializable
  */
 @Serializable
 enum class MealType(val typeName: String) {
-    UNSPECIFIED("Не указано"),
-    BREAKFAST("Завтрак"),
-    LUNCH("Обед"),
-    DINNER("Ужин"),
-    SNACK("Перекус")
+    MEAL_TYPE_UNSPECIFIED ("Не указано"),
+    MEAL_TYPE_BREAKFAST ("Завтрак"),
+    MEAL_TYPE_LUNCH ("Обед"),
+    MEAL_TYPE_DINNER ("Ужин"),
+    MEAL_TYPE_SNACK ("Перекус")
 }

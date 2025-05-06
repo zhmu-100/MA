@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.zhmu100.ma.domain.api.files.FilesApi
 import com.zhmu100.ma.domain.api.profile.ProfileApi
+import com.zhmu100.ma.domain.model.files.FileMetadata
 import com.zhmu100.ma.domain.model.profile.UserProfile
 import com.zhmu100.ma.domain.storage.TokenStorage
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -13,7 +14,6 @@ import kotlinx.coroutines.launch
 class ProfileViewModel(
     private val profileApi: ProfileApi,
     private val filesApi: FilesApi,
-    private val tokenStorage: TokenStorage
 ) : ViewModel() {
     private val _profileState = MutableStateFlow<ViewState<UserProfile>>(ViewState.Uninitialized)
     val profileState = _profileState.asStateFlow()
@@ -21,9 +21,6 @@ class ProfileViewModel(
     private val _profilePhotoUrl = MutableStateFlow<String?>(null)
     val profilePhotoUrl = _profilePhotoUrl.asStateFlow()
 
-//    init {
-//        loadProfile()
-//    }
 
     fun loadProfile(forceRefresh: Boolean = false) {
         if (_profileState.value is ViewState.Loading && !forceRefresh) {
@@ -34,7 +31,7 @@ class ProfileViewModel(
 
         viewModelScope.launch {
             runCatching {
-                val profile = profileApi.getProfileById(tokenStorage.getUserId())
+                val profile = profileApi.getMyProfile()
                 profile to (profile.imageId?.let { filesApi.getFileUrl(it) })
             }.onSuccess { (profile, photoUrl) ->
                 _profileState.value = ViewState.Success(profile, "Profile loaded")
@@ -78,18 +75,28 @@ class ProfileViewModel(
                     else -> profileApi.getMyProfile()
                 }
 
-                val (resultProfile, photoUrl) = if (currentProfile.imageId == null) {
-                    val fileId = filesApi.uploadFile(file, fileName, mimeType)
-                    val updatedProfile = currentProfile.copy(imageId = fileId)
-                    val savedProfile = profileApi.updateProfile(updatedProfile.id, updatedProfile)
-                    savedProfile to filesApi.getFileUrl(fileId)
-                } else {
-                    filesApi.fixUpload(currentProfile.imageId, file, fileName, mimeType)
-                    val updatedProfile = profileApi.getMyProfile()
-                    updatedProfile to filesApi.getFileUrl(currentProfile.imageId)
-                }
+                // Создаем метаданные для файла
+                val metadata = FileMetadata(
+                    user_id = currentProfile.id,
+                    private = false,
+                    mime_type = mimeType,
+                    file_name = fileName,
+                    size = file.size.toLong(),
+                    temp = false,
+                    folder = "profile_photos"
+                )
 
-                resultProfile to photoUrl
+                val fileId = filesApi.uploadFile(
+                    file = file,
+                    fileName = fileName,
+                    mimeType = mimeType,
+                    metadata = metadata,
+                    userId = currentProfile.id
+                ).id
+
+                val updatedProfile = currentProfile.copy(imageId = fileId)
+                val savedProfile = profileApi.updateProfile(updatedProfile.id, updatedProfile)
+                savedProfile to filesApi.getFileUrl(fileId)
             }.onSuccess { (updatedProfile, photoUrl) ->
                 _profileState.value = ViewState.Success(updatedProfile, "Profile picture uploaded")
                 _profilePhotoUrl.value = photoUrl

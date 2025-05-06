@@ -53,11 +53,11 @@ class PostViewModel(
     fun uploadPostImage(file: ByteArray, fileName: String, mimeType: String) {
         viewModelScope.launch {
             runCatching {
-                val fileId = filesApi.uploadFile(file, fileName, mimeType)
-                filesApi.getFileUrl(fileId)
+//                val fileId = filesApi.uploadFile(file, fileName, mimeType)
+//                filesApi.getFileUrl(fileId)
 
             }.onSuccess { imageUrl ->
-                _imageUrl.value = imageUrl
+//                _imageUrl.value = imageUrl
             }.onFailure {
                 _imageUrl.value = null
             }

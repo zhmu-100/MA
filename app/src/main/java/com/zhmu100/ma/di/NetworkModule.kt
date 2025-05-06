@@ -7,12 +7,10 @@ import com.zhmu100.ma.domain.api.comments.CommentApi
 import com.zhmu100.ma.domain.api.comments.CommentApiImpl
 import com.zhmu100.ma.domain.api.diet.DietApi
 import com.zhmu100.ma.domain.api.diet.DietApiImpl
-//import com.zhmu100.ma.domain.api.diet.DietApiMock
 import com.zhmu100.ma.domain.api.feed.PostApi
 import com.zhmu100.ma.domain.api.feed.PostApiImpl
 import com.zhmu100.ma.domain.api.files.FilesApi
 import com.zhmu100.ma.domain.api.files.FilesApiImpl
-import com.zhmu100.ma.domain.api.files.FilesApiMock
 import com.zhmu100.ma.domain.api.notes.NoteApi
 import com.zhmu100.ma.domain.api.notes.NoteApiImpl
 import com.zhmu100.ma.domain.api.notification.NotificationApi
@@ -51,6 +49,6 @@ val networkModule = module {
 //    single<DietApi> { DietApiMock() }
 //    single<StatisticsApi> { StatisticsApiImpl(get(), "http://188.225.77.13:8088/statistics") }
     single<StatisticsApi> { StatisticsApiMock() }
-//    single<FilesApi> { FilesApiImpl(get(),  "http://188.225.77.13:8089/files") }
-    single<FilesApi> { FilesApiMock() }
+    single<FilesApi> { FilesApiImpl(get(),  "http://188.225.77.13:8089/files") }
+//    single<FilesApi> { FilesApiMock() }
 }

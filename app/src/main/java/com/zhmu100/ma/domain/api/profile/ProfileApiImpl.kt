@@ -22,7 +22,7 @@ class ProfileApiImpl(
     private val tokenStorage: TokenStorage
 ) : ProfileApi {
     override suspend fun getMyProfile(): UserProfile {
-        return client.get("$baseUrl/me").body()
+        return getProfileById(tokenStorage.getUserId())
     }
 
     override suspend fun getProfileById(id: String): UserProfile {
@@ -46,7 +46,7 @@ class ProfileApiImpl(
     override suspend fun updateProfile(id: String, profile: UserProfile): UserProfile {
         return client.put("$baseUrl/$id") {
             contentType(ContentType.Application.Json)
-            setBody(profile)
+            setBody(mapOf("profile" to profile))
         }.body()
     }
 

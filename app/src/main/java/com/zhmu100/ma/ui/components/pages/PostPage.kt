@@ -15,7 +15,13 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -27,15 +33,29 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import coil3.compose.AsyncImage
 import com.zhmu100.ma.R
+import com.zhmu100.ma.domain.utils.rememberImagePicker
+import com.zhmu100.ma.domain.viewModel.PostViewModel
 import com.zhmu100.ma.ui.components.buttons.BackButton
 import com.zhmu100.ma.ui.components.buttons.SaveButton
 import com.zhmu100.ma.ui.components.buttons.SquareIconButton
 import com.zhmu100.ma.ui.theme.LightGray
 import com.zhmu100.ma.ui.theme.MATheme
 import kotlinx.serialization.Serializable
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
-fun PostPage(modifier: Modifier = Modifier, navController: NavController? = null) {
+fun PostPage(
+    modifier: Modifier = Modifier,
+    navController: NavController? = null,
+    viewModel: PostViewModel = koinViewModel()
+) {
+    val imageUrl by viewModel.imageUrl.collectAsState()
+    var postText by remember { mutableStateOf("") }
+
+    val pickImage = rememberImagePicker { bytes, fileName, mimeType ->
+        viewModel.uploadPostImage(bytes, fileName, mimeType)
+    }
+
     BasePage(false, modifier = modifier) { baseModifier ->
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -45,11 +65,11 @@ fun PostPage(modifier: Modifier = Modifier, navController: NavController? = null
                 contentColor = MaterialTheme.colorScheme.primary,
                 containerColor = MaterialTheme.colorScheme.background
             )
-            val url =
-                "https://avatars.mds.yandex.net/i?id=973900345cef4fb385b6142051e2cd9b81e0ff0a-9856853-images-thumbs&n=13"
-            val text =
-                "Я снова оттягивала этот момент, но больше нельзя. Диван такой мягкий, сериальчик такой интересный... \n" +
-                        "Но нет! Сегодня день ног, и плевать, что они уже ноют от одной мысли о приседаниях. Нужно оторвать себя от этого уютного плена и заставить двигаться. Ладно, уговорила, сама себя. Пойду, отмучаюсь."
+//            val url =
+//                "https://avatars.mds.yandex.net/i?id=973900345cef4fb385b6142051e2cd9b81e0ff0a-9856853-images-thumbs&n=13"
+//            val text =
+//                "Я снова оттягивала этот момент, но больше нельзя. Диван такой мягкий, сериальчик такой интересный... \n" +
+//                        "Но нет! Сегодня день ног, и плевать, что они уже ноют от одной мысли о приседаниях. Нужно оторвать себя от этого уютного плена и заставить двигаться. Ладно, уговорила, сама себя. Пойду, отмучаюсь."
 
             Box(
                 modifier = Modifier
@@ -64,9 +84,12 @@ fun PostPage(modifier: Modifier = Modifier, navController: NavController? = null
                 SaveButton(
                     text = "Опубликовать",
                     modifier = Modifier.align(Alignment.CenterEnd),
-                    onClick = { navController?.navigate(FeedScreen)} )
+                    onClick = {
+                        viewModel.createPost(postText)
+                        navController?.navigate(FeedScreen)
+                    } )
             }
-            url?.let {
+            imageUrl?.let { url ->
                 Box(
                     modifier = Modifier
                         .clip(shape = RoundedCornerShape(15))
@@ -80,15 +103,22 @@ fun PostPage(modifier: Modifier = Modifier, navController: NavController? = null
                 }
             }
             Row(modifier = Modifier.padding(8.dp)) {
-                IconButton({}, colors = toolIconColors) {
+                IconButton(onClick = pickImage, colors = toolIconColors) {
                     Icon(painter = painterResource(R.drawable.image), "Image Icon")
                 }
-                IconButton({}, colors = toolIconColors) {
-                    Icon(painter = painterResource(R.drawable.play_circle), "Video Icon")
-                }
+//                IconButton({}, colors = toolIconColors) {
+//                    Icon(painter = painterResource(R.drawable.play_circle), "Video Icon")
+//                }
             }
             HorizontalDivider(thickness = 1.dp, color = LightGray)
-            Text(text)
+            TextField(
+                value = postText,
+                onValueChange = { postText = it },
+                label = { Text("Введите текст поста") },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(8.dp)
+            )
         }
     }
 }

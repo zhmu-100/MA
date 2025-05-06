@@ -1,12 +1,11 @@
-package com.zhmu100.ma.domain.model.feed
+package com.zhmu100.ma.domain.model.posts
 
 import kotlinx.serialization.Serializable
 
 @Serializable
 data class PostAttachment(
-    val id: String,
-    val post_id: String,
+    val postId: String?=null,
     val type: AttachmentType,
     val position: Int,
-    val minio_id: String
+    val minioId: String
 )

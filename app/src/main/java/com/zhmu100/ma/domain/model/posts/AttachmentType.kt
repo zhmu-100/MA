@@ -1,4 +1,4 @@
-package com.zhmu100.ma.domain.model.feed
+package com.zhmu100.ma.domain.model.posts
 
 import kotlinx.serialization.Serializable
 

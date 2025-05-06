@@ -18,6 +18,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.zhmu100.ma.domain.model.posts.Reaction
 import com.zhmu100.ma.ui.theme.MATheme
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -47,7 +48,8 @@ data class Comment(
 @Composable
 fun CommentsBottomSheet(
     comments: List<Comment>,
-    onDismissRequest: () -> Unit
+    onDismissRequest: () -> Unit,
+    onNewCommentAdded: (String?) -> Unit,
 ) {
     ModalBottomSheet(
         onDismissRequest = onDismissRequest
@@ -84,7 +86,10 @@ fun CommentsBottomSheet(
                     modifier = Modifier.weight(1f)
                 )
                 IconButton(
-                    onClick = { /* TODO: отправить комментарий */ }
+                    onClick = {
+                        onNewCommentAdded(newComment)
+                        newComment = ""
+                    }
                 ) {
                     Icon(
                         imageVector = Icons.Default.Send,
@@ -103,19 +108,21 @@ fun CommentsBottomSheet(
  */
 
 @Composable
-private fun CommentItem(comment: Comment) {
-    var selectedReaction by remember { mutableStateOf<Int?>(null) }
+private fun CommentItem(
+    comment: Comment
+) {
+    var selectedReaction by remember { mutableStateOf<Reaction?>(null) }
     var showReactions by remember { mutableStateOf(false) }
 
     val scope = rememberCoroutineScope()
 
     val emojiMap = mapOf(
-        1 to "👍",
-        2 to "❤️",
-        3 to "😂",
-        4 to "😮",
-        5 to "😢",
-        6 to "😡"
+        Reaction.REACTION_LIKE to "👍",
+        Reaction.REACTION_LOVE to "❤️",
+        Reaction.REACTION_HAHA to "😂",
+        Reaction.REACTION_WOW to "😮",
+        Reaction.REACTION_SAD to "😢",
+        Reaction.REACTION_ANGRY to "😡"
     )
 
     Column(
@@ -192,16 +199,16 @@ private fun CommentItem(comment: Comment) {
 
 @Composable
 private fun ReactionRow(
-    selectedReaction: Int?,
-    onReactionSelected: (Int) -> Unit
+    selectedReaction: Reaction?,
+    onReactionSelected: (Reaction) -> Unit
 ) {
     val reactions = listOf(
-        1 to "👍",
-        2 to "❤️",
-        3 to "😂",
-        4 to "😮",
-        5 to "😢",
-        6 to "😡"
+        Reaction.REACTION_LIKE to "👍",
+        Reaction.REACTION_LOVE to "❤️",
+        Reaction.REACTION_HAHA to "😂",
+        Reaction.REACTION_WOW to "😮",
+        Reaction.REACTION_SAD to "😢",
+        Reaction.REACTION_ANGRY to "😡"
     )
 
     Row(
@@ -211,15 +218,15 @@ private fun ReactionRow(
             .background(MaterialTheme.colorScheme.surfaceVariant, MaterialTheme.shapes.medium)
             .padding(8.dp)
     ) {
-        reactions.forEach { (id, emoji) ->
+        reactions.forEach { (reaction, emoji) ->
             Text(
                 text = emoji,
                 fontSize = 24.sp,
                 style = TextStyle(
-                    color = if (selectedReaction == id) Color.Unspecified else Color.Gray
+                    color = if (selectedReaction == reaction) Color.Unspecified else Color.Gray
                 ),
                 modifier = Modifier
-                    .clickable { onReactionSelected(id) }
+                    .clickable { onReactionSelected(reaction) }
             )
         }
     }
@@ -236,7 +243,8 @@ fun CommentsBottomSheetPreview() {
                 Comment(username = "Оля", text = "Где купила коврик?)", time = "15 мин назад"),
                 Comment(username = "Антон", text = "Хочу также начать заниматься!", time = "20 мин назад")
             ),
-            onDismissRequest = {}
+            onDismissRequest = {},
+            onNewCommentAdded = {}
         )
     }
 }

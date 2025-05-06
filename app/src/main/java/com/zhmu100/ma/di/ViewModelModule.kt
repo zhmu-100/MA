@@ -1,12 +1,16 @@
 package com.zhmu100.ma.di
 
+import com.zhmu100.ma.domain.viewModel.CommentViewModel
 import com.zhmu100.ma.domain.viewModel.AuthViewModel
 import com.zhmu100.ma.domain.viewModel.DevicesViewModel
 import com.zhmu100.ma.domain.viewModel.DietViewModel
+import com.zhmu100.ma.domain.viewModel.FollowerViewModel
 import com.zhmu100.ma.domain.viewModel.LoginViewModel
 import com.zhmu100.ma.domain.viewModel.NotificationViewModel
 import com.zhmu100.ma.domain.viewModel.NoteViewModel
+import com.zhmu100.ma.domain.viewModel.PostViewModel
 import com.zhmu100.ma.domain.viewModel.ProfileViewModel
+import com.zhmu100.ma.domain.viewModel.ReactionViewModel
 import com.zhmu100.ma.domain.viewModel.RegisterViewModel
 import com.zhmu100.ma.domain.viewModel.SettingsViewModel
 import com.zhmu100.ma.domain.viewModel.StatisticViewModel
@@ -34,5 +38,9 @@ val viewModelModule = module {
     viewModel { StatisticViewModel(get(), get()) }
     viewModel { DevicesViewModel(get()) }
     viewModel { DietViewModel(get()) }
+    viewModel { PostViewModel(get(), get(), get(), get()) }
+    viewModel { CommentViewModel(get(), get(), get()) }
+    viewModel { ReactionViewModel(get(), get()) }
+    viewModel { FollowerViewModel(get()) }
     viewModel { AuthViewModel(get(), get()) }
 }

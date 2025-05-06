@@ -1,5 +1,7 @@
 package com.zhmu100.ma.ui.components.posts
 
+import android.graphics.BitmapFactory
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
@@ -13,6 +15,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.Gray
+import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -37,14 +41,16 @@ import com.zhmu100.ma.ui.theme.MATheme
 
 @Composable
 fun PostCard(
+    userId: String,
     username: String,
     postDate: String,
     postText: String,
     isSubscribed: Boolean = false,
-    onSubscribeClick: () -> Unit = {},
+    onSubscribeClick: (String?) -> Unit = {},
     onLikeClick: () -> Unit = {},
     onCommentClick: () -> Unit = {},
-    onShareClick: () -> Unit = {}
+    onShareClick: () -> Unit = {},
+    file: ByteArray? = null,
 ) {
     var subscribed by remember { mutableStateOf(isSubscribed) }
     var isLiked by remember { mutableStateOf(false) }
@@ -98,7 +104,7 @@ fun PostCard(
                 TextButton(
                     onClick = {
                         subscribed = !subscribed
-                        onSubscribeClick()
+                        onSubscribeClick(userId)
                     }
                 ) {
                     Text(
@@ -119,6 +125,21 @@ fun PostCard(
                     .background(MaterialTheme.colorScheme.secondary),
                 contentAlignment = Alignment.Center
             ) {
+                if (file != null) {
+                    Image(
+                        bitmap = BitmapFactory.decodeByteArray(file, 0, file.size).asImageBitmap(),
+                        contentDescription = "Post Image",
+                        modifier = Modifier.fillMaxSize(),
+                        contentScale = ContentScale.Crop
+                    )
+                } else {
+                    Icon(
+                        painter = painterResource(id = R.drawable.person),
+                        contentDescription = "Post Image",
+                        modifier = Modifier.size(124.dp),
+                        tint = MaterialTheme.colorScheme.background
+                    )
+                }
                 Icon(
                     painter = painterResource(id = R.drawable.person),
                     contentDescription = "Post Image",
@@ -181,10 +202,10 @@ fun PostCard(
 @Composable
 fun PostCardPreview() {
     MATheme {
-        PostCard(
-            username = "Alisa227",
-            postDate = "12 марта 2025 г.",
-            postText = "Я снова оттягивала этот момент, но больше нельзя. Сегодня день ног, и плевать, что они уже ноют от одной мысли о приседаниях."
-        )
+//        PostCard(
+//            username = "Alisa227",
+//            postDate = "12 марта 2025 г.",
+//            postText = "Я снова оттягивала этот момент, но больше нельзя. Сегодня день ног, и плевать, что они уже ноют от одной мысли о приседаниях."
+//        )
     }
 }

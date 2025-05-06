@@ -1,5 +1,7 @@
 package com.zhmu100.ma.domain.model.profile
 
+import kotlinx.serialization.Serializable
+
 /**
  * Ответ на запрос списка подписок с пагинацией.
  *
@@ -8,6 +10,7 @@ package com.zhmu100.ma.domain.model.profile
  * @property page Текущая страница.
  * @property pageSize Количество ID на странице.
  */
+@Serializable
 data class ListFollowingResponse(
     val followingIds: List<String>,
     val total: Int,

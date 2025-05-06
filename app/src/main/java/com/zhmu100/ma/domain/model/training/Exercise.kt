@@ -1,5 +1,7 @@
 package com.zhmu100.ma.domain.model.training
 
+import kotlinx.serialization.Serializable
+
 /**
  * Модель упражнения
  *
@@ -17,6 +19,7 @@ package com.zhmu100.ma.domain.model.training
  * @property reaction Реакция на выполнение упражнения (опционально)
  * @property note Дополнительные заметки (опционально)
  */
+@Serializable
 data class Exercise(
     val id: String? = null,
     val name: ExerciseName,

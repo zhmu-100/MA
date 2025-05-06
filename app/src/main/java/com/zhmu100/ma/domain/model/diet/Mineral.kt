@@ -1,5 +1,7 @@
 package com.zhmu100.ma.domain.model.diet
 
+import kotlinx.serialization.Serializable
+
 /**
  * Модель, представляющая минерал в составе пищи.
  *
@@ -18,6 +20,7 @@ package com.zhmu100.ma.domain.model.diet
  * )
  * ```
  */
+@Serializable
 data class Mineral(
     val id: String? = null,
     val name: String,

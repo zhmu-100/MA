@@ -1,5 +1,7 @@
 package com.zhmu100.ma.domain.model.profile
 
+import kotlinx.serialization.Serializable
+
 /**
  * Основной класс профиля пользователя.
  *
@@ -15,6 +17,7 @@ package com.zhmu100.ma.domain.model.profile
  * @property followerCount Количество подписчиков пользователя (по умолчанию 0).
  * @property followingCount Количество пользователей, на которых подписан данный пользователь (по умолчанию 0).
  */
+@Serializable
 data class UserProfile(
     val id: String,
     val name: String,

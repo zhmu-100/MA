@@ -1,6 +1,7 @@
 package com.zhmu100.ma.domain.model.statistic
 
 import com.google.android.gms.maps.model.LatLng
+import kotlinx.serialization.Serializable
 
 /**
  * Данные GPS позиции
@@ -11,6 +12,7 @@ import com.google.android.gms.maps.model.LatLng
  * @property speed Скорость в м/с
  * @property accuracy Точность измерения в метрах
  */
+@Serializable
 data class GPSPosition(
     val timestamp: String,
     val latitude: Double,

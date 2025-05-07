@@ -26,6 +26,7 @@ import com.zhmu100.ma.ui.components.posts.CommentsBottomSheet
 import com.zhmu100.ma.ui.components.posts.PostCard
 import com.zhmu100.ma.ui.components.posts.ShareBottomSheet
 import com.zhmu100.ma.ui.theme.MATheme
+import com.zhmu100.ma.ui.theme.proteinsColor
 import kotlinx.serialization.Serializable
 import org.koin.androidx.compose.koinViewModel
 import java.time.ZonedDateTime
@@ -139,28 +140,28 @@ fun FeedPage(
                 }
                 item {
                     CategoryButton(
-                        "Все",
+                        "Посты",
                         devicesInd == 1,
                         onClick = { devicesInd = 1 },
                         modifier = Modifier.padding(end = 8.dp)
                     )
                 }
-                item {
-                    CategoryButton(
-                        "Популярное",
-                        devicesInd == 2,
-                        onClick = { devicesInd = 2 },
-                        modifier = Modifier.padding(end = 8.dp)
-                    )
-                }
-                item {
-                    CategoryButton(
-                        "Подписки",
-                        devicesInd == 3,
-                        onClick = { devicesInd = 3 },
-                        modifier = Modifier.padding(end = 8.dp)
-                    )
-                }
+//                item {
+//                    CategoryButton(
+//                        "Популярное",
+//                        devicesInd == 2,
+//                        onClick = { devicesInd = 2 },
+//                        modifier = Modifier.padding(end = 8.dp)
+//                    )
+//                }
+//                item {
+//                    CategoryButton(
+//                        "Подписки",
+//                        devicesInd == 3,
+//                        onClick = { devicesInd = 3 },
+//                        modifier = Modifier.padding(end = 8.dp)
+//                    )
+//                }
             }
 
             LazyColumn(
@@ -189,14 +190,15 @@ fun FeedPage(
                                 onSubscribeClick = {
                                     followerViewModel.follow(post.userId)
                                 },
-                                onLikeClick = { reactionViewModel.addReaction(post.id, selectedReaction ?: Reaction.REACTION_UNSPECIFIED) },
+                                onLikeClick = { reactionViewModel.addReaction(post.id, selectedReaction ?: Reaction.REACTION_LIKE) },
                                 onCommentClick = {
                                     selectedPostId = post.id
                                     showComments = true
                                     commentViewModel.loadUsernames()
                                     commentViewModel.loadComments(post.id)
                                 },
-                                onShareClick = { showShare = true }
+                                onShareClick = { showShare = true },
+                                file = post.attachments.firstOrNull()?.minioId?.let { postViewModel.files.value[it] }
                             )
                             Spacer(modifier = Modifier.height(8.dp))
                         }

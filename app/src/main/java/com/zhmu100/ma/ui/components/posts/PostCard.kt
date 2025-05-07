@@ -101,17 +101,17 @@ fun PostCard(
                     )
                 }
 
-                TextButton(
-                    onClick = {
-                        subscribed = !subscribed
-                        onSubscribeClick(userId)
-                    }
-                ) {
-                    Text(
-                        text = if (subscribed) "Вы подписаны" else "Подписаться",
-                        fontSize = 14.sp
-                    )
-                }
+//                TextButton(
+//                    onClick = {
+//                        subscribed = !subscribed
+//                        onSubscribeClick(userId)
+//                    }
+//                ) {
+//                    Text(
+//                        text = if (subscribed) "Вы подписаны" else "Подписаться",
+//                        fontSize = 14.sp
+//                    )
+//                }
             }
 
             Spacer(modifier = Modifier.height(8.dp))

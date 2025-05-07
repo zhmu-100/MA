@@ -27,11 +27,12 @@ class TrainingApiImpl(
     }
 
     override suspend fun listWorkouts(page: Int, pageSize: Int): List<WorkoutResponse> {
-        return client.get("$baseUrl/workouts") {
+        val r: List<WorkoutResponse> = client.get("$baseUrl/workouts") {
             parameter("userId", tokenStorage.getUserId())
             parameter("page", page)
             parameter("pageSize", pageSize)
         }.body()
+        return r.filter { it.userId == tokenStorage.getUserId() }
     }
 
     override suspend fun getWorkoutExercises(workoutId: String): List<Exercise> {
@@ -41,11 +42,13 @@ class TrainingApiImpl(
     override suspend fun createWorkout(workout: Workout): Workout {
         return client.post("$baseUrl/workouts") {
             contentType(ContentType.Application.Json)
-            setBody(WorkoutRequest(
-                userId = tokenStorage.getUserId(),
-                name = workout.name,
-                excercises = workout.excercises
-            ))
+            setBody(
+                WorkoutRequest(
+                    userId = tokenStorage.getUserId(),
+                    name = workout.name,
+                    excercises = workout.excercises
+                )
+            )
         }.body()
     }
 

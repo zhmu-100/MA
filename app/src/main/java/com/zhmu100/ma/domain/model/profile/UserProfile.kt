@@ -8,7 +8,7 @@ import kotlinx.serialization.Serializable
  * @property id Уникальный идентификатор пользователя.
  * @property name Имя пользователя.
  * @property email Электронная почта пользователя.
- * @property imageId Идентификатор изображения профиля (может быть null).
+ * @property image_id Идентификатор изображения профиля (может быть null).
  * @property bio Пол пользователя "M" | "F" (может быть null).
  * @property location Местоположение пользователя (может быть null).
  * @property birthdate Дата рождения пользователя (может быть null).
@@ -25,7 +25,7 @@ data class UserProfile(
     val email: String,
     @Serializable
     val birthdate: Birthdate? = Birthdate(1990, 10, 5),
-    val imageId: String? = null,
+    val image_id: String? = null,
     val bio: String? = null,
     val location: Location? = null,
     val weight: Double? = null,

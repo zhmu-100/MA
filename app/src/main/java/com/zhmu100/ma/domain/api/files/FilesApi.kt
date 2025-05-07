@@ -2,6 +2,7 @@ package com.zhmu100.ma.domain.api.files
 
 import com.zhmu100.ma.domain.model.files.FileMetadata
 import com.zhmu100.ma.domain.model.files.FilesResponse
+import com.zhmu100.ma.domain.model.files.UrlResponse
 import kotlinx.coroutines.flow.Flow
 
 /**
@@ -20,7 +21,7 @@ interface FilesApi {
     /**
      * Получить ссылку на файл по id
      */
-    suspend fun getFileUrl(id: String): String
+    suspend fun getFileUrl(id: String): UrlResponse
     /**
      * Отправить файл, получить id
      */

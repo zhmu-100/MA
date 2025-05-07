@@ -2,6 +2,7 @@ package com.zhmu100.ma.domain.api.files
 
 import com.zhmu100.ma.domain.model.files.FileMetadata
 import com.zhmu100.ma.domain.model.files.FilesResponse
+import com.zhmu100.ma.domain.model.files.UrlResponse
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.accept
@@ -48,7 +49,7 @@ class FilesApiImpl(private val client: HttpClient, private val baseUrl: String) 
         }
     }
 
-    override suspend fun getFileUrl(id: String): String {
+    override suspend fun getFileUrl(id: String): UrlResponse {
         return client.get("$baseUrl/url/$id").body()
     }
 
@@ -79,7 +80,10 @@ class FilesApiImpl(private val client: HttpClient, private val baseUrl: String) 
                             "file",
                             file,
                             Headers.build {
-                                append(HttpHeaders.ContentDisposition, "form-data; name=\"file\"; filename=\"$fileName\"")
+                                append(
+                                    HttpHeaders.ContentDisposition,
+                                    "form-data; name=\"file\"; filename=\"$fileName\""
+                                )
                                 append(HttpHeaders.ContentType, mimeType)
                             }
                         )

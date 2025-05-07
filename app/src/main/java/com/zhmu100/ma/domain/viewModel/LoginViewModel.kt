@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.zhmu100.ma.domain.api.auth.AuthApi
 import com.zhmu100.ma.domain.model.LoginRequest
+import com.zhmu100.ma.domain.storage.MessageManager
 import com.zhmu100.ma.domain.storage.TokenStorage
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -11,7 +12,8 @@ import kotlinx.coroutines.launch
 
 class LoginViewModel(
     private val authApi: AuthApi,
-    private val tokenStorage: TokenStorage
+    private val tokenStorage: TokenStorage,
+    private val messageManager: MessageManager
 ) : ViewModel() {
     private val _message = MutableStateFlow<String?>(null)
     val message = _message.asStateFlow()
@@ -19,14 +21,19 @@ class LoginViewModel(
     private val _isLoginSuccessful = MutableStateFlow(false)
     val isLoginSuccessful = _isLoginSuccessful.asStateFlow()
 
-    fun login(email: String, password: String) {
-        if (email.isBlank() || password.isBlank()) {
-            _message.value = "Fields must not be empty"
-            _isLoginSuccessful.value = false
-            return
-        }
+    fun clearMessage() {
+        _message.value = null
+    }
 
+    fun login(email: String, password: String) {
         viewModelScope.launch {
+            if (email.isBlank() || password.isBlank()) {
+                _message.value = "Все поля должны быть заполнены"
+                _isLoginSuccessful.value = false
+                messageManager.emitMessage("Все поля должны быть заполнены")
+                return@launch
+            }
+
             runCatching {
                 authApi.login(LoginRequest(email, password))
             }.onSuccess {
@@ -34,8 +41,9 @@ class LoginViewModel(
                 tokenStorage.saveRefreshToken(it.refreshToken)
                 _isLoginSuccessful.value = true
             }.onFailure {
-                _message.value = "Login error: ${it.message}"
+                _message.value = "Неверный логин или пароль"
                 _isLoginSuccessful.value = false
+                messageManager.emitMessage("Неверный логин или пароль")
             }
         }
     }

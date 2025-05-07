@@ -48,6 +48,7 @@ class RegisterViewModel(
         viewModelScope.launch {
             runCatching {
                 authApi.register(RegisterRequest(name, email, password))
+                authApi.login(LoginRequest(name, password))
             }.onSuccess {
                 tokenStorage.saveAccessToken(it.accessToken)
                 tokenStorage.saveRefreshToken(it.refreshToken)

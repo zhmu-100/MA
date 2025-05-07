@@ -1,9 +1,9 @@
 package com.zhmu100.ma.domain.api.diet
 
 import com.zhmu100.ma.domain.model.diet.Food
-import com.zhmu100.ma.domain.model.diet.ListFoodsResponse
-import com.zhmu100.ma.domain.model.diet.ListMealsResponse
 import com.zhmu100.ma.domain.model.diet.Meal
+import com.zhmu100.ma.domain.model.diet.MealRequest
+import com.zhmu100.ma.domain.storage.TokenStorage
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get
@@ -15,14 +15,15 @@ import io.ktor.http.contentType
 
 class DietApiImpl(
     private val client: HttpClient,
-    private val baseUrl: String
+    private val baseUrl: String,
+    private val tokenStorage: TokenStorage
 ) : DietApi {
 
     override suspend fun getFood(id: String): Food {
         return client.get("$baseUrl/foods/$id").body()
     }
 
-    override suspend fun listFoods(nameFilter: String?): ListFoodsResponse {
+    override suspend fun listFoods(nameFilter: String?): List<Food> {
         return client.get("$baseUrl/foods") {
             nameFilter?.let { parameter("nameFilter", it) }
         }.body()
@@ -39,17 +40,19 @@ class DietApiImpl(
         return client.get("$baseUrl/meals/$id").body()
     }
 
-    override suspend fun listMeals(startDate: String, endDate: String): ListMealsResponse {
+    override suspend fun listMeals(startDate: String, endDate: String): List<Meal> {
         return client.get("$baseUrl/meals") {
             parameter("startDate", startDate)
             parameter("endDate", endDate)
+            parameter("user_id", tokenStorage.getUserId())
         }.body()
     }
 
-    override suspend fun createMeal(meal: Meal): Meal {
+    override suspend fun createMeal(meal: MealRequest): Meal {
+        val newMeal = meal.copy(userId = tokenStorage.getUserId())
         return client.post("$baseUrl/meals") {
             contentType(ContentType.Application.Json)
-            setBody(meal)
+            setBody(newMeal)
         }.body()
     }
 }

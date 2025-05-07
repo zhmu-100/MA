@@ -1,11 +1,13 @@
 package com.zhmu100.ma.domain.model.training
 
+import kotlinx.serialization.Serializable
+
 /**
  * Модель упражнения
  *
  * @property name Название упражнения
  * @property duration Продолжительность выполнения в формате ISO-8601
- * @property exerciseType Тип упражнения
+ * @property excercise_type Тип упражнения
  * @property sets Количество подходов (опционально)
  * @property reps Количество повторений (опционально)
  * @property distance Пройденная дистанция в метрах (опционально)
@@ -17,11 +19,12 @@ package com.zhmu100.ma.domain.model.training
  * @property reaction Реакция на выполнение упражнения (опционально)
  * @property note Дополнительные заметки (опционально)
  */
+@Serializable
 data class Exercise(
     val id: String? = null,
-    val name: ExerciseName,
+    val name: ExerciseName = ExerciseName.EXERCISE_NAME_UNSPECIFIED,
     val duration: String, // ISO-8601 duration
-    val exerciseType: ExerciseType,
+    val excercise_type: ExerciseType = ExerciseType.EXERCISE_TYPE_UNSPECIFIED,
     val sets: Int? = null,
     val reps: Int? = null,
     val distance: Int? = null,

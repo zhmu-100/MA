@@ -1,9 +1,11 @@
 package com.zhmu100.ma.domain.api.profile
 
+import com.zhmu100.ma.domain.model.profile.FollowRequest
 import com.zhmu100.ma.domain.model.profile.ListFollowersResponse
 import com.zhmu100.ma.domain.model.profile.ListFollowingResponse
 import com.zhmu100.ma.domain.model.profile.ListProfilesResponse
 import com.zhmu100.ma.domain.model.profile.UserProfile
+import com.zhmu100.ma.domain.storage.TokenStorage
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.delete
@@ -15,9 +17,13 @@ import io.ktor.client.request.setBody
 import io.ktor.http.ContentType
 import io.ktor.http.contentType
 
-class ProfileApiImpl(private val client: HttpClient, private val baseUrl: String) : ProfileApi {
+class ProfileApiImpl(
+    private val client: HttpClient,
+    private val baseUrl: String,
+    private val tokenStorage: TokenStorage
+) : ProfileApi {
     override suspend fun getMyProfile(): UserProfile {
-        return client.get("$baseUrl/me").body()
+        return getProfileById(tokenStorage.getUserId())
     }
 
     override suspend fun getProfileById(id: String): UserProfile {
@@ -32,16 +38,17 @@ class ProfileApiImpl(private val client: HttpClient, private val baseUrl: String
     }
 
     override suspend fun createProfile(profile: UserProfile): UserProfile {
+        val p = profile.copy(user_id = tokenStorage.getUserId())
         return client.post(baseUrl) {
             contentType(ContentType.Application.Json)
-            setBody(profile)
+            setBody(mapOf("profile" to p))
         }.body()
     }
 
     override suspend fun updateProfile(id: String, profile: UserProfile): UserProfile {
         return client.put("$baseUrl/$id") {
             contentType(ContentType.Application.Json)
-            setBody(profile)
+            setBody(mapOf("profile" to profile))
         }.body()
     }
 
@@ -50,11 +57,19 @@ class ProfileApiImpl(private val client: HttpClient, private val baseUrl: String
     }
 
     override suspend fun follow(followeeId: String) {
-        client.post("$baseUrl/$followeeId/follow")
+        val followerId = tokenStorage.getUserId()
+        client.post("$baseUrl/$followeeId/follow") {
+            contentType(ContentType.Application.Json)
+            setBody(FollowRequest(followerId, followeeId))
+        }
     }
 
+
     override suspend fun unfollow(followeeId: String) {
-        client.post("$baseUrl/$followeeId/unfollow")
+        client.post("$baseUrl/$followeeId/unfollow") {
+            parameter("follower_id", tokenStorage.getUserId())
+            parameter("follower_id", followeeId)
+        }
     }
 
     override suspend fun listFollowers(

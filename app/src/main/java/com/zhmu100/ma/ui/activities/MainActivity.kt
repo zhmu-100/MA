@@ -1,6 +1,7 @@
 package com.zhmu100.ma.ui.activities
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -21,8 +22,10 @@ import androidx.navigation.compose.rememberNavController
 import com.zhmu100.ma.di.networkModule
 import com.zhmu100.ma.di.storageModule
 import com.zhmu100.ma.di.viewModelModule
+import com.zhmu100.ma.domain.storage.MessageManager
 import com.zhmu100.ma.domain.viewModel.AuthViewModel
 import com.zhmu100.ma.domain.viewModel.DietViewModel
+import com.zhmu100.ma.domain.viewModel.LoginViewModel
 import com.zhmu100.ma.domain.viewModel.ProfileViewModel
 import com.zhmu100.ma.domain.viewModel.SettingsViewModel
 import com.zhmu100.ma.domain.viewModel.TrainingViewModel
@@ -99,6 +102,7 @@ import com.zhmu100.ma.ui.theme.MATheme
 import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.KoinContext
+import org.koin.compose.koinInject
 import org.koin.core.context.GlobalContext.startKoin
 
 /**
@@ -127,6 +131,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             KoinContext {
+                val messageManager: MessageManager = koinInject()
                 val startDestination = remember { mutableStateOf<Any?>(null) }
                 val settingsViewModel: SettingsViewModel = koinViewModel()
                 MATheme(settingsViewModel = settingsViewModel) {
@@ -135,6 +140,15 @@ class MainActivity : ComponentActivity() {
                     val trainingViewModel: TrainingViewModel = koinViewModel()
                     val dietViewModel: DietViewModel = koinViewModel()
                     val authViewModel: AuthViewModel = koinViewModel()
+                    val loginViewModel: LoginViewModel = koinViewModel()
+
+                    // Toasts
+                    LaunchedEffect(Unit) {
+                        messageManager.messages.collect { message ->
+                            Toast.makeText(this@MainActivity, message, Toast.LENGTH_SHORT).show()
+                        }
+                    }
+
                     LaunchedEffect(Unit) {
                         val isValid = authViewModel.validateToken()
                         if (!isValid) {
@@ -201,7 +215,12 @@ class MainActivity : ComponentActivity() {
                             composable<ActivityLevelRegScreen> { ActivityLevelRegPage(navController = navController) }
                             composable<ProfileRegScreen> { ProfileRegPage(navController = navController) }
                             composable<StatisticsScreen> { StatisticPage(navController = navController) }
-                            composable<LoginScreen> { LoginPage(navController = navController) }
+                            composable<LoginScreen> {
+                                LoginPage(
+                                    navController = navController,
+                                    viewModel = loginViewModel
+                                )
+                            }
                             composable<RegisterScreen> { RegisterPage(navController = navController) }
                             composable<ResetPasswordScreen> { ResetPasswordPage(navController = navController) }
                             composable<NewPasswordScreen> { NewPasswordPage(navController = navController) }
@@ -239,6 +258,7 @@ class MainActivity : ComponentActivity() {
                                 val noteId = backStackEntry.arguments?.getString("noteId")
                                 NotePage(navController = navController, noteId = noteId)
                             }
+                            composable<NoteScreen> { NotePage(navController = navController) }
                         }
                     }
                 }

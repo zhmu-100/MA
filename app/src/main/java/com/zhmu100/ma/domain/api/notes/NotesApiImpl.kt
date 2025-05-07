@@ -15,11 +15,17 @@ class NoteApiImpl(
     }
 
     override suspend fun getNotes(userId: String, page: Int, pageSize: Int): List<Note> {
-        return client.get("$baseUrl/notes") {
+        val response = client.get("$baseUrl/notes") {
             parameter("user_id", userId)
             parameter("page", page)
             parameter("page_size", pageSize)
-        }.body()
+        }
+
+        return if (response.status.isSuccess()) {
+            response.body()
+        } else {
+            emptyList()
+        }
     }
 
     override suspend fun createNote(userId: String, title: String, content: String): Note {
@@ -29,14 +35,16 @@ class NoteApiImpl(
         }.body()
     }
 
-    override suspend fun updateNote(id: String, title: String, content: String): Note {
+    override suspend fun updateNote(id: String, userId: String, title: String, content: String): Note {
         return client.put("$baseUrl/notes/$id") {
             contentType(ContentType.Application.Json)
-            setBody(Note(id = id, title = title, content = content))
+            setBody(Note(userId = userId, title = title, content = content))
         }.body()
     }
 
-    override suspend fun deleteNote(id: String): String {
-        return client.delete("$baseUrl/notes/$id").body()
+    override suspend fun deleteNote(id: String, userId: String): String {
+        return client.delete("$baseUrl/notes/$id"){
+            parameter("user_id", userId)
+        }.body()
     }
 }

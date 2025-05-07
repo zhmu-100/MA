@@ -32,7 +32,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.zhmu100.ma.R
-import com.zhmu100.ma.domain.model.diet.Meal
+import com.zhmu100.ma.domain.model.diet.FoodRequest
+import com.zhmu100.ma.domain.model.diet.MealRequest
 import com.zhmu100.ma.domain.viewModel.DietViewModel
 import com.zhmu100.ma.ui.components.buttons.BackButton
 import com.zhmu100.ma.ui.components.buttons.RoundButton
@@ -42,7 +43,7 @@ import com.zhmu100.ma.ui.data.Vitamin
 import com.zhmu100.ma.ui.theme.MATheme
 import kotlinx.serialization.Serializable
 import org.koin.androidx.compose.koinViewModel
-import java.time.LocalDate
+import java.time.LocalDateTime
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -165,11 +166,11 @@ fun FoodParametersPage(
                         val grams = amount.toDoubleOrNull() ?: 100.0
                         val adjustedFood = food.withPortion(grams)
 
-                        val meal = Meal(
+                        val meal = MealRequest(
                             name = adjustedFood.name,
                             mealType = viewModel.selectedMealType.value,
-                            foods = listOf(adjustedFood),
-                            date = LocalDate.now().toString()
+                            foods = listOf(adjustedFood).map { FoodRequest(it.id ?: "") },
+                            date = LocalDateTime.now().toString()
                         )
 
                         viewModel.addMeal(meal, onSuccess = {

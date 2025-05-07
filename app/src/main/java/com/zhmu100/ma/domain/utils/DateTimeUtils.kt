@@ -7,7 +7,6 @@ import java.time.ZoneId
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 import java.time.format.DateTimeParseException
-import java.util.Calendar
 
 object DateTimeUtils {
 
@@ -43,22 +42,19 @@ object DateTimeUtils {
         return (0..6).map { start.plusDays(it.toLong()) }
     }
 
-    fun String.isInDay(date: LocalDate): Boolean {
-        val instant = Instant.parse(this)
-
-        // Старый стиль через Date и Calendar
-        val cal = Calendar.getInstance()
-        cal.timeInMillis = instant.toEpochMilli()
-
-        val year = cal.get(Calendar.YEAR)
-        val month = cal.get(Calendar.MONTH) // 0-based
-        val day = cal.get(Calendar.DAY_OF_MONTH)
-
-        val calendarDate = Calendar.getInstance().apply {
-            set(year, month, day, 0, 0, 0)
-            set(Calendar.MILLISECOND, 0)
+    fun String.isInDay(day: LocalDate): Boolean {
+        val a = Instant.parse(this)
+        return try {
+            true
+        } catch (e: DateTimeParseException) {
+            false
         }
+    }
 
-        return calendarDate.timeInMillis == date.atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli()
+    fun parseStringToLocalDate(dateString: String): LocalDate {
+        // Формат соответствует вашей строке (ISO-8601 с наносекундами)
+        val formatter = DateTimeFormatter.ISO_DATE_TIME
+        // Парсим строку и извлекаем LocalDate
+        return LocalDate.parse(dateString, formatter)
     }
 }

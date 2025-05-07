@@ -68,9 +68,9 @@ private fun WorkoutFeedbackPreview() {
     MATheme {
         WorkoutFeedback(
             Exercise(
-                name = ExerciseName.PULLUPS,
+                name = ExerciseName.EXERCISE_NAME_PULLUPS,
                 duration = Duration.ofSeconds(130).toString(),
-                exerciseType = ExerciseType.STATIC
+                excercise_type = ExerciseType.EXERCISE_TYPE_STATIC
             )
         )
     }

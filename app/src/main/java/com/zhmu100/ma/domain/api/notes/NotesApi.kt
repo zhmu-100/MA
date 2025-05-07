@@ -6,6 +6,6 @@ interface NoteApi {
     suspend fun getNoteById(id: String): Note
     suspend fun getNotes(userId: String, page: Int, pageSize: Int): List<Note>
     suspend fun createNote(userId: String, title: String, content: String): Note
-    suspend fun updateNote(id: String, title: String, content: String): Note
-    suspend fun deleteNote(id: String): String
+    suspend fun updateNote(id: String, userId: String, title: String, content: String): Note
+    suspend fun deleteNote(id: String, userId: String): String
 }

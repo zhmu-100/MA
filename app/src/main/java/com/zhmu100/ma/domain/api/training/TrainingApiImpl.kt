@@ -2,6 +2,9 @@ package com.zhmu100.ma.domain.api.training
 
 import com.zhmu100.ma.domain.model.training.Exercise
 import com.zhmu100.ma.domain.model.training.Workout
+import com.zhmu100.ma.domain.model.training.WorkoutRequest
+import com.zhmu100.ma.domain.model.training.WorkoutResponse
+import com.zhmu100.ma.domain.storage.TokenStorage
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.delete
@@ -15,18 +18,21 @@ import io.ktor.http.contentType
 
 class TrainingApiImpl(
     private val client: HttpClient,
-    private val baseUrl: String
+    private val baseUrl: String,
+    private val tokenStorage: TokenStorage,
 ) : TrainingApi {
 
     override suspend fun getWorkout(id: String): Workout {
         return client.get("$baseUrl/workouts/$id").body()
     }
 
-    override suspend fun listWorkouts(page: Int, pageSize: Int): List<Workout> {
-        return client.get("$baseUrl/workouts") {
+    override suspend fun listWorkouts(page: Int, pageSize: Int): List<WorkoutResponse> {
+        val r: List<WorkoutResponse> = client.get("$baseUrl/workouts") {
+            parameter("userId", tokenStorage.getUserId())
             parameter("page", page)
             parameter("pageSize", pageSize)
         }.body()
+        return r.filter { it.userId == tokenStorage.getUserId() }
     }
 
     override suspend fun getWorkoutExercises(workoutId: String): List<Exercise> {
@@ -36,7 +42,13 @@ class TrainingApiImpl(
     override suspend fun createWorkout(workout: Workout): Workout {
         return client.post("$baseUrl/workouts") {
             contentType(ContentType.Application.Json)
-            setBody(workout)
+            setBody(
+                WorkoutRequest(
+                    userId = tokenStorage.getUserId(),
+                    name = workout.name,
+                    excercises = workout.excercises
+                )
+            )
         }.body()
     }
 

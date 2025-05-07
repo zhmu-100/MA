@@ -8,6 +8,7 @@ import com.zhmu100.ma.domain.api.diet.DietApi
 import com.zhmu100.ma.domain.model.diet.DailyStats
 import com.zhmu100.ma.domain.model.diet.Food
 import com.zhmu100.ma.domain.model.diet.Meal
+import com.zhmu100.ma.domain.model.diet.MealRequest
 import com.zhmu100.ma.domain.model.diet.MealType
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -15,6 +16,7 @@ import kotlinx.coroutines.launch
 import java.time.DayOfWeek
 import java.time.Instant
 import java.time.LocalDate
+import java.time.LocalDateTime
 import java.time.ZoneId
 
 /**
@@ -62,7 +64,7 @@ class DietViewModel(
     private val _selectedFood = mutableStateOf<Food?>(null)
     val selectedFood: State<Food?> get() = _selectedFood
     // --- Выбранный тип приема пищи ---
-    private val _selectedMealType = mutableStateOf<MealType>(MealType.BREAKFAST)
+    private val _selectedMealType = mutableStateOf<MealType>(MealType.MEAL_TYPE_BREAKFAST)
     val selectedMealType: State<MealType> get() = _selectedMealType
     // --- Параметры порции ---
     private val _portionAmount = mutableStateOf("100")
@@ -88,6 +90,9 @@ class DietViewModel(
 
     init {
         loadFoods()
+    }
+
+    fun refreshData() {
         refreshDataForToday()
         refreshWeekStatus()
     }
@@ -98,7 +103,7 @@ class DietViewModel(
     private fun loadFoods() {
         viewModelScope.launch {
             val response = dietApi.listFoods()
-            _foods.emit(response.foods)
+            _foods.emit(response)
         }
     }
 
@@ -115,14 +120,14 @@ class DietViewModel(
             // Очищаем старые данные и заполняем новые по типам приемов
             _mealsByTypeToday.clear()
             MealType.entries.forEach { type ->
-                if (type != MealType.UNSPECIFIED) {
-                    _mealsByTypeToday[type] = response.meals.filter { it.mealType == type }
+                if (type != MealType.MEAL_TYPE_UNSPECIFIED) {
+                    _mealsByTypeToday[type] = response.filter { it.mealType == type }
                 }
             }
 
             // Суммируем показатели
             val stats = DailyStats()
-            response.meals.flatMap { it.foods }.forEach { food ->
+            response.flatMap { it.foods }.forEach { food ->
                 stats.calories += food.calories
                 stats.protein += food.protein
                 stats.carbs += food.carbs
@@ -145,9 +150,9 @@ class DietViewModel(
         val datesThisWeek = (0..6).map { startOfWeek.plusDays(it.toLong()) }
 
         viewModelScope.launch {
+            val response = dietApi.listMeals(startOfWeek.toString(), startOfWeek.toString())
             _weekMealsStatus.value = datesThisWeek.associateWith { date ->
-                val response = dietApi.listMeals(date.toString(), date.toString())
-                response.meals.isNotEmpty()
+                response.filter { LocalDateTime.parse(it.date).toLocalDate() == date }.isNotEmpty()
             }
         }
     }
@@ -159,7 +164,7 @@ class DietViewModel(
      * @param onSuccess Вызывается при успешном добавлении
      * @param onError Вызывается при ошибке, передается исключение
      */
-    fun addMeal(meal: Meal, onSuccess: () -> Unit, onError: (Throwable) -> Unit) {
+    fun addMeal(meal: MealRequest, onSuccess: () -> Unit, onError: (Throwable) -> Unit) {
         viewModelScope.launch {
             runCatching {
                 dietApi.createMeal(meal)

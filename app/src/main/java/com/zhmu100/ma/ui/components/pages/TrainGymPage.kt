@@ -243,7 +243,7 @@ private fun ExerciseDropdown(
 
     Box(modifier = modifier) {
         OutlinedTextField(
-            value = if (selectedExercise == ExerciseName.UNSPECIFIED) "Выберите упражнение"
+            value = if (selectedExercise == ExerciseName.EXERCISE_NAME_UNSPECIFIED) "Выберите упражнение"
             else selectedExercise.displayName,
             onValueChange = {},
             readOnly = true,

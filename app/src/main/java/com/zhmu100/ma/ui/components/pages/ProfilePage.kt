@@ -53,6 +53,7 @@ fun ProfilePage(
 ) {
     val profileState by viewModel.profileState.collectAsState()
     val profilePhotoUrl by viewModel.profilePhotoUrl.collectAsState()
+//    val profilePhotoUrl = "https://i.pinimg.com/originals/4d/e6/08/4de60873cd38fa9c3ba6facd4e896929.jpg"
 
     val openGallery = rememberImagePicker { bytes, fileName, mimeType ->
         viewModel.updateProfilePhoto(bytes, fileName, mimeType)
@@ -61,6 +62,10 @@ fun ProfilePage(
     val profile: UserProfile? = (profileState as? ViewState.Success)?.data
     val followersCount = profile?.followerCount
     val followingCount = profile?.followingCount
+
+    LaunchedEffect(Unit) {
+        viewModel.loadProfile()
+    }
 
     BasePage(
         true,

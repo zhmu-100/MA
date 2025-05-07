@@ -5,14 +5,14 @@ import kotlinx.serialization.Serializable
 /**
  * Запрос на регистрацию пользователя
  *
- * @property name имя
+ * @property username имя
  * @property email почта
  * @property password пароль
  */
 
 @Serializable
 data class RegisterRequest(
-    val name: String,
+    val username: String,
     val email: String,
     val password: String
 )

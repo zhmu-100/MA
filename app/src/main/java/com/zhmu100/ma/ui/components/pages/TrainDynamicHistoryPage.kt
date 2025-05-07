@@ -53,18 +53,18 @@ fun TrainDynamicHistoryPage(
     // Filter for dynamic workouts when page loads
     LaunchedEffect(Unit) {
         trainingHistoryViewModel.loadWorkouts()
-        trainingHistoryViewModel.filterWorkoutsByExerciseType(ExerciseType.DYNAMIC)
+        trainingHistoryViewModel.filterWorkoutsByExerciseType(ExerciseType.EXERCISE_TYPE_DYNAMIC)
         currentWorkoutIndex = 0
     }
 
     LaunchedEffect(currentWorkoutIndex) {
         val workout = workouts.getOrNull(currentWorkoutIndex) ?: return@LaunchedEffect
         // Assume workout has an exerciseId field
-        if (workout.exercises.isNotEmpty()) {
-            workout.exercises[0].id?.let {
+        if (workout.excercises.isNotEmpty()) {
+            workout.excercises[0].id?.let {
                 trainingHistoryViewModel.loadGPSDataForWorkout(
                     it,
-                    workout.exercises[0]
+                    workout.excercises[0]
                 )
             }
         }
@@ -109,8 +109,8 @@ fun TrainDynamicHistoryPage(
             }
 
             // Mood and notes
-            if (workout.exercises.isNotEmpty()) {
-                WorkoutFeedback(workout.exercises[0])
+            if (workout.excercises.isNotEmpty()) {
+                WorkoutFeedback(workout.excercises[0])
             }
         }
     }

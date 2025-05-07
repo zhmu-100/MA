@@ -20,6 +20,7 @@ import com.zhmu100.ma.domain.utils.GPSStats.calculateSteps
 import com.zhmu100.ma.domain.utils.GPSStats.calculateTotalDistance
 import com.zhmu100.ma.domain.utils.GPSStats.distance
 import java.time.Duration
+import java.time.LocalDateTime
 
 const val DEFAULT_DISTANCE_THRESHOLD = 20.0 // meters
 
@@ -45,11 +46,11 @@ class TrainingMapViewModel(
     // Функции для управления тренировкой
     fun addNewPoint(newPoint: LatLng, totalExerciseTime: Duration) {
         val newGpsData = GPSPosition(
-            timestamp = java.time.Instant.now().toString(),
+            timestamp = LocalDateTime.now().toString(),
             latitude = newPoint.latitude,
             longitude = newPoint.longitude,
             speed = calculateSpeed(totalExerciseTime, totalDistance.value),
-            accuracy = 0.0,
+            accuracy = 100.0,
             altitude = 0.0
         )
 
@@ -78,9 +79,9 @@ class TrainingMapViewModel(
         val speed = calculateSpeed(totalExerciseTime, totalDistance.value)
 
         val exercise = Exercise(
-            name = ExerciseName.RUNNING,
-            exerciseType = ExerciseType.DYNAMIC,
-            duration = totalExerciseTime.toString(),
+            name = ExerciseName.EXERCISE_NAME_RUNNING,
+            excercise_type = ExerciseType.EXERCISE_TYPE_DYNAMIC,
+            duration = LocalDateTime.now().toString(),
             distance = totalDistance.value.toInt(),
             steps = stepsCount.value,
             calories = caloriesBurned.value.toDouble(),
@@ -90,7 +91,7 @@ class TrainingMapViewModel(
         return Workout(
             name = workoutName,
             date = customDate ?: java.time.Instant.now().toString(),
-            exercises = listOf(exercise)
+            excercises = listOf(exercise)
         )
     }
 

@@ -1,5 +1,7 @@
 package com.zhmu100.ma.domain.model.diet
 
+import kotlinx.serialization.Serializable
+
 /**
  * Ответ на запрос списка приемов пищи.
  *
@@ -10,6 +12,7 @@ package com.zhmu100.ma.domain.model.diet
  *
  * Используется для пагинации и фильтрации по дате.
  */
+@Serializable
 data class ListMealsResponse(
     val meals: List<Meal>,
     val total: Int,

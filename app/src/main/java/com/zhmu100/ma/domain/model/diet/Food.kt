@@ -1,5 +1,7 @@
 package com.zhmu100.ma.domain.model.diet
 
+import kotlinx.serialization.Serializable
+
 /**
  * Модель, представляющая пищевой продукт.
  *
@@ -33,6 +35,7 @@ package com.zhmu100.ma.domain.model.diet
  * )
  * ```
  */
+@Serializable
 data class Food(
     val id: String? = null,
     val name: String,
@@ -69,3 +72,6 @@ data class Food(
         )
     }
 }
+
+@Serializable
+data class FoodRequest(val id: String)

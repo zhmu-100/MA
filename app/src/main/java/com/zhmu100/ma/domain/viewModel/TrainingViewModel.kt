@@ -18,6 +18,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import java.time.Duration
 import java.time.Instant
+import java.util.UUID
 
 class TrainingViewModel(
     private val trainingApi: TrainingApi,
@@ -106,18 +107,19 @@ class TrainingViewModel(
         note: String
     ) {
         viewModelScope.launch {
-            val finalExercises = workout.exercises.map {
+            val finalExercises = workout.excercises.map {
                 it.copy(note = note, reaction = reaction)
             }.toList()
-            val finalWorkout = workout.copy(exercises = finalExercises)
+            val finalWorkout = workout.copy(excercises = finalExercises)
             Log.i("TRAIN", finalWorkout.toString())
             runCatching {
                 val newWorkout = trainingApi.createWorkout(finalWorkout)
-                newWorkout.exercises[0].id?.let { id ->
-                    if (newWorkout.exercises[0].exerciseType == ExerciseType.DYNAMIC) {
+                newWorkout.excercises[0].id?.let { id ->
+                    if (newWorkout.excercises[0].excercise_type == ExerciseType.EXERCISE_TYPE_DYNAMIC) {
                         currentGPS.value?.let { gps ->
                             val gpsData = GPSData(
                                 ExerciseMetadata(
+                                    id = UUID.randomUUID().toString(),
                                     exerciseId = id,
                                     timestamp = Instant.now().toString()
                                 ),

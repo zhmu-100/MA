@@ -1,5 +1,6 @@
 package com.zhmu100.ma.domain.viewModel
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.zhmu100.ma.domain.api.diet.DietApi
@@ -7,8 +8,10 @@ import com.zhmu100.ma.domain.api.training.TrainingApi
 import com.zhmu100.ma.domain.model.statistic.DailyStats
 import com.zhmu100.ma.domain.model.statistic.NutritionDay
 import com.zhmu100.ma.domain.model.statistic.WeeklyStatItem
+import com.zhmu100.ma.domain.storage.TokenStorage
 import com.zhmu100.ma.domain.utils.DateTimeUtils
 import com.zhmu100.ma.domain.utils.DateTimeUtils.isInDay
+import com.zhmu100.ma.domain.utils.DateTimeUtils.parseStringToLocalDate
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
@@ -16,12 +19,14 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import java.time.LocalDate
+import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import kotlin.math.roundToInt
 
 class StatisticViewModel(
     private val trainingApi: TrainingApi,
-    private val dietApi: DietApi
+    private val dietApi: DietApi,
+    private val tokenStorage: TokenStorage
 ) : ViewModel() {
 
     // Статистика за день (сегодня)
@@ -92,44 +97,53 @@ class StatisticViewModel(
      * Загрузка данных по шагам и дистанции
      */
     private suspend fun fetchTrainingStats(days: List<LocalDate>) {
-        val dailySteps = mutableListOf<Pair<LocalDate, Int>>()
-        val dailyDistance = mutableListOf<Pair<LocalDate, Double>>()
+        viewModelScope.launch {
+            runCatching {
+                val dailySteps = mutableListOf<Pair<LocalDate, Int>>()
+                val dailyDistance = mutableListOf<Pair<LocalDate, Double>>()
+                val allWorkouts = trainingApi.listWorkouts(page = 1, pageSize = 20)
 
-        for (day in days) {
-            val dayWorkouts = trainingApi.listWorkouts(page = 1, pageSize = 20)
-                .filter { it.date.isInDay(day) }
+                for (day in days) {
+                    val dayWorkouts = allWorkouts
+                        .filter { it.userId == tokenStorage.getUserId() }
+                        .filter { parseStringToLocalDate(it.date) == day }
+                    val workouts = dayWorkouts.map { trainingApi.getWorkout(it.id) }
 
-            val totalSteps = dayWorkouts.sumOf { workout ->
-                workout.exercises.sumOf { it.steps ?: 0 }
-            }
+                    val totalSteps = workouts.sumOf { workout ->
+                        workout.excercises.sumOf { it.steps ?: 0 }
+                    }
 
-            val totalDistance = dayWorkouts.sumOf { workout ->
-                workout.exercises.sumOf { it.distance ?: 0 }
-            }
+                    val totalDistance = workouts.sumOf { workout ->
+                        workout.excercises.sumOf { it.distance ?: 0 }
+                    }
 
-            // Добавляем данные за день
-            dailySteps.add(Pair(day, totalSteps))
-            dailyDistance.add(Pair(day, totalDistance.toDouble()))
-        }
-
-        // Убедимся, что список содержит ровно 7 дней
-        if (dailySteps.size < 7) {
-            for (day in days) {
-                if (!dailySteps.any { it.first == day }) {
-                    dailySteps.add(Pair(day, 0))
+                    // Добавляем данные за день
+                    dailySteps.add(Pair(day, totalSteps))
+                    dailyDistance.add(Pair(day, totalDistance.toDouble()))
                 }
-                if (!dailyDistance.any { it.first == day }) {
-                    dailyDistance.add(Pair(day, 0.0))
+
+                // Убедимся, что список содержит ровно 7 дней
+                if (dailySteps.size < 7) {
+                    for (day in days) {
+                        if (!dailySteps.any { it.first == day }) {
+                            dailySteps.add(Pair(day, 0))
+                        }
+                        if (!dailyDistance.any { it.first == day }) {
+                            dailyDistance.add(Pair(day, 0.0))
+                        }
+                    }
                 }
+
+                // Сортируем по дате (на случай, если API вернул данные не по порядку)
+                val sortedSteps = dailySteps.sortedBy { it.first }
+                val sortedDistance = dailyDistance.sortedBy { it.first }
+
+                _weeklySteps.value = sortedSteps
+                _weeklyDistance.value = sortedDistance
+            }.onFailure {
+                Log.e("HTTP", it.toString())
             }
         }
-
-        // Сортируем по дате (на случай, если API вернул данные не по порядку)
-        val sortedSteps = dailySteps.sortedBy { it.first }
-        val sortedDistance = dailyDistance.sortedBy { it.first }
-
-        _weeklySteps.value = sortedSteps
-        _weeklyDistance.value = sortedDistance
     }
 
     /**
@@ -137,10 +151,12 @@ class StatisticViewModel(
      */
     private suspend fun fetchMealStats(days: List<LocalDate>) {
         val nutritionByDay = mutableListOf<Pair<LocalDate, NutritionDay>>()
+        val _day = DateTimeFormatter.ISO_LOCAL_DATE.format(days[0])
+        val allMeals = dietApi.listMeals(_day, _day)
 
         for (day in days) {
-            val formatted = DateTimeFormatter.ISO_LOCAL_DATE.format(day)
-            val meals = dietApi.listMeals(formatted, formatted).meals
+            val meals = allMeals
+                .filter { LocalDateTime.parse(it.date).toLocalDate() == day }
 
             var totalCalories = 0.0
             var totalProtein = 0.0
@@ -195,37 +211,47 @@ class StatisticViewModel(
      */
     fun loadTodayStats() {
         viewModelScope.launch {
-            val today = LocalDate.now()
-            val formatted = DateTimeFormatter.ISO_LOCAL_DATE.format(today)
+            runCatching {
+                val today = LocalDate.now()
+                val formatted = DateTimeFormatter.ISO_LOCAL_DATE.format(today)
 
-            val workouts = trainingApi.listWorkouts(0, 10)
-                .filter { it.date.isInDay(today) }
+                val allWorkouts = trainingApi.listWorkouts(0, 10)
+                    .filter { it.userId == tokenStorage.getUserId() }
+                    .filter { it.date.isInDay(today) }
+                val workouts = allWorkouts.map { trainingApi.getWorkout(it.id) }
 
-            val steps = workouts.sumOf { workout ->
-                workout.exercises.sumOf { ex -> ex.steps ?: 0 }
+                Log.i("HTTP", workouts.toString())
+
+                val steps = workouts.sumOf { workout ->
+                    workout.excercises.sumOf { ex -> ex.steps ?: 0 }
+                }
+
+                val distance = workouts.sumOf { workout ->
+                    workout.excercises.sumOf { ex -> ex.distance ?: 0 }
+                }
+
+                // Берём только приёмы пищи за сегодня
+                val meals = dietApi.listMeals(formatted, formatted)
+                    .filter { LocalDateTime.parse(it.date).toLocalDate() == today }
+
+                val calories = meals.sumOf { it.foods.sumOf { food -> food.calories.toInt() } }
+                val protein = meals.sumOf { it.foods.sumOf { food -> food.protein } }
+                val carbs = meals.sumOf { it.foods.sumOf { food -> food.carbs } }
+                val fats =
+                    meals.sumOf { it.foods.sumOf { food -> food.saturatedFats + food.transFats } }
+
+                _todayStats.value = DailyStats(
+                    date = today.toString(),
+                    steps = steps,
+                    distance = distance.toDouble(),
+                    calories = calories,
+                    protein = protein,
+                    carbs = carbs,
+                    fats = fats
+                )
+            }.onFailure {
+                Log.e("HTTP", it.toString())
             }
-
-            val distance = workouts.sumOf { workout ->
-                workout.exercises.sumOf { ex -> ex.distance ?: 0 }
-            }
-
-            // Берём только приёмы пищи за сегодня
-            val meals = dietApi.listMeals(formatted, formatted).meals
-
-            val calories = meals.sumOf { it.foods.sumOf { food -> food.calories.toInt() } }
-            val protein = meals.sumOf { it.foods.sumOf { food -> food.protein } }
-            val carbs = meals.sumOf { it.foods.sumOf { food -> food.carbs } }
-            val fats = meals.sumOf { it.foods.sumOf { food -> food.saturatedFats + food.transFats } }
-
-            _todayStats.value = DailyStats(
-                date = today.toString(),
-                steps = steps,
-                distance = distance.toDouble(),
-                calories = calories,
-                protein = protein,
-                carbs = carbs,
-                fats = fats
-            )
         }
     }
 }

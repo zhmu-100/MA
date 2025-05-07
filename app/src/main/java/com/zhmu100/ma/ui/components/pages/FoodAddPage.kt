@@ -55,7 +55,7 @@ fun FoodAddPage(
 ) {
     val allFoods by viewModel.foods.collectAsStateWithLifecycle()
     var searchQuery by rememberSaveable { mutableStateOf("") }
-    var selectedMealType by rememberSaveable { mutableStateOf(MealType.BREAKFAST) }
+    var selectedMealType by rememberSaveable { mutableStateOf(MealType.MEAL_TYPE_BREAKFAST) }
     var showMealDropdown by remember { mutableStateOf(false) }
 
     val filteredItems by remember(searchQuery, allFoods) {
@@ -130,7 +130,7 @@ fun FoodAddPage(
                             onDismissRequest = { showMealDropdown = false }
                         ) {
                             MealType.entries.forEach { type ->
-                                if (type != MealType.UNSPECIFIED) {
+                                if (type != MealType.MEAL_TYPE_UNSPECIFIED) {
                                     DropdownMenuItem(
                                         text = { Text(type.typeName) },
                                         onClick = {

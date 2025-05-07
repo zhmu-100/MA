@@ -44,7 +44,14 @@ fun RegisterPage(
     navController: NavController? = null,
     onBackClick: () -> Unit = {},
     viewModel: RegisterViewModel = koinViewModel(),
-    onRegisterClick: (String, String, String, String) -> Unit = { name, email, password, confirmPassword ->viewModel.register(name, email, password, confirmPassword) },
+    onRegisterClick: (String, String, String, String) -> Unit = { name, email, password, confirmPassword ->
+        viewModel.register(
+            name,
+            email,
+            password,
+            confirmPassword
+        )
+    },
     onLoginClick: () -> Unit = {}
 ) {
     var name by remember { mutableStateOf("") }
@@ -135,7 +142,12 @@ fun RegisterPage(
 
 
             Button(
-                onClick = { onRegisterClick(name, email, password, confirmPassword) },
+                onClick = {
+                    onRegisterClick(name, email, password, confirmPassword)
+                    if (isRegisterSuccessful) {
+                        navController?.navigate(ProfileScreen)
+                    }
+                },
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(56.dp),

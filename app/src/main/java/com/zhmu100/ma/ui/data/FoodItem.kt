@@ -1,5 +1,6 @@
 package com.zhmu100.ma.ui.data
 
+import android.util.Log
 import com.zhmu100.ma.domain.model.diet.Food
 import kotlin.math.roundToInt
 
@@ -32,6 +33,9 @@ data class FoodItem(
          */
         fun fromFood(food: Food, allFood: List<Food>): FoodItem {
             var grams = 100.0
+
+            Log.i("HTTP", food.toString())
+            Log.i("HTTP", allFood.toString())
 
             // Пытаемся найти оригинальный продукт по id
             val originalFood = allFood.find { it.id == food.id }

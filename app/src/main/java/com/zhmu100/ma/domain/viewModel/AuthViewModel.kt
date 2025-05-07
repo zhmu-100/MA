@@ -20,25 +20,26 @@ class AuthViewModel(
     val logoutSuccess: LiveData<Boolean> get() = _logoutSuccess
 
     suspend fun validateToken(): Boolean {
-        return try {
-            val result = authApi.validate()
-            result
-        } catch (e: Exception) {
-            false
-        }
+        return tokenStorage.getAccessToken() != null
+//        return try {
+//            val result = authApi.validate()
+//            result
+//        } catch (e: Exception) {
+//            false
+//        }
     }
 
     suspend fun refreshToken() {
-        val refreshToken = tokenStorage.getRefreshToken()
-        if (!refreshToken.isNullOrBlank()) {
-            try {
-                val response = authApi.refresh(refreshToken)
-                tokenStorage.saveAccessToken(response.accessToken)
-                _accessToken.value = response.accessToken
-            } catch (e: Exception) {
-                e.message
-            }
-        }
+//        val refreshToken = tokenStorage.getRefreshToken()
+//        if (!refreshToken.isNullOrBlank()) {
+//            try {
+//                val response = authApi.refresh(refreshToken)
+//                tokenStorage.saveAccessToken(response.accessToken)
+//                _accessToken.value = response.accessToken
+//            } catch (e: Exception) {
+//                e.message
+//            }
+//        }
     }
 
     suspend fun logout() {

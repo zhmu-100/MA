@@ -1,9 +1,15 @@
 package com.zhmu100.ma.domain.model.profile
 
+import kotlinx.serialization.Serializable
+
 /**
  * Запрос на подписку одного пользователя на другого.
  *
- * @property followerId ID пользователя, который подписывается.
- * @property followeeId ID пользователя, на которого подписываются.
+ * @property follower_id ID пользователя, который подписывается.
+ * @property followee_id ID пользователя, на которого подписываются.
  */
-data class FollowRequest(val followerId: String, val followeeId: String)
+@Serializable
+data class FollowRequest(
+    val follower_id: String,
+    val followee_id: String
+)

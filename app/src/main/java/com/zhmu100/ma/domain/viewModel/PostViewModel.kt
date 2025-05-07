@@ -1,5 +1,6 @@
 package com.zhmu100.ma.domain.viewModel
 
+import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -8,11 +9,14 @@ import com.zhmu100.ma.domain.api.files.FilesApi
 import com.zhmu100.ma.domain.api.profile.ProfileApi
 import com.zhmu100.ma.domain.model.posts.AttachmentType
 import com.zhmu100.ma.domain.model.posts.Post
-import com.zhmu100.ma.domain.model.posts.PostAttachment
+import com.zhmu100.ma.domain.model.posts.Attachment
 import com.zhmu100.ma.domain.storage.TokenStorage
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import androidx.compose.runtime.State
+import com.zhmu100.ma.domain.model.files.FileMetadata
+import com.zhmu100.ma.domain.model.profile.UserProfile
 
 class PostViewModel(
     private val filesApi: FilesApi,
@@ -42,7 +46,7 @@ class PostViewModel(
     val fileState = _fileState.asStateFlow()
 
     private val _usernames = mutableStateOf<Map<String, String>>(emptyMap())
-    val usernames get() = _usernames
+    val usernames: State<Map<String, String>> get() = _usernames
 
     private val _files = mutableStateOf<Map<String, ByteArray>>(emptyMap())
     val files get() = _files
@@ -50,19 +54,37 @@ class PostViewModel(
     private val _posts = mutableStateOf<List<Post>>(emptyList())
     val posts get() = _posts
 
+    private val _imageFileId = MutableStateFlow<String?>(null)
+    val imageFileId = _imageFileId.asStateFlow()
+
     fun uploadPostImage(file: ByteArray, fileName: String, mimeType: String) {
         viewModelScope.launch {
             runCatching {
-                val fileId = filesApi.uploadFile(file, fileName, mimeType)
-                filesApi.getFileUrl(fileId)
+                val userId = tokenStorage.getUserId()
 
-            }.onSuccess { imageUrl ->
-                _imageUrl.value = imageUrl
+                val metadata = FileMetadata(
+                    user_id = userId,
+                    private = false,
+                    mime_type = mimeType,
+                    file_name = fileName,
+                    size = file.size.toLong(),
+                    temp = false,
+                    folder = "profile_photos"
+                )
+
+                val fileId = filesApi.uploadFile(file, fileName, mimeType, metadata, userId)
+                val url = filesApi.getFileUrl(fileId.id)
+                Pair(fileId.id, url.url)
+            }.onSuccess { (fileId, url) ->
+                _imageFileId.value = fileId
+                _imageUrl.value = url
             }.onFailure {
+                _imageFileId.value = null
                 _imageUrl.value = null
             }
         }
     }
+
 
     fun createPost(text: String) {
         if (_postState.value is ViewState.Loading) return
@@ -71,13 +93,15 @@ class PostViewModel(
 
         viewModelScope.launch {
             runCatching {
-                val image = imageUrl.value
+                val image = imageFileId.value
                 val userId = tokenStorage.getUserId()
                 val postContent = text
 
+                Log.d(image, "imageId === ${image}")
                 val attachments = image?.let {
                     listOf(
-                        PostAttachment(
+                        Attachment(
+                            postId="",
                             type = AttachmentType.ATTACHMENT_TYPE_IMAGE,
                             position = 0,
                             minioId = it
@@ -126,9 +150,15 @@ class PostViewModel(
             runCatching {
                 postApi.listPosts(page, pageSize)
             }.onSuccess { posts ->
+                val posts = posts.posts
                 _posts.value = posts
-                fetchUsernames(posts)
-                fetchFiles(posts)
+                _postsListState.value = ViewState.Success(posts)
+                viewModelScope.launch {
+                    fetchUsernames(posts)
+                    fetchFiles(posts)
+                }
+            }.onFailure{ e ->
+                Log.d(e.message, "Error: ${e.message}")
             }
         }
     }
@@ -142,8 +172,9 @@ class PostViewModel(
             runCatching {
                 val userId = tokenStorage.getUserId()
                 postApi.listUserPosts(userId, page, pageSize)
-            }.onSuccess {
-                _userPostsListState.value = ViewState.Success(it, "User posts got")
+            }.onSuccess { result ->
+                val posts = result.posts
+                _userPostsListState.value = ViewState.Success(posts, "User posts got")
             }.onFailure {
                 _userPostsListState.value = ViewState.Error("Error: ${it.message}", it)
             }
@@ -177,6 +208,9 @@ class PostViewModel(
             runCatching {
                 val profile = profileApi.getProfileById(userId)
                 usernamesMap[userId] = profile.name
+                Log.d("FetchUsernames", "Fetched profile: ${profile.name} for $userId")
+            }.onFailure {
+                Log.e("FetchUsernames", "Failed to fetch for $userId: ${it.message}")
             }
         }
 

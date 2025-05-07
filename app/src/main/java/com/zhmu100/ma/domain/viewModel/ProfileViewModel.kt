@@ -1,17 +1,21 @@
 package com.zhmu100.ma.domain.viewModel
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.zhmu100.ma.domain.api.files.FilesApi
 import com.zhmu100.ma.domain.api.profile.ProfileApi
+import com.zhmu100.ma.domain.model.files.FileMetadata
 import com.zhmu100.ma.domain.model.profile.UserProfile
+import com.zhmu100.ma.domain.storage.TokenStorage
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 class ProfileViewModel(
     private val profileApi: ProfileApi,
-    private val filesApi: FilesApi
+    private val filesApi: FilesApi,
+    private val tokenStorage: TokenStorage
 ) : ViewModel() {
     private val _profileState = MutableStateFlow<ViewState<UserProfile>>(ViewState.Uninitialized)
     val profileState = _profileState.asStateFlow()
@@ -19,11 +23,8 @@ class ProfileViewModel(
     private val _profilePhotoUrl = MutableStateFlow<String?>(null)
     val profilePhotoUrl = _profilePhotoUrl.asStateFlow()
 
-    init {
-        loadProfile()
-    }
 
-    private fun loadProfile(forceRefresh: Boolean = false) {
+    fun loadProfile(forceRefresh: Boolean = false) {
         if (_profileState.value is ViewState.Loading && !forceRefresh) {
             return
         }
@@ -33,10 +34,10 @@ class ProfileViewModel(
         viewModelScope.launch {
             runCatching {
                 val profile = profileApi.getMyProfile()
-                profile to (profile.imageId?.let { filesApi.getFileUrl(it) })
+                profile to (profile.image_id?.let { filesApi.getFileUrl(it) })
             }.onSuccess { (profile, photoUrl) ->
                 _profileState.value = ViewState.Success(profile, "Profile loaded")
-                _profilePhotoUrl.value = photoUrl
+                _profilePhotoUrl.value = photoUrl?.url
             }.onFailure {
                 _profileState.value = ViewState.Error("Error loading profile ${it.message}", it)
                 _profilePhotoUrl.value = null
@@ -76,24 +77,38 @@ class ProfileViewModel(
                     else -> profileApi.getMyProfile()
                 }
 
-                val (resultProfile, photoUrl) = if (currentProfile.imageId == null) {
-                    val fileId = filesApi.uploadFile(file, fileName, mimeType)
-                    val updatedProfile = currentProfile.copy(imageId = fileId)
-                    val savedProfile = profileApi.updateProfile(updatedProfile.id, updatedProfile)
-                    savedProfile to filesApi.getFileUrl(fileId)
-                } else {
-                    filesApi.fixUpload(currentProfile.imageId, file, fileName, mimeType)
-                    val updatedProfile = profileApi.getMyProfile()
-                    updatedProfile to filesApi.getFileUrl(currentProfile.imageId)
-                }
+                // Создаем метаданные для файла
+                val metadata = FileMetadata(
+                    user_id = currentProfile.id,
+                    private = false,
+                    mime_type = mimeType,
+                    file_name = fileName,
+                    size = file.size.toLong(),
+                    temp = false,
+                    folder = "profile_photos"
+                )
 
-                resultProfile to photoUrl
+                val fileId = filesApi.uploadFile(
+                    file = file,
+                    fileName = fileName,
+                    mimeType = mimeType,
+                    metadata = metadata,
+                    userId = currentProfile.id
+                ).id
+
+                Log.i("HTTP", fileId)
+                val updatedProfile = currentProfile.copy(image_id = fileId)
+                Log.i("HTTP", updatedProfile.toString())
+                val savedProfile = profileApi.updateProfile(updatedProfile.id, updatedProfile)
+                savedProfile to filesApi.getFileUrl(fileId).url
             }.onSuccess { (updatedProfile, photoUrl) ->
                 _profileState.value = ViewState.Success(updatedProfile, "Profile picture uploaded")
                 _profilePhotoUrl.value = photoUrl
+                Log.i("HTTP", photoUrl)
             }.onFailure {
                 _profileState.value =
                     ViewState.Error("Error updating profile photo: ${it.message}", it)
+                Log.i("HTTP", "Error updating profile photo: ${it.message}")
             }
         }
     }

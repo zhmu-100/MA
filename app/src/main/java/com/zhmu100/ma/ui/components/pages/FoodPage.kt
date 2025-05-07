@@ -56,17 +56,17 @@ fun FoodPage(
         }
     }
 
-    val breakfastItems = remember(mealsByTypeToday[MealType.BREAKFAST]) {
-        mealsByTypeToday[MealType.BREAKFAST]?.flatMap { it.foods } ?: emptyList()
+    val breakfastItems = remember(mealsByTypeToday[MealType.MEAL_TYPE_BREAKFAST]) {
+        mealsByTypeToday[MealType.MEAL_TYPE_BREAKFAST]?.flatMap { it.foods } ?: emptyList()
     }
-    val lunchItems = remember(mealsByTypeToday[MealType.LUNCH]) {
-        mealsByTypeToday[MealType.LUNCH]?.flatMap { it.foods } ?: emptyList()
+    val lunchItems = remember(mealsByTypeToday[MealType.MEAL_TYPE_LUNCH]) {
+        mealsByTypeToday[MealType.MEAL_TYPE_LUNCH]?.flatMap { it.foods } ?: emptyList()
     }
-    val dinnerItems = remember(mealsByTypeToday[MealType.DINNER]) {
-        mealsByTypeToday[MealType.DINNER]?.flatMap { it.foods } ?: emptyList()
+    val dinnerItems = remember(mealsByTypeToday[MealType.MEAL_TYPE_DINNER]) {
+        mealsByTypeToday[MealType.MEAL_TYPE_DINNER]?.flatMap { it.foods } ?: emptyList()
     }
-    val snackItems = remember(mealsByTypeToday[MealType.SNACK]) {
-        mealsByTypeToday[MealType.SNACK]?.flatMap { it.foods } ?: emptyList()
+    val snackItems = remember(mealsByTypeToday[MealType.MEAL_TYPE_SNACK]) {
+        mealsByTypeToday[MealType.MEAL_TYPE_SNACK]?.flatMap { it.foods } ?: emptyList()
     }
 
     Log.i("DIET", breakfastItems.toString())
@@ -75,6 +75,10 @@ fun FoodPage(
         Recommendation(1, "Как вкусно готовить ?", "25 марта 2025", "", "https://example.com/1"),
         Recommendation(2, "Полезные советы", "24 марта 2025", "", "https://example.com/2")
     )
+
+    LaunchedEffect(Unit) {
+        viewModel.refreshData()
+    }
 
     BasePage(
         true,

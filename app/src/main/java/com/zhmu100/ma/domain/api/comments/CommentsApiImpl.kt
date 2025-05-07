@@ -19,7 +19,7 @@ class CommentApiImpl(
     }
 
     override suspend fun listComments(postId: String?, page: Int, pageSize: Int): List<Comment> {
-        return client.post("${baseUrl}/$postId/comments") {
+        return client.get("${baseUrl}/posts/$postId/comments") {
             contentType(ContentType.Application.Json)
             setBody(ListCommentsRequest(page, pageSize))
         }.body<ListCommentsResponse>().comments

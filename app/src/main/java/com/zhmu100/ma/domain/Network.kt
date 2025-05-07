@@ -22,7 +22,14 @@ import kotlinx.serialization.json.Json
  */
 
 object Network {
-    val httpClient = HttpClient(CIO) {
+    lateinit var tokenStorage: TokenStorage;
+
+    fun init(tokenStorage: TokenStorage): HttpClient {
+        this.tokenStorage = tokenStorage
+        return httpClient
+    }
+
+    private val httpClient = HttpClient(CIO) {
         install(ContentNegotiation) {
             json(Json {
                 ignoreUnknownKeys = true

@@ -136,8 +136,7 @@ fun NotesPage(
                     imageVector = Icons.Default.Add,
                     onClick = {
                         viewModel.clearCurrentNote()
-                        val newNote = Note()
-                        navController?.navigate("$NoteScreen/${newNote.id}")
+                        navController?.navigate(NoteScreen)
                     }
                 )
             }

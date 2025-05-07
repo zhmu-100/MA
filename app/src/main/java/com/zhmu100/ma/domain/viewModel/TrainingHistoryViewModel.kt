@@ -1,5 +1,6 @@
 package com.zhmu100.ma.domain.viewModel
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.android.gms.maps.model.LatLng
@@ -18,8 +19,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import java.time.Duration
-import java.time.Instant
-import java.time.format.DateTimeFormatter
 
 class TrainingHistoryViewModel(
     private val trainingApi: TrainingApi,
@@ -48,13 +47,13 @@ class TrainingHistoryViewModel(
 
         viewModelScope.launch {
             runCatching {
-                trainingApi.listWorkouts(page = 1, pageSize = 20)
+                trainingApi.listWorkouts(page = 1, pageSize = 5)
             }.onSuccess { workouts ->
-                _workoutsState.value = ViewState.Success(workouts)
+                _workoutsState.value = ViewState.Success(workouts.map{trainingApi.getWorkout(it.id)})
                 currentExerciseType?.let { type ->
                     filterWorkoutsByExerciseType(type)
                 } ?: run {
-                    _filteredWorkouts.value = workouts.sortedByDescending { it.date.toInstant() }
+                    _filteredWorkouts.value = workouts.map{trainingApi.getWorkout(it.id)}
                 }
             }.onFailure {
                 _workoutsState.value = ViewState.Error("Error loading workouts: ${it.message}", it)
@@ -72,9 +71,8 @@ class TrainingHistoryViewModel(
 
         _filteredWorkouts.value = workouts
             .filter { workout ->
-                workout.exercises.any { it.exerciseType == exerciseType }
+                workout.excercises.any { it.excercise_type == exerciseType }
             }
-            .sortedByDescending { it.date.toInstant() }
     }
 
     fun loadGPSDataForWorkout(exerciseId: String, exercise: Exercise) {
@@ -83,10 +81,12 @@ class TrainingHistoryViewModel(
                 statisticsApi.getGPSData(exerciseId)
             }.onSuccess { gpsDataList ->
                 val positions = gpsDataList.flatMap { it.positions }
+                Log.i("HTTP", positions.toString())
                 _currentGPSData.value = positions
                 calculateAndEmitStats(positions, exercise)
             }.onFailure {
                 // Handle error (e.g., show empty state)
+                Log.i("HTTP", it.toString())
                 _currentGPSData.value = emptyList()
                 _currentWorkoutStats.value = null
             }
@@ -118,9 +118,5 @@ class TrainingHistoryViewModel(
         if (_workoutsState.value is ViewState.Error) {
             _workoutsState.value = ViewState.Uninitialized
         }
-    }
-
-    private fun String.toInstant(): Instant {
-        return Instant.from(DateTimeFormatter.ISO_INSTANT.parse(this))
     }
 }

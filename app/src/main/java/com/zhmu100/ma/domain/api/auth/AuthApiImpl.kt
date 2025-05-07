@@ -19,11 +19,11 @@ class AuthApiImpl(
         }.body()
     }
 
-    override suspend fun register(request: RegisterRequest): AuthResponse {
-        return client.post("$baseUrl/register") {
+    override suspend fun register(request: RegisterRequest){
+        client.post("$baseUrl/register") {
             contentType(ContentType.Application.Json)
             setBody(request)
-        }.body()
+        }
     }
 
     override suspend fun logout() {

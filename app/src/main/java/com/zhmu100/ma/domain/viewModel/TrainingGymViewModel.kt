@@ -12,6 +12,7 @@ import com.zhmu100.ma.domain.storage.DeviceStorage
 import com.zhmu100.ma.ui.data.TrainRowData
 import java.time.Duration
 import java.time.Instant
+import java.time.LocalDateTime
 
 class TrainingGymViewModel(
     private val deviceStorage: DeviceStorage
@@ -20,12 +21,12 @@ class TrainingGymViewModel(
     val trainRows: SnapshotStateList<TrainRowData> = _trainRows
 
     private val _exerciseOptions = ExerciseName.entries.filter {
-        it != ExerciseName.UNSPECIFIED && it != ExerciseName.RUNNING && it != ExerciseName.CYCLING
+        it != ExerciseName.EXERCISE_NAME_UNSPECIFIED && it != ExerciseName.EXERCISE_NAME_RUNNING && it != ExerciseName.EXERCISE_NAME_CYCLING
     }
     val exerciseOptions: List<ExerciseName> = _exerciseOptions
 
     fun addExerciseRow() {
-        _trainRows.add(TrainRowData(ExerciseName.UNSPECIFIED, ""))
+        _trainRows.add(TrainRowData(ExerciseName.EXERCISE_NAME_UNSPECIFIED, ""))
     }
 
     fun updateExercise(index: Int, exercise: ExerciseName) {
@@ -58,16 +59,16 @@ class TrainingGymViewModel(
         val exercises = trainRows.map { row ->
             Exercise(
                 name = row.exercise,
-                exerciseType = ExerciseType.STATIC,
+                excercise_type = ExerciseType.EXERCISE_TYPE_STATIC,
                 reps = row.value.toIntOrNull() ?: 0,
-                duration = totalExerciseTime.toString(),
+                duration = LocalDateTime.now().toString(),
                 bmp = device?.getReading()?.value?.toInt()
             )
         }
         return Workout(
             name = workoutName,
             date = customDate ?: Instant.now().toString(),
-            exercises = exercises
+            excercises = exercises
         )
     }
 }

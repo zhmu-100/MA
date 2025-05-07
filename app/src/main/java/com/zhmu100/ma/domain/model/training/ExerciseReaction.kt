@@ -7,10 +7,10 @@ import kotlinx.serialization.Serializable
  */
 @Serializable
 enum class ExerciseReaction {
-    UNSPECIFIED,
-    EXCELLENT,
-    GOOD,
-    OK,
-    BAD,
-    VERY_BAD
+    EXERCISE_REACTION_UNSPECIFIED,
+    EXERCISE_REACTION_EXCELLENT,
+    EXERCISE_REACTION_GOOD,
+    EXERCISE_REACTION_OK,
+    EXERCISE_REACTION_BAD,
+    EXERCISE_REACTION_VERY_BAD
 }

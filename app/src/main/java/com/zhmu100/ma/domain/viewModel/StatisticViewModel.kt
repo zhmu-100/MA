@@ -16,6 +16,7 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import java.time.LocalDate
+import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import kotlin.math.roundToInt
 
@@ -98,13 +99,14 @@ class StatisticViewModel(
         for (day in days) {
             val dayWorkouts = trainingApi.listWorkouts(page = 1, pageSize = 20)
                 .filter { it.date.isInDay(day) }
+            val workouts = dayWorkouts.map { trainingApi.getWorkout(it.id) }
 
-            val totalSteps = dayWorkouts.sumOf { workout ->
-                workout.exercises.sumOf { it.steps ?: 0 }
+            val totalSteps = workouts.sumOf { workout ->
+                workout.excercises.sumOf { it.steps ?: 0 }
             }
 
-            val totalDistance = dayWorkouts.sumOf { workout ->
-                workout.exercises.sumOf { it.distance ?: 0 }
+            val totalDistance = workouts.sumOf { workout ->
+                workout.excercises.sumOf { it.distance ?: 0 }
             }
 
             // Добавляем данные за день
@@ -141,6 +143,7 @@ class StatisticViewModel(
         for (day in days) {
             val formatted = DateTimeFormatter.ISO_LOCAL_DATE.format(day)
             val meals = dietApi.listMeals(formatted, formatted)
+                .filter { LocalDateTime.parse(it.date).toLocalDate() == day }
 
             var totalCalories = 0.0
             var totalProtein = 0.0
@@ -198,24 +201,27 @@ class StatisticViewModel(
             val today = LocalDate.now()
             val formatted = DateTimeFormatter.ISO_LOCAL_DATE.format(today)
 
-            val workouts = trainingApi.listWorkouts(0, 10)
+            val allWorkouts = trainingApi.listWorkouts(0, 10)
                 .filter { it.date.isInDay(today) }
+            val workouts = allWorkouts.map { trainingApi.getWorkout(it.id) }
 
             val steps = workouts.sumOf { workout ->
-                workout.exercises.sumOf { ex -> ex.steps ?: 0 }
+                workout.excercises.sumOf { ex -> ex.steps ?: 0 }
             }
 
             val distance = workouts.sumOf { workout ->
-                workout.exercises.sumOf { ex -> ex.distance ?: 0 }
+                workout.excercises.sumOf { ex -> ex.distance ?: 0 }
             }
 
             // Берём только приёмы пищи за сегодня
             val meals = dietApi.listMeals(formatted, formatted)
+                .filter { LocalDateTime.parse(it.date).toLocalDate() == today }
 
             val calories = meals.sumOf { it.foods.sumOf { food -> food.calories.toInt() } }
             val protein = meals.sumOf { it.foods.sumOf { food -> food.protein } }
             val carbs = meals.sumOf { it.foods.sumOf { food -> food.carbs } }
-            val fats = meals.sumOf { it.foods.sumOf { food -> food.saturatedFats + food.transFats } }
+            val fats =
+                meals.sumOf { it.foods.sumOf { food -> food.saturatedFats + food.transFats } }
 
             _todayStats.value = DailyStats(
                 date = today.toString(),

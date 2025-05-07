@@ -48,13 +48,13 @@ class TrainingHistoryViewModel(
 
         viewModelScope.launch {
             runCatching {
-                trainingApi.listWorkouts(page = 1, pageSize = 20)
+                trainingApi.listWorkouts(page = 1, pageSize = 5)
             }.onSuccess { workouts ->
-                _workoutsState.value = ViewState.Success(workouts)
+                _workoutsState.value = ViewState.Success(workouts.map{trainingApi.getWorkout(it.id)})
                 currentExerciseType?.let { type ->
                     filterWorkoutsByExerciseType(type)
                 } ?: run {
-                    _filteredWorkouts.value = workouts.sortedByDescending { it.date.toInstant() }
+                    _filteredWorkouts.value = workouts.map{trainingApi.getWorkout(it.id)}
                 }
             }.onFailure {
                 _workoutsState.value = ViewState.Error("Error loading workouts: ${it.message}", it)
@@ -72,9 +72,8 @@ class TrainingHistoryViewModel(
 
         _filteredWorkouts.value = workouts
             .filter { workout ->
-                workout.exercises.any { it.exerciseType == exerciseType }
+                workout.excercises.any { it.excercise_type == exerciseType }
             }
-            .sortedByDescending { it.date.toInstant() }
     }
 
     fun loadGPSDataForWorkout(exerciseId: String, exercise: Exercise) {
@@ -118,9 +117,5 @@ class TrainingHistoryViewModel(
         if (_workoutsState.value is ViewState.Error) {
             _workoutsState.value = ViewState.Uninitialized
         }
-    }
-
-    private fun String.toInstant(): Instant {
-        return Instant.from(DateTimeFormatter.ISO_INSTANT.parse(this))
     }
 }

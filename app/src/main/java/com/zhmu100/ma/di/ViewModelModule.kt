@@ -25,7 +25,7 @@ import org.koin.dsl.module
  * Модуль DI для ViewModel
  */
 val viewModelModule = module {
-    viewModel { ProfileViewModel(get(), get()) }
+    viewModel { ProfileViewModel(get(), get(), get()) }
     viewModel { SettingsViewModel(get()) }
     viewModel { LoginViewModel(get(), get()) }
     viewModel { RegisterViewModel(get(), get()) }

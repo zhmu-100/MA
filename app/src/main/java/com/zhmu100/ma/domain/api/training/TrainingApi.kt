@@ -2,6 +2,7 @@ package com.zhmu100.ma.domain.api.training
 
 import com.zhmu100.ma.domain.model.training.Exercise
 import com.zhmu100.ma.domain.model.training.Workout
+import com.zhmu100.ma.domain.model.training.WorkoutResponse
 
 /**
  * API для общения с сервисом профиля
@@ -15,7 +16,7 @@ interface TrainingApi {
     /**
      * Получить список своих тренировок с пагинацией
      */
-    suspend fun listWorkouts(page: Int, pageSize: Int): List<Workout>
+    suspend fun listWorkouts(page: Int, pageSize: Int): List<WorkoutResponse>
 
     /**
      * Получить список упражнений в тренировке по Id

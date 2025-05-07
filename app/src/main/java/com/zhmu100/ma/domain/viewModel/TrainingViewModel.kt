@@ -106,15 +106,15 @@ class TrainingViewModel(
         note: String
     ) {
         viewModelScope.launch {
-            val finalExercises = workout.exercises.map {
+            val finalExercises = workout.excercises.map {
                 it.copy(note = note, reaction = reaction)
             }.toList()
-            val finalWorkout = workout.copy(exercises = finalExercises)
+            val finalWorkout = workout.copy(excercises = finalExercises)
             Log.i("TRAIN", finalWorkout.toString())
             runCatching {
                 val newWorkout = trainingApi.createWorkout(finalWorkout)
-                newWorkout.exercises[0].id?.let { id ->
-                    if (newWorkout.exercises[0].exerciseType == ExerciseType.DYNAMIC) {
+                newWorkout.excercises[0].id?.let { id ->
+                    if (newWorkout.excercises[0].excercise_type == ExerciseType.EXERCISE_TYPE_DYNAMIC) {
                         currentGPS.value?.let { gps ->
                             val gpsData = GPSData(
                                 ExerciseMetadata(

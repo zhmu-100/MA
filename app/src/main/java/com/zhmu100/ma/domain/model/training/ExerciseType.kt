@@ -9,7 +9,7 @@ import kotlinx.serialization.Serializable
  */
 @Serializable
 enum class ExerciseType {
-    UNSPECIFIED,
-    STATIC,
-    DYNAMIC
+    EXERCISE_TYPE_UNSPECIFIED,
+    EXERCISE_TYPE_STATIC,
+    EXERCISE_TYPE_DYNAMIC
 }

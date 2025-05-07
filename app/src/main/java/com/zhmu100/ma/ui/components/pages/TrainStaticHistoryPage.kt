@@ -45,7 +45,7 @@ fun TrainStaticHistoryPage(
     // Загрузка статичных тренировок
     LaunchedEffect(Unit) {
         trainingHistoryViewModel.loadWorkouts()
-        trainingHistoryViewModel.filterWorkoutsByExerciseType(ExerciseType.STATIC)
+        trainingHistoryViewModel.filterWorkoutsByExerciseType(ExerciseType.EXERCISE_TYPE_STATIC)
         currentWorkoutIndex = 0
     }
 
@@ -74,23 +74,23 @@ fun TrainStaticHistoryPage(
             WorkoutName(workout.name)
 
             // Статистика по упражнениям
-            if (workout.exercises.isNotEmpty()) {
+            if (workout.excercises.isNotEmpty()) {
                 LazyColumn(
                     modifier = Modifier
                         .weight(1f)
                         .padding(horizontal = 16.dp),
                     verticalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
-                    items(workout.exercises) { exercise ->
+                    items(workout.excercises) { exercise ->
                         ExerciseItem(exercise = exercise)
                     }
                 }
 
                 // Общее время
-                WorkoutDuration(DurationUtils.isoStringToDuration(workout.exercises[0].duration))
+                WorkoutDuration(DurationUtils.isoStringToDuration(workout.excercises[0].duration))
 
                 // Эмоция и заметка
-                WorkoutFeedback(workout.exercises[0])
+                WorkoutFeedback(workout.excercises[0])
             }
         }
     }

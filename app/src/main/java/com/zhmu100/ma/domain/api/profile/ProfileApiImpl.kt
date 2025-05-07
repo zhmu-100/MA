@@ -39,7 +39,7 @@ class ProfileApiImpl(
     override suspend fun createProfile(profile: UserProfile): UserProfile {
         return client.post(baseUrl) {
             contentType(ContentType.Application.Json)
-            setBody(profile)
+            setBody(mapOf("profile" to profile))
         }.body()
     }
 

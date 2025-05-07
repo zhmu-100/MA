@@ -23,7 +23,7 @@ import com.zhmu100.ma.domain.api.reactions.ReactionApi
 import com.zhmu100.ma.domain.api.statistic.StatisticsApi
 import com.zhmu100.ma.domain.api.statistic.StatisticsApiMock
 import com.zhmu100.ma.domain.api.training.TrainingApi
-import com.zhmu100.ma.domain.api.training.TrainingApiMock
+import com.zhmu100.ma.domain.api.training.TrainingApiImpl
 import org.koin.dsl.module
 
 
@@ -36,8 +36,8 @@ val networkModule = module {
     single<AuthApi> { AuthApiImpl(get(), "http://188.225.77.13:8080/api/auth") }
     single<ProfileApi> { ProfileApiImpl(get(),  "http://188.225.77.13:8083/profiles", get()) }
 //    single<ProfileApi> { ProfileApiMock() }
-//    single<TrainingApi> { TrainingApiImpl(get(), "http://188.225.77.13:8084/training") }
-    single<TrainingApi> { TrainingApiMock() }
+    single<TrainingApi> { TrainingApiImpl(get(), "http://188.225.77.13:8084/training", get()) }
+//    single<TrainingApi> { TrainingApiMock() }
     single<CommentApi> { CommentApiImpl(get(), "http://188.225.77.13:8085/feed") }
     single<PostApi> { PostApiImpl(get(), get(), "http://188.225.77.13:8085/feed") }
     single<ReactionApi> { ReactionApiImpl(get(), "http://188.225.77.13:8085/feed") }

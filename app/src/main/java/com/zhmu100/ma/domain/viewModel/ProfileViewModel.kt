@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.zhmu100.ma.domain.api.files.FilesApi
 import com.zhmu100.ma.domain.api.profile.ProfileApi
 import com.zhmu100.ma.domain.model.files.FileMetadata
+import com.zhmu100.ma.domain.model.profile.Birthdate
 import com.zhmu100.ma.domain.model.profile.UserProfile
 import com.zhmu100.ma.domain.storage.TokenStorage
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -14,6 +15,7 @@ import kotlinx.coroutines.launch
 class ProfileViewModel(
     private val profileApi: ProfileApi,
     private val filesApi: FilesApi,
+    private val tokenStorage: TokenStorage
 ) : ViewModel() {
     private val _profileState = MutableStateFlow<ViewState<UserProfile>>(ViewState.Uninitialized)
     val profileState = _profileState.asStateFlow()
@@ -39,6 +41,7 @@ class ProfileViewModel(
             }.onFailure {
                 _profileState.value = ViewState.Error("Error loading profile ${it.message}", it)
                 _profilePhotoUrl.value = null
+//                profileApi.createProfile(UserProfile("", "test name", "test@email.ru", birthdate = Birthdate(1990, 1, 1)))
             }
         }
     }

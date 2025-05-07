@@ -23,7 +23,7 @@ class AuthApiImpl(
         client.post("$baseUrl/register") {
             contentType(ContentType.Application.Json)
             setBody(request)
-        }
+        }.body()
     }
 
     override suspend fun logout() {

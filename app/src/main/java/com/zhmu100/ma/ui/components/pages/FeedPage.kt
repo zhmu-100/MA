@@ -27,6 +27,9 @@ import com.zhmu100.ma.ui.components.posts.ShareBottomSheet
 import com.zhmu100.ma.ui.theme.MATheme
 import kotlinx.serialization.Serializable
 import org.koin.androidx.compose.koinViewModel
+import java.time.ZonedDateTime
+import java.time.format.DateTimeFormatter
+import java.util.Locale
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -47,12 +50,23 @@ fun FeedPage(
     val postsState = postViewModel.postsListState.collectAsState().value
     var selectedPostId by remember { mutableStateOf<String?>(null) }
     val commentState = commentViewModel.comments.collectAsState().value
-    val usernameMap = commentViewModel.usernames.collectAsState().value
+//    val usernameMap = commentViewModel.usernames.collectAsState().value
+    val usernameMap = postViewModel.usernames.value
+
     var selectedReaction by remember { mutableStateOf<Reaction?>(null) }
 
     LaunchedEffect(Unit) {
         postViewModel.listPosts()
     }
+
+    LaunchedEffect(postsState) {
+        val state = postsState
+        if (state is ViewState.Success) {
+            postViewModel.fetchUsernames(state.data)
+            postViewModel.fetchFiles(state.data)
+        }
+    }
+
 
 //    val comments = remember {
 //        listOf(
@@ -153,7 +167,16 @@ fun FeedPage(
                             PostCard(
                                 userId = post.userId,
                                 username = postViewModel.usernames.value[post.userId] ?: "Unknown user",
-                                postDate = post.date ?: "No date",
+//                                postDate = post.date ?: "No date",
+                                postDate = post.date?.let {
+                                    try {
+                                        val parsedDate = ZonedDateTime.parse(it)
+                                        val formatter = DateTimeFormatter.ofPattern("d MMMM yyyy", Locale("ru"))
+                                        parsedDate.format(formatter)
+                                    } catch (e: Exception) {
+                                        e.message
+                                    }
+                                } ?: "No date",
                                 postText = post.content ?: "No content",
                                 isSubscribed = false,
                                 onSubscribeClick = {

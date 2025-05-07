@@ -8,5 +8,5 @@ data class Post(
     val userId: String,
     val content: String?=null,
     val date: String?=null,
-    val attachments: List<PostAttachment>
+    val attachments: List<Attachment> = emptyList()
 )

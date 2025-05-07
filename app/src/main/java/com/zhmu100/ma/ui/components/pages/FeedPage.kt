@@ -1,5 +1,6 @@
 package com.zhmu100.ma.ui.components.pages
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -50,14 +51,10 @@ fun FeedPage(
     val postsState = postViewModel.postsListState.collectAsState().value
     var selectedPostId by remember { mutableStateOf<String?>(null) }
     val commentState = commentViewModel.comments.collectAsState().value
-//    val usernameMap = commentViewModel.usernames.collectAsState().value
-    val usernameMap = postViewModel.usernames.value
+    val usernameMap = commentViewModel.usernames.collectAsState().value
+//    val usernameMap = postViewModel.usernames.value
 
     var selectedReaction by remember { mutableStateOf<Reaction?>(null) }
-
-    LaunchedEffect(Unit) {
-        postViewModel.listPosts()
-    }
 
     LaunchedEffect(postsState) {
         val state = postsState
@@ -67,6 +64,9 @@ fun FeedPage(
         }
     }
 
+    LaunchedEffect(Unit) {
+        postViewModel.listPosts()
+    }
 
 //    val comments = remember {
 //        listOf(
@@ -81,9 +81,17 @@ fun FeedPage(
         CommentsBottomSheet(
             comments = commentState.map {
                 Comment(
-                    username = usernameMap[it.userId]  ?: "Unknown",
+                    username = usernameMap[it.userId]  ?: "",
                     text = it.content,
-                    time = it.date
+                    time = it.date.let {
+                        try {
+                            val parsedDate = ZonedDateTime.parse(it)
+                            val formatter = DateTimeFormatter.ofPattern("d MMMM yyyy", Locale("ru"))
+                            parsedDate.format(formatter)
+                        } catch (e: Exception) {
+                            e.message
+                        }
+                    } ?: "",
                 )
             },
             onDismissRequest = { showComments = false },
@@ -166,8 +174,7 @@ fun FeedPage(
                             val post = posts[index]
                             PostCard(
                                 userId = post.userId,
-                                username = postViewModel.usernames.value[post.userId] ?: "Unknown user",
-//                                postDate = post.date ?: "No date",
+                                username = postViewModel.usernames.value[post.userId] ?: "",
                                 postDate = post.date?.let {
                                     try {
                                         val parsedDate = ZonedDateTime.parse(it)
@@ -176,8 +183,8 @@ fun FeedPage(
                                     } catch (e: Exception) {
                                         e.message
                                     }
-                                } ?: "No date",
-                                postText = post.content ?: "No content",
+                                } ?: "",
+                                postText = post.content ?: "",
                                 isSubscribed = false,
                                 onSubscribeClick = {
                                     followerViewModel.follow(post.userId)

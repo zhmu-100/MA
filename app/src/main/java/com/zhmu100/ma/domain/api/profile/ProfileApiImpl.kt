@@ -1,5 +1,6 @@
 package com.zhmu100.ma.domain.api.profile
 
+import com.zhmu100.ma.domain.model.profile.FollowRequest
 import com.zhmu100.ma.domain.model.profile.ListFollowersResponse
 import com.zhmu100.ma.domain.model.profile.ListFollowingResponse
 import com.zhmu100.ma.domain.model.profile.ListProfilesResponse
@@ -56,11 +57,13 @@ class ProfileApiImpl(
     }
 
     override suspend fun follow(followeeId: String) {
+        val followerId = tokenStorage.getUserId()
         client.post("$baseUrl/$followeeId/follow") {
-            parameter("follower_id", tokenStorage.getUserId())
-            parameter("follower_id", followeeId)
+            contentType(ContentType.Application.Json)
+            setBody(FollowRequest(followerId, followeeId))
         }
     }
+
 
     override suspend fun unfollow(followeeId: String) {
         client.post("$baseUrl/$followeeId/unfollow") {

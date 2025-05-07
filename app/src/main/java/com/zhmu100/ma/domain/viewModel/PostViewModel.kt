@@ -15,6 +15,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import androidx.compose.runtime.State
+import com.zhmu100.ma.domain.model.files.FileMetadata
 
 class PostViewModel(
     private val filesApi: FilesApi,
@@ -55,11 +56,24 @@ class PostViewModel(
     fun uploadPostImage(file: ByteArray, fileName: String, mimeType: String) {
         viewModelScope.launch {
             runCatching {
-//                val fileId = filesApi.uploadFile(file, fileName, mimeType)
-//                filesApi.getFileUrl(fileId)
+
+                val userId = tokenStorage.getUserId()
+
+                val metadata = FileMetadata(
+                    user_id = userId,
+                    private = false,
+                    mime_type = mimeType,
+                    file_name = fileName,
+                    size = file.size.toLong(),
+                    temp = false,
+                    folder = "profile_photos"
+                )
+
+                val fileId = filesApi.uploadFile(file, fileName, mimeType, metadata, userId)
+                filesApi.getFileUrl(fileId.toString())
 
             }.onSuccess { imageUrl ->
-//                _imageUrl.value = imageUrl
+                _imageUrl.value = imageUrl
             }.onFailure {
                 _imageUrl.value = null
             }

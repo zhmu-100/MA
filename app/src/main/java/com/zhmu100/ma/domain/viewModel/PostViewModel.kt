@@ -73,7 +73,7 @@ class PostViewModel(
                 filesApi.getFileUrl(fileId.toString())
 
             }.onSuccess { imageUrl ->
-                _imageUrl.value = imageUrl
+                _imageUrl.value = imageUrl.toString()
             }.onFailure {
                 _imageUrl.value = null
             }

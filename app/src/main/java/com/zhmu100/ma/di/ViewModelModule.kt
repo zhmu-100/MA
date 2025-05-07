@@ -18,6 +18,7 @@ import com.zhmu100.ma.domain.viewModel.TrainingGymViewModel
 import com.zhmu100.ma.domain.viewModel.TrainingHistoryViewModel
 import com.zhmu100.ma.domain.viewModel.TrainingMapViewModel
 import com.zhmu100.ma.domain.viewModel.TrainingViewModel
+import com.zhmu100.ma.ui.components.pages.RememberViewModel
 import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
 
@@ -43,4 +44,5 @@ val viewModelModule = module {
     viewModel { ReactionViewModel(get(), get()) }
     viewModel { FollowerViewModel(get()) }
     viewModel { AuthViewModel(get(), get()) }
+    viewModel { RememberViewModel(get()) }
 }

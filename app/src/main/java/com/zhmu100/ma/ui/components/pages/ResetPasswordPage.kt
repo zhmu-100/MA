@@ -14,9 +14,11 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.currentRecomposeScope
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -25,20 +27,28 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
+import com.zhmu100.ma.domain.storage.MessageManager
 import com.zhmu100.ma.ui.components.buttons.BackButton
 import com.zhmu100.ma.ui.components.inputs.InputLine
 import com.zhmu100.ma.ui.theme.LightGreen
 import com.zhmu100.ma.ui.theme.MATheme
 import com.zhmu100.ma.ui.theme.White
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
+import org.koin.androidx.compose.koinViewModel
+import org.koin.compose.koinInject
 
 
 @Composable
 fun ResetPasswordPage(
     navController: NavController? = null,
-    onBackClick: () -> Unit = {},
-    onSendCodeClick: (String) -> Unit = { _ -> },
+    rememberViewModel: RememberViewModel = koinViewModel(),
+    onBackClick: () -> Unit = { navController?.popBackStack() },
+    onSendCodeClick: (String) -> Unit = {},
     onContinueClick: (String, String) -> Unit = { _, _ -> }
 ) {
     var email by remember { mutableStateOf("") }
@@ -94,9 +104,10 @@ fun ResetPasswordPage(
 
 
             Button(
-                onClick = { 
+                onClick = {
                     onSendCodeClick(email)
-                    codeSent = true
+                    rememberViewModel.send()
+//                    codeSent = true
                 },
                 modifier = Modifier
                     .fillMaxWidth()
@@ -116,7 +127,7 @@ fun ResetPasswordPage(
 
             if (codeSent) {
                 Spacer(modifier = Modifier.height(32.dp))
-                
+
 
                 InputLine(
                     modifier = Modifier.padding(vertical = 8.dp),
@@ -128,7 +139,7 @@ fun ResetPasswordPage(
 
 
                 Button(
-                    onClick = { 
+                    onClick = {
                         onContinueClick(email, code)
                         navController?.navigate(NewPasswordScreen)
                     },
@@ -160,5 +171,14 @@ object ResetPasswordScreen
 private fun ResetPasswordPagePreview() {
     MATheme {
         ResetPasswordPage()
+    }
+}
+
+
+class RememberViewModel(private val messageManager: MessageManager) : ViewModel() {
+    fun send() {
+        viewModelScope.launch {
+            messageManager.emitMessage("Напишите на jhmu100@mail.ru")
+        }
     }
 }

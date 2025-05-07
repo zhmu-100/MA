@@ -19,8 +19,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import java.time.Duration
-import java.time.Instant
-import java.time.format.DateTimeFormatter
 
 class TrainingHistoryViewModel(
     private val trainingApi: TrainingApi,

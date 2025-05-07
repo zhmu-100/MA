@@ -23,10 +23,11 @@ data class UserProfile(
     val user_id: String? = null,
     val name: String,
     val email: String,
+    @Serializable
+    val birthdate: Birthdate? = Birthdate(1990, 10, 5),
     val imageId: String? = null,
     val bio: String? = null,
     val location: Location? = null,
-    val birthdate: Birthdate? = null,
     val weight: Double? = null,
     val height: Double? = null,
     val followerCount: Int = 0,

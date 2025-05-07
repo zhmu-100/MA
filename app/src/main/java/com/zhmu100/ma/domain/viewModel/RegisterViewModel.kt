@@ -8,6 +8,7 @@ import com.zhmu100.ma.domain.api.auth.AuthApi
 import com.zhmu100.ma.domain.api.profile.ProfileApi
 import com.zhmu100.ma.domain.model.LoginRequest
 import com.zhmu100.ma.domain.model.RegisterRequest
+import com.zhmu100.ma.domain.model.profile.Birthdate
 import com.zhmu100.ma.domain.model.profile.UserProfile
 import com.zhmu100.ma.domain.storage.TokenStorage
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -27,7 +28,7 @@ class RegisterViewModel(
 
     fun register(name: String, email: String, password: String, confirmPassword: String) {
         when {
-            email.isBlank() || password.isBlank() || name.isBlank()-> {
+            email.isBlank() || password.isBlank() || name.isBlank() -> {
                 _message.value = "Fields must not be empty"
                 _isRegisterSuccessful.value = false
                 return
@@ -52,7 +53,13 @@ class RegisterViewModel(
             }.onSuccess {
                 tokenStorage.saveAccessToken(it.accessToken)
                 tokenStorage.saveRefreshToken(it.refreshToken)
-                val profile = UserProfile(name, email, password)
+                val profile = UserProfile(
+                    id = tokenStorage.getUserId(),
+                    user_id = tokenStorage.getUserId(),
+                    name = name,
+                    email = email,
+                    birthdate = Birthdate(1991, 2, 2)
+                )
                 val result = profileApi.createProfile(profile)
                 Log.d(result.toString(), "result :${result}")
                 _isRegisterSuccessful.value = true

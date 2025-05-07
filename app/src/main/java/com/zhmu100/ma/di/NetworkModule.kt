@@ -17,7 +17,6 @@ import com.zhmu100.ma.domain.api.notification.NotificationApi
 import com.zhmu100.ma.domain.api.notification.NotificationApiImpl
 import com.zhmu100.ma.domain.api.profile.ProfileApi
 import com.zhmu100.ma.domain.api.profile.ProfileApiImpl
-import com.zhmu100.ma.domain.api.profile.ProfileApiMock
 import com.zhmu100.ma.domain.api.reaction.ReactionApiImpl
 import com.zhmu100.ma.domain.api.reactions.ReactionApi
 import com.zhmu100.ma.domain.api.statistic.StatisticsApi

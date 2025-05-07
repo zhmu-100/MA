@@ -1,6 +1,5 @@
 package com.zhmu100.ma.domain.viewModel
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.zhmu100.ma.domain.api.auth.AuthApi

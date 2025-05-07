@@ -38,9 +38,9 @@ val networkModule = module {
 //    single<ProfileApi> { ProfileApiMock() }
     single<TrainingApi> { TrainingApiImpl(get(), "http://188.225.77.13:8084/training", get()) }
 //    single<TrainingApi> { TrainingApiMock() }
-    single<CommentApi> { CommentApiImpl(get(), "http://188.225.77.13:8085/feed") }
-    single<PostApi> { PostApiImpl(get(), get(), "http://188.225.77.13:8085/feed") }
-    single<ReactionApi> { ReactionApiImpl(get(), "http://188.225.77.13:8085/feed") }
+    single<CommentApi> { CommentApiImpl(get(), "http://188.225.77.13:8085") }
+    single<PostApi> { PostApiImpl(get(), get(), "http://188.225.77.13:8085") }
+    single<ReactionApi> { ReactionApiImpl(get(), "http://188.225.77.13:8085") }
     single<NoteApi> { NoteApiImpl(get(), "http://188.225.77.13:8086/notebook") }
     single<NotificationApi> { NotificationApiImpl(get(), "http://188.225.77.13:8086/notebook") }
     single<DietApi> { DietApiImpl(get(),  "http://188.225.77.13:8087/diet", get()) }

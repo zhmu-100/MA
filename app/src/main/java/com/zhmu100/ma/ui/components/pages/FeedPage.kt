@@ -1,5 +1,6 @@
 package com.zhmu100.ma.ui.components.pages
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -25,6 +26,7 @@ import com.zhmu100.ma.ui.components.posts.CommentsBottomSheet
 import com.zhmu100.ma.ui.components.posts.PostCard
 import com.zhmu100.ma.ui.components.posts.ShareBottomSheet
 import com.zhmu100.ma.ui.theme.MATheme
+import com.zhmu100.ma.ui.theme.proteinsColor
 import kotlinx.serialization.Serializable
 import org.koin.androidx.compose.koinViewModel
 import java.time.ZonedDateTime
@@ -50,14 +52,10 @@ fun FeedPage(
     val postsState = postViewModel.postsListState.collectAsState().value
     var selectedPostId by remember { mutableStateOf<String?>(null) }
     val commentState = commentViewModel.comments.collectAsState().value
-//    val usernameMap = commentViewModel.usernames.collectAsState().value
-    val usernameMap = postViewModel.usernames.value
+    val usernameMap = commentViewModel.usernames.collectAsState().value
+//    val usernameMap = postViewModel.usernames.value
 
     var selectedReaction by remember { mutableStateOf<Reaction?>(null) }
-
-    LaunchedEffect(Unit) {
-        postViewModel.listPosts()
-    }
 
     LaunchedEffect(postsState) {
         val state = postsState
@@ -67,6 +65,9 @@ fun FeedPage(
         }
     }
 
+    LaunchedEffect(Unit) {
+        postViewModel.listPosts()
+    }
 
 //    val comments = remember {
 //        listOf(
@@ -81,9 +82,17 @@ fun FeedPage(
         CommentsBottomSheet(
             comments = commentState.map {
                 Comment(
-                    username = usernameMap[it.userId]  ?: "Unknown",
+                    username = usernameMap[it.userId]  ?: "",
                     text = it.content,
-                    time = it.date
+                    time = it.date.let {
+                        try {
+                            val parsedDate = ZonedDateTime.parse(it)
+                            val formatter = DateTimeFormatter.ofPattern("d MMMM yyyy", Locale("ru"))
+                            parsedDate.format(formatter)
+                        } catch (e: Exception) {
+                            e.message
+                        }
+                    } ?: "",
                 )
             },
             onDismissRequest = { showComments = false },
@@ -131,28 +140,28 @@ fun FeedPage(
                 }
                 item {
                     CategoryButton(
-                        "Все",
+                        "Посты",
                         devicesInd == 1,
                         onClick = { devicesInd = 1 },
                         modifier = Modifier.padding(end = 8.dp)
                     )
                 }
-                item {
-                    CategoryButton(
-                        "Популярное",
-                        devicesInd == 2,
-                        onClick = { devicesInd = 2 },
-                        modifier = Modifier.padding(end = 8.dp)
-                    )
-                }
-                item {
-                    CategoryButton(
-                        "Подписки",
-                        devicesInd == 3,
-                        onClick = { devicesInd = 3 },
-                        modifier = Modifier.padding(end = 8.dp)
-                    )
-                }
+//                item {
+//                    CategoryButton(
+//                        "Популярное",
+//                        devicesInd == 2,
+//                        onClick = { devicesInd = 2 },
+//                        modifier = Modifier.padding(end = 8.dp)
+//                    )
+//                }
+//                item {
+//                    CategoryButton(
+//                        "Подписки",
+//                        devicesInd == 3,
+//                        onClick = { devicesInd = 3 },
+//                        modifier = Modifier.padding(end = 8.dp)
+//                    )
+//                }
             }
 
             LazyColumn(
@@ -166,8 +175,7 @@ fun FeedPage(
                             val post = posts[index]
                             PostCard(
                                 userId = post.userId,
-                                username = postViewModel.usernames.value[post.userId] ?: "Unknown user",
-//                                postDate = post.date ?: "No date",
+                                username = postViewModel.usernames.value[post.userId] ?: "",
                                 postDate = post.date?.let {
                                     try {
                                         val parsedDate = ZonedDateTime.parse(it)
@@ -176,20 +184,21 @@ fun FeedPage(
                                     } catch (e: Exception) {
                                         e.message
                                     }
-                                } ?: "No date",
-                                postText = post.content ?: "No content",
+                                } ?: "",
+                                postText = post.content ?: "",
                                 isSubscribed = false,
                                 onSubscribeClick = {
                                     followerViewModel.follow(post.userId)
                                 },
-                                onLikeClick = { reactionViewModel.addReaction(post.id, selectedReaction ?: Reaction.REACTION_UNSPECIFIED) },
+                                onLikeClick = { reactionViewModel.addReaction(post.id, selectedReaction ?: Reaction.REACTION_LIKE) },
                                 onCommentClick = {
                                     selectedPostId = post.id
                                     showComments = true
                                     commentViewModel.loadUsernames()
                                     commentViewModel.loadComments(post.id)
                                 },
-                                onShareClick = { showShare = true }
+                                onShareClick = { showShare = true },
+                                file = post.attachments.firstOrNull()?.minioId?.let { postViewModel.files.value[it] }
                             )
                             Spacer(modifier = Modifier.height(8.dp))
                         }

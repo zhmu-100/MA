@@ -42,7 +42,7 @@ val viewModelModule = module {
     viewModel { PostViewModel(get(), get(), get(), get()) }
     viewModel { CommentViewModel(get(), get(), get()) }
     viewModel { ReactionViewModel(get(), get()) }
-    viewModel { FollowerViewModel(get()) }
+    viewModel { FollowerViewModel(get(), get()) }
     viewModel { AuthViewModel(get(), get()) }
     viewModel { RememberViewModel(get()) }
 }

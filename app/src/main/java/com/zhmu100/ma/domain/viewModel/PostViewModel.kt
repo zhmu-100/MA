@@ -15,6 +15,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import androidx.compose.runtime.State
+import com.zhmu100.ma.domain.model.files.FileMetadata
+import com.zhmu100.ma.domain.model.profile.UserProfile
 
 class PostViewModel(
     private val filesApi: FilesApi,
@@ -52,19 +54,37 @@ class PostViewModel(
     private val _posts = mutableStateOf<List<Post>>(emptyList())
     val posts get() = _posts
 
+    private val _imageFileId = MutableStateFlow<String?>(null)
+    val imageFileId = _imageFileId.asStateFlow()
+
     fun uploadPostImage(file: ByteArray, fileName: String, mimeType: String) {
         viewModelScope.launch {
             runCatching {
-//                val fileId = filesApi.uploadFile(file, fileName, mimeType)
-//                filesApi.getFileUrl(fileId)
+                val userId = tokenStorage.getUserId()
 
-            }.onSuccess { imageUrl ->
-//                _imageUrl.value = imageUrl
+                val metadata = FileMetadata(
+                    user_id = userId,
+                    private = false,
+                    mime_type = mimeType,
+                    file_name = fileName,
+                    size = file.size.toLong(),
+                    temp = false,
+                    folder = "profile_photos"
+                )
+
+                val fileId = filesApi.uploadFile(file, fileName, mimeType, metadata, userId)
+                val url = filesApi.getFileUrl(fileId.id)
+                Pair(fileId.id, url.url)
+            }.onSuccess { (fileId, url) ->
+                _imageFileId.value = fileId
+                _imageUrl.value = url
             }.onFailure {
+                _imageFileId.value = null
                 _imageUrl.value = null
             }
         }
     }
+
 
     fun createPost(text: String) {
         if (_postState.value is ViewState.Loading) return
@@ -73,13 +93,15 @@ class PostViewModel(
 
         viewModelScope.launch {
             runCatching {
-                val image = imageUrl.value
+                val image = imageFileId.value
                 val userId = tokenStorage.getUserId()
                 val postContent = text
 
+                Log.d(image, "imageId === ${image}")
                 val attachments = image?.let {
                     listOf(
                         Attachment(
+                            postId="",
                             type = AttachmentType.ATTACHMENT_TYPE_IMAGE,
                             position = 0,
                             minioId = it

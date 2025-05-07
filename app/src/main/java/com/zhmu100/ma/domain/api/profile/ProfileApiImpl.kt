@@ -37,9 +37,10 @@ class ProfileApiImpl(
     }
 
     override suspend fun createProfile(profile: UserProfile): UserProfile {
+        val p = profile.copy(user_id = tokenStorage.getUserId())
         return client.post(baseUrl) {
             contentType(ContentType.Application.Json)
-            setBody(mapOf("profile" to profile))
+            setBody(mapOf("profile" to p))
         }.body()
     }
 

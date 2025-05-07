@@ -46,11 +46,11 @@ class TrainingMapViewModel(
     // Функции для управления тренировкой
     fun addNewPoint(newPoint: LatLng, totalExerciseTime: Duration) {
         val newGpsData = GPSPosition(
-            timestamp = java.time.Instant.now().toString(),
+            timestamp = LocalDateTime.now().toString(),
             latitude = newPoint.latitude,
             longitude = newPoint.longitude,
             speed = calculateSpeed(totalExerciseTime, totalDistance.value),
-            accuracy = 0.0,
+            accuracy = 100.0,
             altitude = 0.0
         )
 

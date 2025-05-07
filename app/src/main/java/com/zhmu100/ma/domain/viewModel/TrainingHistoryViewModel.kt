@@ -1,5 +1,6 @@
 package com.zhmu100.ma.domain.viewModel
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.android.gms.maps.model.LatLng
@@ -82,10 +83,12 @@ class TrainingHistoryViewModel(
                 statisticsApi.getGPSData(exerciseId)
             }.onSuccess { gpsDataList ->
                 val positions = gpsDataList.flatMap { it.positions }
+                Log.i("HTTP", positions.toString())
                 _currentGPSData.value = positions
                 calculateAndEmitStats(positions, exercise)
             }.onFailure {
                 // Handle error (e.g., show empty state)
+                Log.i("HTTP", it.toString())
                 _currentGPSData.value = emptyList()
                 _currentWorkoutStats.value = null
             }

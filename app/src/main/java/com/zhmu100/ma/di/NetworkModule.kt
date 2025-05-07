@@ -21,7 +21,6 @@ import com.zhmu100.ma.domain.api.reaction.ReactionApiImpl
 import com.zhmu100.ma.domain.api.reactions.ReactionApi
 import com.zhmu100.ma.domain.api.statistic.StatisticsApi
 import com.zhmu100.ma.domain.api.statistic.StatisticsApiImpl
-import com.zhmu100.ma.domain.api.statistic.StatisticsApiMock
 import com.zhmu100.ma.domain.api.training.TrainingApi
 import com.zhmu100.ma.domain.api.training.TrainingApiImpl
 import org.koin.dsl.module
@@ -45,8 +44,8 @@ val networkModule = module {
     single<NotificationApi> { NotificationApiImpl(get(), "http://188.225.77.13:8086/notebook") }
     single<DietApi> { DietApiImpl(get(),  "http://188.225.77.13:8087/diet", get()) }
 //    single<DietApi> { DietApiMock() }
-//    single<StatisticsApi> { StatisticsApiImpl(get(), "http://188.225.77.13:8088/statistics") }
-    single<StatisticsApi> { StatisticsApiMock() }
+    single<StatisticsApi> { StatisticsApiImpl(get(), "http://188.225.77.13:8088/api/statistics") }
+//    single<StatisticsApi> { StatisticsApiMock() }
     single<FilesApi> { FilesApiImpl(get(),  "http://188.225.77.13:8089/files") }
 //    single<FilesApi> { FilesApiMock() }
 }

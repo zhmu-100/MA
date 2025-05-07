@@ -35,7 +35,7 @@ val viewModelModule = module {
     viewModel { TrainingMapViewModel(get()) }
     viewModel { TrainingGymViewModel(get()) }
     viewModel { TrainingHistoryViewModel(get(), get()) }
-    viewModel { StatisticViewModel(get(), get()) }
+    viewModel { StatisticViewModel(get(), get(), get()) }
     viewModel { DevicesViewModel(get()) }
     viewModel { DietViewModel(get()) }
     viewModel { PostViewModel(get(), get(), get(), get()) }

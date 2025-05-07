@@ -2,6 +2,7 @@ package com.zhmu100.ma.domain.api.statistic
 
 import com.zhmu100.ma.domain.model.statistic.CaloriesData
 import com.zhmu100.ma.domain.model.statistic.GPSData
+import com.zhmu100.ma.domain.model.statistic.GPSDataResponse
 import com.zhmu100.ma.domain.model.statistic.HeartRateData
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
@@ -19,8 +20,8 @@ class StatisticsApiImpl(
 
     override suspend fun getGPSData(exerciseId: String): List<GPSData> {
         return client.get("$baseUrl/gps") {
-            parameter("exerciseId", exerciseId)
-        }.body()
+            parameter("exercise_id", exerciseId)
+        }.body<GPSDataResponse>().gps_data
     }
 
     override suspend fun uploadGPSData(gpsData: GPSData) {

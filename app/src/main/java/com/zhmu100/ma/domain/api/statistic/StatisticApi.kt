@@ -2,6 +2,7 @@ package com.zhmu100.ma.domain.api.statistic
 
 import com.zhmu100.ma.domain.model.statistic.CaloriesData
 import com.zhmu100.ma.domain.model.statistic.GPSData
+import com.zhmu100.ma.domain.model.statistic.GPSDataResponse
 import com.zhmu100.ma.domain.model.statistic.HeartRateData
 
 /**

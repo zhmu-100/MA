@@ -18,6 +18,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import java.time.Duration
 import java.time.Instant
+import java.util.UUID
 
 class TrainingViewModel(
     private val trainingApi: TrainingApi,
@@ -118,6 +119,7 @@ class TrainingViewModel(
                         currentGPS.value?.let { gps ->
                             val gpsData = GPSData(
                                 ExerciseMetadata(
+                                    id = UUID.randomUUID().toString(),
                                     exerciseId = id,
                                     timestamp = Instant.now().toString()
                                 ),

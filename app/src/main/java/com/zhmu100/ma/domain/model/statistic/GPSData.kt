@@ -12,3 +12,8 @@ data class GPSData(
     val meta: ExerciseMetadata,
     val positions: List<GPSPosition> = emptyList()
 )
+
+@Serializable
+data class GPSDataResponse(
+    val gps_data: List<GPSData>
+)
